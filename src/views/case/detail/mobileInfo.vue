@@ -21,7 +21,8 @@
     </view>
     <view class="mt-25px bg-000-04 p-16px rounded-10px flex flex-wrap justify-start">
       <view class="flex flex-wrap items-center w-1/2 h-25px" v-for="item in theme" :key="item.name">
-        <i class="iconfont text-tip text-12px mr-3px" v-html="item.icon"></i>{{ item.label }}
+        <i class="iconfont text-tip text-12px mr-3px">{{ item.icon }}</i
+        >{{ item.label }}
         <span class="pl-20px">{{ item.name }}</span>
       </view>
     </view>
