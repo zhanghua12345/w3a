@@ -30,6 +30,6 @@
 		"build/**/*.d.ts",
 		"mock/**/*.ts",
 		"vite.config.ts"
-	],
+, "src/components/Editor/index.js", "src/components/Editor/index.js"	],
 	"exclude": ["node_modules", "dist"]
 }

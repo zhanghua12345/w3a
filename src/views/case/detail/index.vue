@@ -1,95 +1,176 @@
 <template>
   <div>
     <el-card shadow="never">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-000 font-600">详情</span>
+          <el-button type="primary" @click="onAddOrUpdate(0)">编辑</el-button>
+        </div>
+      </template>
       <el-row justify="space-between">
-        <el-col :span="10" :xs="24">
+        <el-col :span="16" :xs="24">
           <div class="flex h-full py-2">
-            <img
-              class="w-20 h-20 mr-5 rounded-full border border-borderColor"
-              src="@/assets/image/avatar.jpg"
-              alt=""
-            />
+            <div class="bg-000-04 rounded-8px mr-10px h-120px overflow-hidden">
+              <el-image
+                class="w-full h-full"
+                src="https://nice-short-pro.s3.ap-east-1.amazonaws.com/image/0ffa54e069ac2bf61c3d.jpg"
+                fit="scale-down"
+              />
+            </div>
             <div>
-              <h3 class="mb-2">早上好，又是美好的一天呢!</h3>
-              <p class="text-sm text-gray">今天天气晴朗，20℃-30℃</p>
+              <h3 class="mb-2 font-600">轻奢1222三居室</h3>
+              <p class="text-sm text-gray">上传时间：2024-12-11 15:02:10</p>
+              <p class="text-sm text-gray">最近更新：2024-12-19 15:16:30</p>
             </div>
           </div>
         </el-col>
         <el-col :span="8" :xs="24">
           <div class="flex justify-around py-2">
             <div class="mr-7">
-              <div class="text-gray mb-2">消息</div>
-              <div class="text-6">22</div>
+              <div class="text-gray mb-2">
+                浏览量
+                <el-tooltip content="浏览量 = 实际值 + 初始值" transition="slide-fade">
+                  <el-icon style="vertical-align: middle">
+                    <InfoFilled />
+                  </el-icon>
+                </el-tooltip>
+              </div>
+              <div class="text-16px">52</div>
+              <div>22 + 30</div>
             </div>
             <div>
-              <div class="text-gray mb-2">代办</div>
-              <div class="text-6">4/10</div>
-            </div>
-            <div>
-              <div class="text-gray mb-2">项目</div>
-              <div class="text-6">10</div>
+              <div class="text-gray mb-2">
+                收藏<el-tooltip content="浏览量 = 实际值 + 初始值" transition="slide-fade">
+                  <el-icon style="vertical-align: middle">
+                    <InfoFilled />
+                  </el-icon>
+                </el-tooltip>
+              </div>
+              <div class="text-16px">52</div>
+              <div>22 + 30</div>
             </div>
           </div>
         </el-col>
       </el-row>
     </el-card>
     <el-row class="mt-3" :gutter="12">
-      <el-col :span="18" :xs="24">
+      <el-col :span="16" :xs="24">
         <el-card shadow="never">
+          <template #header>
+            <div class="flex justify-between items-center">
+              <span class="text-000 font-600">详情</span>
+              <el-button type="primary" @click="onAddOrUpdate(2)">编辑</el-button>
+            </div>
+          </template>
           <div class="flex flex-wrap">
             <div
-              class="w-30% <sm:w-100% bg-fill rounded p-4 mt-2 mx-1"
+              class="w-30% <sm:w-100% bg-000-04 rounded-8px px-14px py-8px mb-10px mx-5px"
               v-for="(item, index) in list"
               :key="index"
             >
-              <div class="flex items-center">
-                <img :src="item.img" alt="" class="h-14 w-14 mb-1" />
-                <span class="ml-2 text-xl">{{ item.name }}</span>
+              <div class="text-12px text-[#8b8b8b]">热度初始值{{ item.name }}</div>
+              <div class="text-18px mt-4px font-600 leading-none text-000 text-main-1 text-main-2">
+                多语言
               </div>
-              <p>{{ item.desc }}</p>
             </div>
           </div>
         </el-card>
         <el-card class="mt-3" shadow="never">
           <template #header>
-            <div class="flex justify-between">
-              <span>动态</span>
-              <el-button type="primary" link>更多</el-button>
+            <div class="flex justify-between items-center">
+              <span class="text-000 font-600">主图</span>
+              <el-button type="primary" @click="onAddOrUpdate(1)">编辑</el-button>
             </div>
           </template>
-          <div
-            v-for="(item, index) in dynamicList"
-            :key="index"
-            class="flex mb-4 border-b border-borderColor last:border-0"
-          >
-            <div>
-              <img src="@/assets/image/avatar.jpg" class="w-10 mb-2 h-10 rounded-full" alt="" />
+          <div class="" v-for="(item, index) in 2" :key="index">
+            <div class="w-full text-000 font-600">
+              {{ index === 0 ? '封面图' + item : '详情图' }}
             </div>
-            <div class="ml-4">
-              <div>{{ item.desc }}</div>
-              <div>{{ item.timestamp }}</div>
+            <div class="flex flex-wrap mt-10px">
+              <div class="<sm:w-30% bg-000-04 rounded-8px px-14px py-8px mb-10px mx-5px h-120px">
+                <el-image
+                  class="w-full h-full"
+                  src="https://nice-short-pro.s3.ap-east-1.amazonaws.com/image/0ffa54e069ac2bf61c3d.jpg"
+                  fit="scale-down"
+                />
+              </div>
+            </div>
+          </div>
+        </el-card>
+        <el-card class="mt-3" shadow="never">
+          <template #header>
+            <div class="flex justify-between items-center">
+              <span class="text-000 font-600">室内图</span>
+              <el-button type="primary" @click="onAddOrUpdate(1)">编辑</el-button>
+            </div>
+          </template>
+          <div class="flex flex-col">
+            <div class="" v-for="(item, index) in 5" :key="index">
+              <div class="w-full text-000 font-600">
+                {{
+                  index === 0
+                    ? '主卧' + item
+                    : index === 1
+                    ? '次卧一'
+                    : index === 2
+                    ? '次卧二'
+                    : index === 3
+                    ? '客厅'
+                    : index === 4
+                    ? '餐厅'
+                    : '厨房'
+                }}
+              </div>
+              <div class="flex flex-wrap mt-10px">
+                <div class="<sm:w-30% bg-000-04 rounded-8px px-14px py-8px mb-10px mx-5px h-120px">
+                  <el-image
+                    class="w-full h-full"
+                    src="https://nice-short-pro.s3.ap-east-1.amazonaws.com/image/0ffa54e069ac2bf61c3d.jpg"
+                    fit="scale-down"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6" :xs="24">
-        <el-card shadow="never" class="<sm:mt-3">
-          <el-timeline>
-            <el-timeline-item
-              v-for="(activity, index) in activities"
-              :key="index"
-              :timestamp="activity.timestamp"
-            >
-              {{ activity.content }}
-            </el-timeline-item>
-          </el-timeline>
+      <el-col :span="8" :xs="24">
+        <el-card shadow="never">
+          <template #header>
+            <div class="flex justify-between">
+              <span>效果</span>
+              <el-button type="primary" link>编辑</el-button>
+            </div>
+          </template>
+          <div
+            class="w-full h-670px overflow-auto info border-1 border-[#e5e5e5] rounded-1 bg-[#fff]"
+          >
+            <MobileInfo :data="activities" />
+          </div>
         </el-card>
       </el-col>
     </el-row>
+    <AddOrUpdate ref="addOrUpdateRef" :tree-data="tableData" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { AddOrUpdate } from './components';
+import MobileInfo from './mobileInfo.vue';
+
+import { getMenuList } from '@/api/auth';
+import { useTable } from '@/hooks/useTable';
+
+const { tableData } = useTable({
+  apiFn: getMenuList,
+  isPageable: false
+});
+
+const addOrUpdateRef = ref();
+const onAddOrUpdate = (index = 0) => {
+  addOrUpdateRef.value.init(index, list);
+};
 const list = [
   {
     name: 'Vue3',
@@ -147,28 +228,21 @@ const activities = [
     timestamp: '2023-8-1'
   }
 ];
-const dynamicList = [
-  {
-    desc: '不知道写啥在里面，哈哈哈哈',
-    timestamp: '2023-9-13'
-  },
-  {
-    desc: '写了下后台，让页面多起来了',
-    timestamp: '2023-9-12'
-  },
-  {
-    desc: '修复table hooks bug',
-    timestamp: '2023-9-10'
-  },
-  {
-    desc: '修复暗黑模式下的样式错误',
-    timestamp: '2023-9-6'
-  },
-  {
-    desc: '新增权限页面',
-    timestamp: '2023-9-1'
-  }
-];
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+/* 设置滚动条的宽度和颜色 */
+.info::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* 设置滚动条轨道的背景颜色 */
+.info::-webkit-scrollbar-track {
+  background-color: #e5e5e5;
+}
+
+/* 设置滚动条滑块的背景颜色 */
+.info::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+</style>

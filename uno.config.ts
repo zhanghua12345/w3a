@@ -1,7 +1,19 @@
 import { defineConfig } from '@unocss/vite';
 import presetUno from '@unocss/preset-uno';
 import transformerDirectives from '@unocss/transformer-directives';
-
+const spacing = () => {
+  let spacArr = {};
+  for (let i = 0; i <= 375; i++) {
+    spacArr[2 * i] = 2 * i + 'px';
+  }
+  spacArr = {
+    ...spacArr,
+    '100vh': '100vh',
+    '30b': '-30rpx',
+    2000: '2000rpx'
+  };
+  return spacArr;
+};
 export default defineConfig({
   content: {
     pipeline: {
@@ -58,6 +70,7 @@ export default defineConfig({
     'transition-base': 'transition-all duration-300 ease-in-out'
   },
   theme: {
+    spacing: { ...spacing(), main: '28rpx' },
     colors: {
       primary: 'var(--el-color-primary)',
       primary_dark: 'var(--el-color-primary-light-5)',
@@ -69,7 +82,67 @@ export default defineConfig({
       text: 'var(--el-text-color-primary)',
       card: 'var(--el-bg-color-overlay)',
       background: 'var(--el-bg-color)',
-      borderColor: 'var(--el-border-color-lighter)'
+      borderColor: 'var(--el-border-color-lighter)',
+      'main-1': 'rgb(252, 67, 50)',
+      'main-2': 'rgb(0, 185, 107)',
+      bg: '#f8f8f8',
+      main: '#cf5d38',
+      tip: '#9c9c9c',
+      line: '#f0f0f0',
+      'main-sub': '#b3ecff',
+      'main-vip': '#805844',
+      f0f0f0: '#f0f0f0',
+      d6f4fa: '#d6f4fa',
+      '1c1c1e': '#1c1c1e',
+      '000': '#000',
+      131313: '#131313',
+      141414: '#141414',
+      252525: '#252525',
+      '5e3d05': '#5e3d05',
+      '444-8': 'rgba(4,4,4,.8)',
+      fff: '#fff',
+      'fff-9': 'rgba(255, 255, 255, 0.9)',
+      '000-9': 'rgba(0,0,0,.9)',
+      'f8f8f8-5': 'rgba(248, 248, 248, 0.5)',
+      'fff-8': 'rgba(255, 255, 255, 0.8)',
+      '000-8': 'rgba(0,0,0,.8)',
+      'fff-7': 'rgba(255, 255, 255, 0.7)',
+      '000-7': 'rgba(0,0,0,.7)',
+      'fff-6': 'rgba(255, 255, 255, 0.6)',
+      '000-6': 'rgba(0,0,0,.6)',
+      'fff-5': 'rgba(255, 255, 255, 0.5)',
+      '000-5': 'rgba(0,0,0,.5)',
+      'fff-4': 'rgba(255, 255, 255, 0.4)',
+      '000-4': 'rgba(0,0,0,.4)',
+      'fff-2': 'rgba(255, 255, 255, 0.2)',
+      '000-2': 'rgba(0,0,0,.2)',
+      'fff-16': 'rgba(255, 255, 255, 0.16)',
+      '000-16': 'rgba(0,0,0,.16)',
+      'fff-12': 'rgba(255, 255, 255, 0.12)',
+      '000-12': 'rgba(0,0,0,.12)',
+      'fff-1': 'rgba(255, 255, 255, 0.1)',
+      '000-1': 'rgba(0,0,0,.1)',
+      'fff-08': 'rgba(255, 255, 255, 0.08)',
+      '000-08': 'rgba(0,0,0,.08)',
+      'fff-06': 'rgba(255, 255, 255, 0.06)',
+      '000-06': 'rgba(0,0,0,.06)',
+      'fff-05': 'rgba(255, 255, 255, 0.05)',
+      '000-05': 'rgba(0,0,0,.05)',
+      'fff-04': 'rgba(255, 255, 255, 0.04)',
+      '000-04': 'rgba(0,0,0,.04)',
+      'fff-0': 'rgba(255, 255, 255, 0)',
+      '000-0': 'rgba(0,0,0,0)',
+      fdf2e0: '#fdf2e0',
+      f9ebea: '#f9ebea',
+      f5f4d6: '#f5f4d6',
+      linear: 'linear-gradient(135deg, #FE5351 0%, #FE345B 51%, #FE3964 100%)',
+      ddd: '#ddd',
+      ccc: '#ccc',
+      eee: '#eee',
+      secondary: {
+        '000': 'linear-gradient(red, yellow, blue)',
+        linear: 'linear-gradient(135deg, #FE5351 0%, #FE345B 51%, #FE3964 100%)'
+      }
     }
   }
 });

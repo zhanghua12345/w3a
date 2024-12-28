@@ -1,174 +1,199 @@
 <template>
   <div>
-    <el-card shadow="never">
-      <el-row justify="space-between">
-        <el-col :span="10" :xs="24">
-          <div class="flex h-full py-2">
-            <img
-              class="w-20 h-20 mr-5 rounded-full border border-borderColor"
-              src="@/assets/image/avatar.jpg"
-              alt=""
-            />
-            <div>
-              <h3 class="mb-2">早上好，又是美好的一天呢!</h3>
-              <p class="text-sm text-gray">今天天气晴朗，20℃-30℃</p>
-            </div>
+    <el-form :model="form" label-width="100" ref="formRef" :rules="formRules" class="pt-10">
+      <el-card shadow="never">
+        <template #header>
+          <div class="flex justify-between items-center">
+            <span class="text-000 font-600">文章</span>
           </div>
-        </el-col>
-        <el-col :span="8" :xs="24">
-          <div class="flex justify-around py-2">
-            <div class="mr-7">
-              <div class="text-gray mb-2">消息</div>
-              <div class="text-6">22</div>
-            </div>
-            <div>
-              <div class="text-gray mb-2">代办</div>
-              <div class="text-6">4/10</div>
-            </div>
-            <div>
-              <div class="text-gray mb-2">项目</div>
-              <div class="text-6">10</div>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </el-card>
-    <el-row class="mt-3" :gutter="12">
-      <el-col :span="18" :xs="24">
+        </template>
+        <el-row justify="space-between">
+          <el-col :span="12" :xs="24">
+            <el-form-item label="标题" prop="title">
+              <el-input
+                v-model="form.title"
+                placeholder="请输入菜单名称"
+                clearable
+                class="w-300px"
+              />
+            </el-form-item>
+
+            <el-form-item label="文章分类" prop="pid">
+              <el-select v-model="form.pid" placeholder="请选择案例风格" class="w-300px">
+                <el-option label="现代简约" :value="1" />
+                <el-option label="奶油风" :value="2" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="封面图片" prop="pid">
+              <el-upload
+                class="avatar-uploader"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+              >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :xs="24">
+            <el-form-item label="作者" prop="title">
+              <el-input
+                v-model="form.title"
+                placeholder="请输入菜单名称"
+                clearable
+                class="w-300px"
+              />
+            </el-form-item>
+
+            <el-form-item label="简介" prop="pid">
+              <el-select v-model="form.pid" placeholder="请选择案例风格" class="w-300px">
+                <el-option label="现代简约" :value="1" />
+                <el-option label="奶油风" :value="2" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div class="mt-3">
         <el-card shadow="never">
-          <div class="flex flex-wrap">
-            <div
-              class="w-30% <sm:w-100% bg-fill rounded p-4 mt-2 mx-1"
-              v-for="(item, index) in list"
-              :key="index"
-            >
-              <div class="flex items-center">
-                <img :src="item.img" alt="" class="h-14 w-14 mb-1" />
-                <span class="ml-2 text-xl">{{ item.name }}</span>
-              </div>
-              <p>{{ item.desc }}</p>
-            </div>
-          </div>
-        </el-card>
-        <el-card class="mt-3" shadow="never">
           <template #header>
-            <div class="flex justify-between">
-              <span>动态</span>
-              <el-button type="primary" link>更多</el-button>
+            <div class="flex justify-between items-center">
+              <span class="text-000 font-600">文章内容</span>
             </div>
           </template>
-          <div
-            v-for="(item, index) in dynamicList"
-            :key="index"
-            class="flex mb-4 border-b border-borderColor last:border-0"
-          >
-            <div>
-              <img src="@/assets/image/avatar.jpg" class="w-10 mb-2 h-10 rounded-full" alt="" />
-            </div>
-            <div class="ml-4">
-              <div>{{ item.desc }}</div>
-              <div>{{ item.timestamp }}</div>
-            </div>
-          </div>
+          <el-form-item label="文章内容" prop="pid">
+            <Editor v-model="defaultHtml" ref="editorRef" @change="change" />
+          </el-form-item>
         </el-card>
-      </el-col>
-      <el-col :span="6" :xs="24">
-        <el-card shadow="never" class="<sm:mt-3">
-          <el-timeline>
-            <el-timeline-item
-              v-for="(activity, index) in activities"
-              :key="index"
-              :timestamp="activity.timestamp"
-            >
-              {{ activity.content }}
-            </el-timeline-item>
-          </el-timeline>
+      </div>
+
+      <div class="mt-3" :gutter="12">
+        <el-card shadow="never">
+          <template #header>
+            <div class="flex justify-between items-center">
+              <span class="text-000 font-600">其他</span>
+            </div>
+          </template>
+          <el-col :span="24" :xs="24">
+            <el-form-item label="标题" prop="title">
+              <el-input
+                v-model="form.title"
+                placeholder="请输入菜单名称"
+                clearable
+                class="w-300px"
+              />
+            </el-form-item>
+
+            <el-form-item label="文章分类" prop="pid">
+              <el-select v-model="form.pid" placeholder="请选择案例风格" class="w-300px">
+                <el-option label="现代简约" :value="1" />
+                <el-option label="奶油风" :value="2" />
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-card>
-      </el-col>
-    </el-row>
+      </div>
+    </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-const list = [
-  {
-    name: 'Vue3',
-    desc: '渐进式 JavaScript 框架',
-    img: 'https://cn.vuejs.org/logo.svg'
-  },
-  {
-    name: 'Vite',
-    desc: '下一代前端开发与构建工具',
-    img: 'https://vitejs.dev/logo.svg'
-  },
-  {
-    name: 'Pinia',
-    desc: '新一代的状态管理库',
-    img: 'https://pinia.web3doc.top/logo.svg'
-  },
-  {
-    name: 'Unocss',
-    desc: '原子化预设样式',
-    img: 'https://unocss.dev/logo.svg'
-  },
-  {
-    name: 'TypeScript',
-    desc: 'js 超集语言',
-    img: 'https://img0.baidu.com/it/u=648247815,3161686023&fm=253&fmt=auto&app=138&f=PNG'
+import { ref, unref, reactive, onMounted } from 'vue';
+
+import { Plus } from '@element-plus/icons-vue';
+
+import { Editor } from '@/components/Editor';
+
+const form = reactive({
+  id: 0,
+  pid: '',
+  title: '',
+  icon: '',
+  path: '',
+  component: '',
+  iframeLink: '',
+  permission: '',
+  affix: 0,
+  isHide: 0,
+  isKeep: 0,
+  sort: 0,
+  type: 0
+});
+const formRules = ref(undefined);
+const imageUrl = ref('');
+
+const handleAvatarSuccess = (uploadFile: any) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw);
+};
+const beforeAvatarUpload = (rawFile: any) => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!');
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!');
+    return false;
   }
-];
-const activities = [
-  {
-    content: '每天写一点',
-    timestamp: '2023-9-13'
-  },
-  {
-    content: '完善权限角色菜单',
-    timestamp: '2023-9-10'
-  },
-  {
-    content: '封装表格hooks',
-    timestamp: '2023-9-5'
-  },
-  {
-    content: '改写菜单样式',
-    timestamp: '2023-9-1'
-  },
-  {
-    content: '多语言支持',
-    timestamp: '2023-8-26'
-  },
-  {
-    content: '工程化搭建',
-    timestamp: '2023-8-14'
-  },
-  {
-    content: '项目创建',
-    timestamp: '2023-8-1'
-  }
-];
-const dynamicList = [
-  {
-    desc: '不知道写啥在里面，哈哈哈哈',
-    timestamp: '2023-9-13'
-  },
-  {
-    desc: '写了下后台，让页面多起来了',
-    timestamp: '2023-9-12'
-  },
-  {
-    desc: '修复table hooks bug',
-    timestamp: '2023-9-10'
-  },
-  {
-    desc: '修复暗黑模式下的样式错误',
-    timestamp: '2023-9-6'
-  },
-  {
-    desc: '新增权限页面',
-    timestamp: '2023-9-1'
-  }
-];
+  return true;
+};
+
+const editorRef = ref();
+
+const defaultHtml = ref('');
+
+onMounted(async () => {
+  const editor = await unref(editorRef)?.getEditorRef();
+  console.log(editor);
+});
+setTimeout(() => {
+  defaultHtml.value = '<p>hello <strong>world</strong></p>';
+}, 3000);
+
+const change = (editor: any) => {
+  console.log(editor.getHtml());
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+/* 设置滚动条的宽度和颜色 */
+.info::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* 设置滚动条轨道的背景颜色 */
+.info::-webkit-scrollbar-track {
+  background-color: #e5e5e5;
+}
+
+/* 设置滚动条滑块的背景颜色 */
+.info::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+  border: 1px solid #e5e5e5;
+}
+</style>

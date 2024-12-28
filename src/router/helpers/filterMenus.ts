@@ -9,7 +9,7 @@ export function filterRoutesToMenus(routes: RouteRecordRaw[]) {
       path: route.path,
       title: route.meta?.title || '',
       icon: route.meta?.icon,
-      hidden: route?.hidden || false
+      hidden: route.path.includes('detail') || false
     };
     if (route.children && route.children.length > 0) {
       menuItem.children = filterRoutesToMenus(route.children);

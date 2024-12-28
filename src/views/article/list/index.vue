@@ -78,7 +78,7 @@ const { tableData, page, loading, resetParams, getList, handleCurrentChange, han
 // };
 
 const onAddOrUpdate = (data: IUserItem) => {
-  push({ path: '/case/detail', query: { id: data.id } });
+  push({ path: '/article/detail', query: { id: data.id } });
 };
 
 const onDelete = () => {
