@@ -1,8 +1,4 @@
-@import './element-plus.scss';
-@import './transition.scss';
-@import './reset.scss';
-
-/* 灰色模式 */
-.html-grey {
-  filter: grayscale(100%);
-}
+@import './font/iconfont.css';
+@import './common.scss';
+@import 'style';
+@import 'iconfont';
