@@ -2,7 +2,7 @@
   <div class="" id="shopp-manager" v-loading="spinShow">
     <pages-header
       ref="pageHeader"
-      :title="$route.params.id ? '编辑商品' : '添加商品'"
+      :title="$route.params.id ? '编辑案例' : '添加案例'"
       :backUrl="$routeProStr + '/product/product_list'"
     ></pages-header>
     <el-card :bordered="false" shadow="never" class="mt16" :body-style="{ padding: '0 20px 20px' }">
@@ -20,26 +20,8 @@
       >
         <!-- 基础信息-->
         <el-row :gutter="24" v-show="currentTab === '1'">
-          <!-- <el-col :span="24">
-            <el-form-item label="商品类型：" props="is_virtual">
-              <div class="virtual" :class="formValidate.virtual_type == item.id ? 'virtual_boder' : 'virtual_boder2'"
-                v-for="(item, index) in virtual" :key="index" @click="virtualbtn(item.id, 2)">
-                <div class="virtual_top">{{ item.tit }}</div>
-                <div class="virtual_bottom">({{ item.tit2 }})</div>
-                <div v-if="formValidate.virtual_type == item.id" class="virtual_san"></div>
-                <div v-if="formValidate.virtual_type == item.id" class="virtual_dui">✓</div>
-              </div>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="24">
-            <el-form-item label="商品分类：" prop="cate_id">
-              <!-- {{ formValidate.cate_id }}
-              <el-select v-model="formValidate.cate_id" placeholder="请选择商品分类" multiple class="content_width">
-                <el-option v-for="item in treeSelect" :disabled="item.pid === 0" :value="item.id" :key="item.id">{{
-                  item.html + item.cate_name
-                }}</el-option>
-              </el-select>
-              {{ formValidate.cate_id }} -->
+            <el-form-item label="案例分类：" prop="cate_id">
               <el-cascader
                 class="content_width"
                 v-model="formValidate.cate_id"
@@ -52,53 +34,45 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="商品名称：" prop="store_name">
-              <el-input class="content_width" v-model.trim="formValidate.store_name" placeholder="请输入商品名称" />
+            <el-form-item label="案例名称：" prop="store_name">
+              <el-input class="content_width" v-model.trim="formValidate.store_name" placeholder="请输入案例名称" />
             </el-form-item>
           </el-col>
-
+          <el-col :span="24">
+            <el-form-item label="案例名称：" prop="store_name">
+              <el-select v-model="formValidate.selectRule" class="content_width mr14">
+                <el-option
+                  v-for="(item, index) in ruleList"
+                  :value="item.rule_name"
+                  :key="index"
+                  :label="item.rule_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="单位：" prop="unit_name">
               <el-input class="content_width" v-model="formValidate.unit_name" placeholder="请输入单位" />
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="24">
-            <el-form-item label="材质：" prop="">
-              <el-select v-model="formValidate.material_id" placeholder="请选择材质" clearable @change="changeMate">
-                <el-option v-for="item in mateList" :key="item.id" :label="item.name" :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="24">
-            <el-form-item label="商品轮播图：" prop="slider_image">
-              <div class="acea-row">
-                <div
-                  class="pictrue"
-                  v-for="(item, index) in formValidate.slider_image"
-                  :key="index"
-                  draggable="true"
-                  @dragstart="handleDragStart($event, item)"
-                  @dragover.prevent="handleDragOver($event, item)"
-                  @dragenter="handleDragEnter($event, item)"
-                  @dragend="handleDragEnd($event, item)"
-                >
-                  <img v-lazy="item" />
-                  <i class="el-icon-error btndel" @click="handleRemove(index)"></i>
+            <el-form-item label="VR链接：" prop="unit_name">
+              <el-input class="content_width" v-model="formValidate.unit_name" placeholder="请添加VR链接" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="商品封面图：">
+              <div class="pictrueBox" @click="modalPicTap('dan', 'recommend_image')">
+                <div class="pictrue" v-if="formValidate.recommend_image">
+                  <img v-lazy="formValidate.recommend_image" />
+                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
                 </div>
-                <div
-                  v-if="formValidate.slider_image.length < 10"
-                  class="upLoad acea-row row-center-wrapper"
-                  @click="modalPicTap('duo')"
-                >
+                <div class="upLoad acea-row row-center-wrapper" v-else>
+                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <el-input v-model="formValidate.slider_image[0]" style="display: none"></el-input>
+                <div class="titTip">移动端分类样式3显示的长方形图片，建议比例：5:2</div>
               </div>
-
-              <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，默认首张图为主图，最多上传10张</div>
-
-              <!-- <div class="tips">(最多10张<br />750*750)</div> -->
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -126,10 +100,7 @@
                 </div>
                 <el-input v-model="formValidate.slider_image[0]" style="display: none"></el-input>
               </div>
-
               <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，默认首张图为主图，最多上传10张</div>
-
-              <!-- <div class="tips">(最多10张<br />750*750)</div> -->
             </el-form-item>
           </el-col>
           <!-- <el-col :span="24">
@@ -139,7 +110,7 @@
                 <span slot="close">关闭</span>
               </el-switch>
             </el-form-item>
-          </el-col> -->
+          </el-col>
           <el-col :span="24" v-if="formValidate.video_open">
             <el-form-item label="视频类型：">
               <el-radio-group v-model="seletVideo" @input="changeVideo">
@@ -197,7 +168,7 @@
               <Progress class="progress" :percent="progress" :stroke-width="5" v-if="upload.videoIng || videoIng" />
               <div class="titTip">建议时长：9～30秒，视频宽高比16:9</div>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col v-bind="grid">
             <el-form-item label="商品状态：">
               <el-radio-group v-model="formValidate.is_show">
@@ -207,11 +178,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 规格库存-->
+        <!-- 详情设置-->
         <el-row :gutter="24" v-show="currentTab === '2'">
-          <!-- 多规格添加-->
           <el-col :span="24" v-if="formValidate.spec_type === 1" class="noForm">
-            <el-form-item label="选择规格：" prop="">
+            <el-form-item label="详情设置：" prop="">
               <div class="acea-row row-middle">
                 <el-select v-model="formValidate.selectRule" class="content_width mr14">
                   <el-option
@@ -226,37 +196,44 @@
               </div>
             </el-form-item>
 
-            <el-form-item v-if="attrs.length !== 0">
-              <draggable
-                class="dragArea list-group"
-                :list="attrs"
-                group="peoples"
-                handle=".move-icon"
-                :move="checkMove"
-                @end="end"
-              >
-                <div v-for="(item, index) in attrs" :key="index" class="acea-row row-middle mb10">
-                  <div class="move-icon">
-                    <span class="iconfont icondrag2"></span>
-                  </div>
-                  <div :class="moveIndex === index ? 'borderStyle' : ''">
-                    <div class="acea-row row-middle" style="min-width: 200px">
-                      <span class="mr5" style="flex: 1">{{ item.value }}</span>
-                      <el-tag
-                        effect="plain"
-                        color="primary"
-                        v-for="(j, indexn) in item.detail"
-                        :key="indexn"
-                        class="mr20 drag"
-                        @close="handleRemove2(item.detail, indexn)"
-                        >{{ j }}</el-tag
-                      >
-                      <i size="14" class="curs el-icon-error" @click="handleRemoveRole(index)" />
-                    </div>
+            <el-col :span="24">
+              <el-form-item label="自定义表单：">
+                <el-switch
+                  :active-value="1"
+                  :inactive-value="0"
+                  v-model="customBtn"
+                  @change="customMessBtn"
+                  size="large"
+                >
+                  <span slot="open">开启</span>
+                  <span slot="close">关闭</span>
+                </el-switch>
+                <div class="addCustom_content" v-if="customBtn">
+                  <div v-for="(item, index) in formValidate.custom_form" :key="index" class="custom_box">
+                    <el-input
+                      v-model.trim="item.title"
+                      :placeholder="'表单标题' + (index + 1)"
+                      style="width: 150px; margin-right: 10px"
+                      :maxlength="10"
+                    />
+                    <el-select v-model="item.label" style="width: 200px; margin-left: 6px; margin-right: 10px">
+                      <el-option
+                        v-for="items in CustomList"
+                        :value="items.value"
+                        :key="items.value"
+                        :label="items.label"
+                      ></el-option>
+                    </el-select>
+                    <el-checkbox v-model="item.status">必填</el-checkbox>
+                    <div class="addfont" @click="delcustom()">删除</div>
                   </div>
                 </div>
-              </draggable>
-            </el-form-item>
+                <div class="addCustomBox" v-show="customBtn">
+                  <div class="btn" @click="addcustom">+ 添加表单</div>
+                  <div class="titTip">用户下单时需填写的信息，最多可设置10条，设置了自定义表单的商品不能加入购物车</div>
+                </div>
+              </el-form-item>
+            </el-col>
             <!-- <el-col :span="24" v-if="createBnt"> -->
             <el-form-item v-if="createBnt">
               <el-button type="primary" @click="addBtn">添加新规格</el-button>
@@ -337,7 +314,7 @@
         </el-row>
 
         <!-- 其他设置-->
-        <el-row justify="space-between" v-show="headTab.length === 6 ? currentTab === '6' : currentTab === '5'">
+        <el-row justify="space-between" v-show="currentTab === '4'">
           <el-col :span="24">
             <el-form-item label="商品关键字：">
               <el-input class="content_width" v-model.trim="formValidate.keyword" placeholder="请输入商品关键字" />
@@ -419,35 +396,18 @@
         </el-row>
         <el-form-item>
           <el-button v-if="currentTab !== '1'" @click="upTab">上一步</el-button>
-          <el-button
-            type="primary"
-            class="submission"
-            v-if="currentTab !== '3' && formValidate.virtual_type == 0"
-            @click="downTab"
-            >下一步</el-button
-          >
-          <el-button
-            type="primary"
-            class="submission"
-            v-if="currentTab !== '5' && formValidate.virtual_type != 0"
-            @click="downTab"
-            >下一步</el-button
-          >
+          <el-button type="primary" class="submission" v-if="currentTab !== '4'" @click="downTab">下一步</el-button>
           <el-button
             type="primary"
             :disabled="openSubimit"
             class="submission"
             @click="handleSubmit('formValidate')"
-            v-if="($route.params.id || currentTab === '3') && formValidate.virtual_type == 0"
+            v-if="$route.params.id || currentTab === '4'"
             >保存</el-button
           >
-          <!-- <el-button type="primary" :disabled="openSubimit" class="submission" @click="handleSubmit('formValidate')"
-            v-if="($route.params.id || currentTab === '6') && formValidate.virtual_type == 0">保存</el-button>
-          <el-button type="primary" :disabled="openSubimit" class="submission" @click="handleSubmit('formValidate')"
-            v-if="($route.params.id || currentTab === '5') && formValidate.virtual_type != 0">保存</el-button> -->
         </el-form-item>
       </el-form>
-      <el-dialog :visible.sync="modalPic" width="950px" scrollable title="上传商品图" :close-on-click-modal="false">
+      <el-dialog :visible.sync="modalPic" width="950px" scrollable title="上传案例图" :close-on-click-modal="false">
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -456,69 +416,6 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
-      <el-dialog
-        :visible.sync="addVirtualModel"
-        width="720px"
-        title="添加卡密"
-        :show-close="true"
-        :close-on-click-modal="false"
-        @closed="initVirtualData"
-      >
-        <div class="trip"></div>
-        <div class="type-radio">
-          <el-form label-width="85px">
-            <el-form-item label="卡密类型：">
-              <el-radio-group v-model="disk_type" size="large">
-                <el-radio :label="1">固定卡密</el-radio>
-                <el-radio :label="2">一次性卡密</el-radio>
-              </el-radio-group>
-              <div v-if="disk_type == 1">
-                <div class="stock-disk">
-                  <el-input v-model="disk_info" size="large" type="textarea" :rows="4" placeholder="填写卡密信息" />
-                </div>
-                <div class="stock-input">
-                  <!-- <el-input type="number" v-model="stock" size="large" :min='0' placeholder="填写库存数量">
-                    <span slot="append">件</span>
-                  </el-input> -->
-                  <el-input-number :controls="false" :max="100000" :min="1" :step="1" :precision="0" v-model="stock" />
-                  <span class="pl10">件</span>
-                </div>
-              </div>
-              <div class="scroll-virtual" v-if="disk_type == 2">
-                <div class="virtual-data mb10" v-for="(item, index) in virtualList" :key="index">
-                  <span class="mr10 virtual-title">卡号{{ index + 1 }}：</span>
-                  <el-input
-                    class="mr10"
-                    type="text"
-                    v-model.trim="item.key"
-                    style="width: 150px"
-                    placeholder="请输入卡号(非必填)"
-                  ></el-input>
-                  <span class="mr10 virtual-title">卡密{{ index + 1 }}：</span>
-                  <el-input
-                    class="mr10"
-                    type="text"
-                    v-model.trim="item.value"
-                    style="width: 150px"
-                    placeholder="请输入卡密"
-                  ></el-input>
-                  <span class="deteal-btn" @click="removeVirtual(index)">删除</span>
-                </div>
-              </div>
-              <div class="add-more" v-if="disk_type == 2">
-                <el-button type="primary" @click="handleAdd">新增</el-button>
-                <el-upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile">
-                  <el-button>导入卡密</el-button>
-                </el-upload>
-              </div>
-            </el-form-item>
-          </el-form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="closeVirtual">取 消</el-button>
-          <el-button type="primary" @click="upVirtual">确 定</el-button>
-        </span>
       </el-dialog>
     </el-card>
     <freightTemplate :template="template" v-on:changeTemplate="changeTemplate" ref="templates"></freightTemplate>
@@ -531,17 +428,6 @@
       :updateName="updateName"
     ></coupon-list>
     <coupon-list ref="goodsCoupon" many="one" :luckDraw="true" @getCouponId="goodsCouponId"></coupon-list>
-    <!-- 生成淘宝京东表单-->
-    <el-dialog
-      :visible.sync="modals"
-      @closed="cancel"
-      class="Box"
-      title="复制淘宝、天猫、京东、苏宁、1688"
-      :close-on-click-modal="false"
-      width="720px"
-    >
-      <tao-bao ref="taobaos" v-if="modals" @on-close="onClose"></tao-bao>
-    </el-dialog>
     <el-dialog :visible.sync="goods_modals" title="商品列表" footerHide class="paymentFooter" scrollable width="1000px">
       <goods-list v-if="goods_modals" ref="goodslist" :ischeckbox="true" @getProductId="getProductId"></goods-list>
     </el-dialog>
@@ -610,11 +496,9 @@ export default {
       dataLabel: [],
       headTab: [
         { tit: '基础信息', name: '1' },
-        { tit: '规格库存', name: '2' },
+        { tit: '详情设置', name: '2' },
         { tit: '商品详情', name: '3' },
-        // { tit: '物流设置', name: '4' },
-        // { tit: '营销设置', name: '5' },
-        // { tit: '其他设置', name: '6' },
+        { tit: '其他设置', name: '4' },
       ],
       virtual: [
         { tit: '普通商品', id: 0, tit2: '物流发货' },
@@ -888,7 +772,7 @@ export default {
         // postage: 0,
         temp_id: '',
         attrs: [],
-        attrs1:[],
+        attrs1: [],
         items: [
           {
             pic: '',
@@ -1215,57 +1099,6 @@ export default {
             this.generate(1);
           }
         }
-      }
-      switch (index) {
-        case 0:
-          this.formValidate.virtual_type = 0;
-          this.formValidate.is_virtual = 0;
-          this.headTab = [
-            { tit: '基础信息', name: '1' },
-            { tit: '规格库存', name: '2' },
-            { tit: '商品详情', name: '3' },
-            { tit: '物流设置', name: '4' },
-            { tit: '营销设置', name: '5' },
-            { tit: '其他设置', name: '6' },
-          ];
-          break;
-        case 1:
-          this.formValidate.virtual_type = 1;
-          this.formValidate.postage = 0;
-          this.formValidate.is_virtual = 1;
-          this.headTab = [
-            { tit: '基础信息', name: '1' },
-            { tit: '规格库存', name: '2' },
-            { tit: '商品详情', name: '3' },
-            // { tit: "物流设置", name: "4" },
-            { tit: '营销设置', name: '4' },
-            { tit: '其他设置', name: '5' },
-          ];
-          break;
-        case 2:
-          this.formValidate.virtual_type = 2;
-          this.formValidate.is_virtual = 1;
-          this.headTab = [
-            { tit: '基础信息', name: '1' },
-            { tit: '规格库存', name: '2' },
-            { tit: '商品详情', name: '3' },
-            // { tit: "物流设置", name: "4" },
-            { tit: '营销设置', name: '4' },
-            { tit: '其他设置', name: '5' },
-          ];
-          break;
-        case 3:
-          this.formValidate.virtual_type = 3;
-          this.formValidate.is_virtual = 1;
-          this.headTab = [
-            { tit: '基础信息', name: '1' },
-            { tit: '规格库存', name: '2' },
-            { tit: '商品详情', name: '3' },
-            // { tit: "物流设置", name: "4" },
-            { tit: '营销设置', name: '4' },
-            { tit: '其他设置', name: '5' },
-          ];
-          break;
       }
     },
     // 新增分类
@@ -1760,7 +1593,7 @@ export default {
     },
     // 立即生成
     generate(type, isCopy, arr) {
-      this.formValidate.attrs1 = [...this.attrs]
+      this.formValidate.attrs1 = [...this.attrs];
       generateAttrApi(
         {
           attrs: this.attrs,

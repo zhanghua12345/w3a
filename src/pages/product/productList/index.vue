@@ -24,24 +24,10 @@
       </el-tabs>
       <div class="Button">
         <router-link v-auth="['product-product-save']" :to="$routeProStr + '/product/add_product'"><el-button
-            type="primary" class="mr14">添加商品</el-button></router-link>
-        <!-- <el-button v-auth="['product-crawl-save']" type="success" class="mr14" @click="onCopy">商品采集</el-button>
-        <el-dropdown class="bnt mr14" @command="batchSelect">
-          <el-button>批量修改<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="1">商品分类</el-dropdown-item>
-            <el-dropdown-item :command="2">物流设置</el-dropdown-item>
-            <el-dropdown-item :command="3">购买送积分</el-dropdown-item>
-            <el-dropdown-item :command="4">购买送优惠券</el-dropdown-item>
-            <el-dropdown-item :command="5">关联用户标签</el-dropdown-item>
-            <el-dropdown-item :command="6">活动推荐</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown> -->
+            type="primary" class="mr14">添加案例</el-button></router-link>
         <el-button v-auth="['product-product-product_show']" @click="onDismount"
           v-show="artFrom.type === '1'">批量下架</el-button>
-        <el-button v-auth="['product-product-product_show']" @click="onShelves"
-          v-show="artFrom.type === '2'">批量上架</el-button>
-        <el-button v-auth="['export-storeProduct']" class="export" @click="exports">导出</el-button>
+        <!-- <el-button v-auth="['export-storeProduct']" class="export" @click="exports">导出</el-button> -->
       </div>
       <el-table ref="table" :data="tableList" class="ivu-mt mt14" v-loading="loading" highlight-current-row
         :row-key="getRowKey" @selection-change="handleSelectRow" empty-text="暂无数据">
