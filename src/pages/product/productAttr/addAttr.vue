@@ -1,5 +1,12 @@
 <template>
-  <el-dialog :visible.sync="modal" @closed="onClose" title="详情模板" width="1000px" v-loading="spinShow" :close-on-click-modal="false">
+  <el-dialog
+    :visible.sync="modal"
+    @closed="onClose"
+    title="详情模板"
+    width="1000px"
+    v-loading="spinShow"
+    :close-on-click-modal="false"
+  >
     <el-form
       ref="formDynamic"
       :model="formDynamic"
@@ -26,19 +33,19 @@
             <div class="addCustom_content">
               <div v-for="(item, index) in formDynamic.spec" :key="index" class="custom_box">
                 <el-input
-                  v-model.trim="item.title"
+                  v-model.trim="item.value"
                   placeholder="详情菜单名称"
                   style="width: 150px; margin-right: 10px"
                   :maxlength="10"
                 />
                 <el-input
-                  v-model.trim="item.label"
+                  v-model.trim="item.detail[0]"
                   type="number"
                   placeholder="排序"
                   style="width: 150px; margin-right: 10px"
                   :maxlength="10"
                 />
-                <el-checkbox v-model="item.status">必填</el-checkbox>
+                <el-checkbox v-model="item.status" true-label="1" false-label="">必填</el-checkbox>
                 <div class="addfont" @click="removeCustom(index)" v-if="index > 0">删除</div>
               </div>
             </div>
@@ -53,7 +60,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onClose">取消</el-button>
-      <el-button type="primary" :loading="modal_loading" @click="handleSubmit('formDynamic')">确定</el-button>
+      <el-button type="primary" :loading="modal_loading" @click="handleSubmit()">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -92,7 +99,7 @@ export default {
         this.$message.warning('请输入模板名称');
       } else {
         this.isBtn = true;
-        this.formDynamic.spec.push({ title: '', label: '', status: false });
+        this.formDynamic.spec.push({ value: '', detail: [], status: '' });
       }
     },
 
@@ -101,7 +108,7 @@ export default {
       if (this.formDynamic.spec.length > 9) {
         this.$message.warning('最多添加10条');
       } else {
-        this.formDynamic.spec.push({ title: '', label: '', status: false });
+        this.formDynamic.spec.push({ value: '', detail: [], status: '' });
       }
     },
 
@@ -114,31 +121,30 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const isSpec = this.formDynamic.spec.every((e) => e.title && e.label);
+          const isSpec = this.formDynamic.spec.every((e) => e.value && String(e.detail[0]));
           if (!isSpec) {
             return this.$message.warning('模板数据不能留空！');
-          }else{
+          } else {
             this.modal_loading = true;
-          setTimeout(() => {
-            ruleAddApi(this.formDynamic, this.ids)
-              .then((res) => {
-                this.$message.success(res.msg);
-                setTimeout(() => {
-                  this.modal = false;
+            setTimeout(() => {
+              ruleAddApi(this.formDynamic, this.ids)
+                .then((res) => {
+                  this.$message.success(res.msg);
+                  setTimeout(() => {
+                    this.modal = false;
+                    this.modal_loading = false;
+                  }, 500);
+                  setTimeout(() => {
+                    this.$emit('getList');
+                    this.clear();
+                  }, 600);
+                })
+                .catch((res) => {
                   this.modal_loading = false;
-                }, 500);
-                setTimeout(() => {
-                  this.$emit('getList');
-                  this.clear();
-                }, 600);
-              })
-              .catch((res) => {
-                this.modal_loading = false;
-                this.$message.error(res.msg);
-              });
-          }, 1200);
+                  this.$message.error(res.msg);
+                });
+            }, 1200);
           }
-          
         } else {
           return false;
         }

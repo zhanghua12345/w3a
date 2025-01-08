@@ -5,7 +5,7 @@
       :title="$route.params.id ? '编辑案例' : '添加案例'"
       :backUrl="$routeProStr + '/product/product_list'"
     ></pages-header>
-    <el-card :bordered="false" shadow="never" class="mt16" :body-style="{ padding: '0 20px 20px' }">
+    <el-card :bordered="false" shadow="never" class="mt16" :body-style="{ padding: '0 20px 20px', minHeight: '400px' }">
       <el-tabs v-model="currentTab">
         <el-tab-pane v-for="(item, index) in headTab" :key="index" :label="item.tit" :name="item.name"></el-tab-pane>
       </el-tabs>
@@ -21,54 +21,31 @@
         <!-- 基础信息-->
         <el-row :gutter="24" v-show="currentTab === '1'">
           <el-col :span="24">
-            <el-form-item label="案例分类：" prop="cate_id">
-              <el-cascader
-                class="content_width"
-                v-model="formValidate.cate_id"
-                size="small"
-                :options="treeSelect"
-                :props="{ multiple: true, checkStrictly: true, emitPath: false }"
-                clearable
-              ></el-cascader>
-              <span class="addfont" @click="addCate">新增分类</span>
+            <el-form-item label="案例名称：" prop="name">
+              <el-input class="content_width" v-model.trim="formValidate.name" placeholder="请输入案例名称" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="案例名称：" prop="store_name">
-              <el-input class="content_width" v-model.trim="formValidate.store_name" placeholder="请输入案例名称" />
+            <el-form-item label="VR链接：" prop="VR_link">
+              <el-input class="content_width" v-model="formValidate.VR_link" placeholder="请添加VR链接" />
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-form-item label="案例名称：" prop="store_name">
-              <el-select v-model="formValidate.selectRule" class="content_width mr14">
-                <el-option
-                  v-for="(item, index) in ruleList"
-                  :value="item.rule_name"
-                  :key="index"
-                  :label="item.rule_name"
-                ></el-option>
+          <el-col :span="24" v-for="(item, index) in formValidate.treeSelect" Key="item">
+            <el-form-item :label="item.label + '：'" prop="required">
+              <el-select v-model.trim="formValidate.treeSelect[index].select" class="content_width mr14">
+                <el-option v-for="(e, i) in item.children" :value="e.id" :key="i" :label="e.label"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="单位：" prop="unit_name">
-              <el-input class="content_width" v-model="formValidate.unit_name" placeholder="请输入单位" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="VR链接：" prop="unit_name">
-              <el-input class="content_width" v-model="formValidate.unit_name" placeholder="请添加VR链接" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="商品封面图：">
-              <div class="pictrueBox" @click="modalPicTap('dan', 'recommend_image')">
-                <div class="pictrue" v-if="formValidate.recommend_image">
-                  <img v-lazy="formValidate.recommend_image" />
-                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
+            <el-form-item label="封面图：" prop="coverImg">
+              <div class="pictrueBox" @click="modalPicTap('dan', 'coverImg')">
+                <div class="pictrue" v-if="formValidate.coverImg">
+                  <img v-lazy="formValidate.coverImg" />
+                  <el-input v-model.trim="formValidate.coverImg" style="display: none"></el-input>
                 </div>
                 <div class="upLoad acea-row row-center-wrapper" v-else>
-                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
+                  <el-input v-model.trim="formValidate.coverImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
                 <div class="titTip">移动端分类样式3显示的长方形图片，建议比例：5:2</div>
@@ -76,231 +53,128 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="商品轮播图：" prop="slider_image">
+            <el-form-item label="轮播图：" prop="banner">
               <div class="acea-row">
                 <div
                   class="pictrue"
-                  v-for="(item, index) in formValidate.slider_image"
+                  v-for="(item, index) in formValidate.banner"
                   :key="index"
                   draggable="true"
                   @dragstart="handleDragStart($event, item)"
                   @dragover.prevent="handleDragOver($event, item)"
-                  @dragenter="handleDragEnter($event, item)"
+                  @dragenter="handleDragEnter($event, item, 'banner')"
                   @dragend="handleDragEnd($event, item)"
                 >
                   <img v-lazy="item" />
-                  <i class="el-icon-error btndel" @click="handleRemove(index)"></i>
+                  <i class="el-icon-error btndel" @click="handleRemove(index, 'banner')"></i>
                 </div>
                 <div
-                  v-if="formValidate.slider_image.length < 1"
+                  v-if="formValidate.banner.length < 10"
                   class="upLoad acea-row row-center-wrapper"
-                  @click="modalPicTap('duo')"
+                  @click="modalPicTap('duo', 'banner')"
                 >
+                  <el-input v-model.trim="formValidate.banner[0]" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <el-input v-model="formValidate.slider_image[0]" style="display: none"></el-input>
               </div>
               <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，默认首张图为主图，最多上传10张</div>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="24">
-            <el-form-item label="添加视频：">
-              <el-switch :active-value="1" :inactive-value="0" v-model="formValidate.video_open" size="large">
-                <span slot="open">开启</span>
-                <span slot="close">关闭</span>
-              </el-switch>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" v-if="formValidate.video_open">
-            <el-form-item label="视频类型：">
-              <el-radio-group v-model="seletVideo" @input="changeVideo">
-                <el-radio :label="0" class="radio">本地视频</el-radio>
-                <el-radio :label="1">视频链接</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" v-if="formValidate.video_open" id="selectvideo">
-            <el-form-item label="" prop="video_link">
-              <el-input
-                v-if="seletVideo == 1 && !formValidate.video_link"
-                class="content_width"
-                v-model="videoLink"
-                placeholder="请输入视频链接"
-              />
-              <input type="file" ref="refid" @change="zh_uploadFile_change" style="display: none" />
-              <div
-                v-if="seletVideo == 0 && (upload_type !== '1' || videoLink) && !formValidate.video_link"
-                class="ml10 videbox"
-                @click="zh_uploadFile"
-              >
-                +
-              </div>
-              <el-button
-                v-if="seletVideo == 1 && (upload_type !== '1' || videoLink) && !formValidate.video_link"
-                type="primary"
-                class="ml10"
-                @click="zh_uploadFile"
-                >确认添加</el-button
-              >
-              <el-upload
-                v-if="upload_type === '1' && !videoLink"
-                :show-file-list="false"
-                :action="fileUrl2"
-                :before-upload="videoSaveToUrl"
-                :data="uploadData"
-                :headers="header"
-                :multiple="false"
-                style="display: inline-block"
-              >
-                <div v-if="seletVideo === 0 && !formValidate.video_link" class="videbox">+</div>
-              </el-upload>
-              <div class="box-video-style" v-if="formValidate.video_link">
-                <video
-                  style="width: 100%; height: 100% !important; border-radius: 10px"
-                  :src="formValidate.video_link"
-                  controls="controls"
-                >
-                  您的浏览器不支持 video 标签。
-                </video>
-                <div class="mark"></div>
-                <i class="el-icon-delete iconv" @click="delVideo"></i>
-              </div>
-              <Progress class="progress" :percent="progress" :stroke-width="5" v-if="upload.videoIng || videoIng" />
-              <div class="titTip">建议时长：9～30秒，视频宽高比16:9</div>
-            </el-form-item>
-          </el-col> -->
-          <el-col v-bind="grid">
-            <el-form-item label="商品状态：">
-              <el-radio-group v-model="formValidate.is_show">
+          <el-col>
+            <el-form-item label="商品状态：" prop="status">
+              <el-radio-group v-model="formValidate.status">
                 <el-radio :label="1" class="radio">上架</el-radio>
                 <el-radio :label="0">下架</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
+
         <!-- 详情设置-->
-        <el-row :gutter="24" v-show="currentTab === '2'">
-          <el-col :span="24" v-if="formValidate.spec_type === 1" class="noForm">
-            <el-form-item label="详情设置：" prop="">
+        <el-row :gutter="24" v-show="currentTab === '2'" style="min-height: 300px">
+          <el-col :span="24" class="noForm">
+            <el-form-item label="详情设置：" prop="selectRule">
               <div class="acea-row row-middle">
                 <el-select v-model="formValidate.selectRule" class="content_width mr14">
                   <el-option
                     v-for="(item, index) in ruleList"
-                    :value="item.rule_name"
+                    :value="item.id"
                     :key="index"
                     :label="item.rule_name"
                   ></el-option>
                 </el-select>
                 <el-button type="primary" @click="confirm">确认</el-button>
-                <el-button @click="addRule">添加规格模板</el-button>
+                <el-button @click="addRule">添加详情模板</el-button>
               </div>
             </el-form-item>
-
-            <el-col :span="24">
-              <el-form-item label="自定义表单：">
-                <el-switch
-                  :active-value="1"
-                  :inactive-value="0"
-                  v-model="customBtn"
-                  @change="customMessBtn"
-                  size="large"
-                >
-                  <span slot="open">开启</span>
-                  <span slot="close">关闭</span>
-                </el-switch>
-                <div class="addCustom_content" v-if="customBtn">
-                  <div v-for="(item, index) in formValidate.custom_form" :key="index" class="custom_box">
-                    <el-input
-                      v-model.trim="item.title"
-                      :placeholder="'表单标题' + (index + 1)"
-                      style="width: 150px; margin-right: 10px"
-                      :maxlength="10"
-                    />
-                    <el-select v-model="item.label" style="width: 200px; margin-left: 6px; margin-right: 10px">
-                      <el-option
-                        v-for="items in CustomList"
-                        :value="items.value"
-                        :key="items.value"
-                        :label="items.label"
-                      ></el-option>
-                    </el-select>
-                    <el-checkbox v-model="item.status">必填</el-checkbox>
-                    <div class="addfont" @click="delcustom()">删除</div>
-                  </div>
+            <template v-if="isSelectRule">
+              <el-form-item label="详情菜单：">
+                <div v-for="(item, index) in formValidate.attrs" :key="index" class="custom_box">
+                  <el-input
+                    v-model.trim="item.value"
+                    placeholder="详情菜单名称"
+                    style="width: 150px; margin-right: 10px"
+                    :maxlength="10"
+                  />
+                  <el-input
+                    v-model.trim="item.detail[0]"
+                    placeholder="排序"
+                    type="number"
+                    style="width: 150px; margin-right: 10px"
+                    :maxlength="10"
+                  />
+                  <el-checkbox v-model="item.status" true-label="1" false-label="">必填</el-checkbox>
+                  <div class="addfont" @click="delcustom()" v-if="index > 0">删除</div>
                 </div>
-                <div class="addCustomBox" v-show="customBtn">
-                  <div class="btn" @click="addcustom">+ 添加表单</div>
-                  <div class="titTip">用户下单时需填写的信息，最多可设置10条，设置了自定义表单的商品不能加入购物车</div>
+                <div class="addCustomBox">
+                  <div class="btn" @click="addcustom">+ 添加规格</div>
+                  <div class="titTip">最多可设置10条</div>
                 </div>
               </el-form-item>
-            </el-col>
-            <!-- <el-col :span="24" v-if="createBnt"> -->
-            <el-form-item v-if="createBnt">
-              <el-button type="primary" @click="addBtn">添加新规格</el-button>
-              <el-button type="success" @click="generate(1)">立即生成</el-button>
-            </el-form-item>
-            <!-- </el-col> -->
-            <el-col :span="24" v-if="showIput">
-              <el-col :xl="6" :lg="9" :md="10" :sm="24" :xs="24">
-                <el-form-item label="规格：">
-                  <el-input placeholder="请输入规格" v-model="formDynamic.attrsName" />
-                </el-form-item>
-              </el-col>
-              <el-col :xl="6" :lg="9" :md="10" :sm="24" :xs="24">
-                <el-form-item label="规格值：">
-                  <el-input v-model="formDynamic.attrsVal" placeholder="请输入规格值" />
-                </el-form-item>
-              </el-col>
-              <el-col :xl="6" :lg="5" :md="10" :sm="24" :xs="24">
-                <div class="df-n-warp">
-                  <el-button type="primary" @click="createAttrName">确定</el-button>
-                  <el-button @click="offAttrName">取消</el-button>
-                </div>
-              </el-col>
-            </el-col>
-            <!-- 多规格设置-->
-            <el-col
-              :xl="24"
-              :lg="24"
-              :md="24"
-              :sm="24"
-              :xs="24"
-              v-if="manyFormValidate.length && formValidate.header.length !== 0 && attrs.length !== 0"
-            >
-              <el-col :span="24" v-for="(item, index) in formValidate.attrs1" :key="index">
-                <el-form-item :label="item.value" prop="slider_image">
+              <el-form-item>
+                <el-button type="success" @click="generate">立即生成</el-button>
+              </el-form-item>
+            </template>
+
+            <!-- 案例详情-->
+            <el-col v-if="formValidate.attrsImages && formValidate.attrsImages.length">
+              <el-col :span="24" v-for="(item, index) in formValidate.attrsImages" :key="index">
+                <el-form-item :label="item.value" :prop="item.status?'required':''" >
                   <div class="acea-row">
                     <div
                       class="pictrue"
-                      v-for="(item, index) in formValidate.slider_image"
-                      :key="index"
+                      v-for="(e, i) in item.images"
+                      :key="i"
                       draggable="true"
-                      @dragstart="handleDragStart($event, item)"
-                      @dragover.prevent="handleDragOver($event, item)"
-                      @dragenter="handleDragEnter($event, item)"
-                      @dragend="handleDragEnd($event, item)"
+                      @dragstart="handleDragStart($event, e)"
+                      @dragover.prevent="handleDragOver($event, e)"
+                      @dragenter="handleDragEnter($event, e, `attrsImages`, index)"
+                      @dragend="handleDragEnd($event, e)"
                     >
-                      <img v-lazy="item" />
-                      <i class="el-icon-error btndel" @click="handleRemove(index)"></i>
+                      <img v-lazy="e" />
+                      <i class="el-icon-error btndel" @click="handleRemove(i, 'attrsImages', index)"></i>
                     </div>
                     <div
-                      v-if="formValidate.slider_image.length < 1"
+                      v-if="item.images.length < 10"
                       class="upLoad acea-row row-center-wrapper"
-                      @click="modalPicTap('duo')"
+                      @click="modalPicTap('duo', `attrsImages`, index)"
                     >
+                      <el-input
+                        v-model.trim="formValidate.attrsImages[index].images[0]"
+                        style="display: none"
+                      ></el-input>
                       <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                     </div>
-                    <el-input v-model="formValidate.slider_image[0]" style="display: none"></el-input>
                   </div>
 
-                  <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，默认首张图为主图，最多上传10张</div>
+                  <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，最多上传10张</div>
                 </el-form-item>
               </el-col>
             </el-col>
           </el-col>
         </el-row>
         <!-- 商品详情-->
-        <el-row v-show="currentTab === '3'">
+        <el-row v-show="currentTab === '3'" :gutter="24">
           <el-col :span="16">
             <el-form-item label="商品详情：">
               <WangEditor style="width: 100%" :content="contents" @editorContent="getEditorContent"></WangEditor>
@@ -316,80 +190,36 @@
         <!-- 其他设置-->
         <el-row justify="space-between" v-show="currentTab === '4'">
           <el-col :span="24">
-            <el-form-item label="商品关键字：">
-              <el-input class="content_width" v-model.trim="formValidate.keyword" placeholder="请输入商品关键字" />
-              <div class="titTip">PC端的SEO优化以及可以根据关键字进行商品搜索</div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="商品简介：">
+            <el-form-item label="案例简介：">
               <el-input
                 class="content_width"
-                v-model.trim="formValidate.store_info"
+                v-model.trim="formValidate.description"
                 type="textarea"
                 :rows="3"
-                placeholder="请输入商品简介"
+                placeholder="请输入案例简介"
               />
-              <div class="titTip">公众号分享商品以及PC端SEO优化使用</div>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="商品口令：">
-              <el-input
-                v-model.trim="formValidate.command_word"
-                placeholder="请输入商品口令"
-                type="textarea"
-                :rows="3"
-                class="content_width"
-              />
-              <div class="titTip">将其他平台的商品口令填写保存，移动端进入商品详情的时候自动复制</div>
+            <el-form-item label="案例推荐：" prop="isRecommend">
+              <el-radio-group v-model="formValidate.isRecommend">
+                <el-radio :label="1" class="radio">是</el-radio>
+                <el-radio :label="0">否</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
-
-          <el-col :span="24">
-            <el-form-item label="商品推荐图：">
-              <div class="pictrueBox" @click="modalPicTap('dan', 'recommend_image')">
-                <div class="pictrue" v-if="formValidate.recommend_image">
-                  <img v-lazy="formValidate.recommend_image" />
-                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
+          <el-col :span="24" v-if="formValidate.isRecommend">
+            <el-form-item label="案例推荐图：" prop="recommendImg">
+              <div class="pictrueBox" @click="modalPicTap('dan', 'recommendImg')">
+                <div class="pictrue" v-if="formValidate.recommendImg">
+                  <img v-lazy="formValidate.recommendImg" />
+                  <el-input v-model.trim="formValidate.recommendImg" style="display: none"></el-input>
                 </div>
                 <div class="upLoad acea-row row-center-wrapper" v-else>
-                  <el-input v-model.trim="formValidate.recommend_image" style="display: none"></el-input>
+                  <el-input v-model.trim="formValidate.recommendImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
                 <div class="titTip">移动端分类样式3显示的长方形图片，建议比例：5:2</div>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="自定义表单：">
-              <el-switch :active-value="1" :inactive-value="0" v-model="customBtn" @change="customMessBtn" size="large">
-                <span slot="open">开启</span>
-                <span slot="close">关闭</span>
-              </el-switch>
-              <div class="addCustom_content" v-if="customBtn">
-                <div v-for="(item, index) in formValidate.custom_form" :key="index" class="custom_box">
-                  <el-input
-                    v-model.trim="item.title"
-                    :placeholder="'表单标题' + (index + 1)"
-                    style="width: 150px; margin-right: 10px"
-                    :maxlength="10"
-                  />
-                  <el-select v-model="item.label" style="width: 200px; margin-left: 6px; margin-right: 10px">
-                    <el-option
-                      v-for="items in CustomList"
-                      :value="items.value"
-                      :key="items.value"
-                      :label="items.label"
-                    ></el-option>
-                  </el-select>
-                  <el-checkbox v-model="item.status">必填</el-checkbox>
-                  <div class="addfont" @click="delcustom()">删除</div>
-                </div>
-              </div>
-              <div class="addCustomBox" v-show="customBtn">
-                <div class="btn" @click="addcustom">+ 添加表单</div>
-                <div class="titTip">用户下单时需填写的信息，最多可设置10条，设置了自定义表单的商品不能加入购物车</div>
               </div>
             </el-form-item>
           </el-col>
@@ -418,260 +248,73 @@
         ></uploadPictures>
       </el-dialog>
     </el-card>
-    <freightTemplate :template="template" v-on:changeTemplate="changeTemplate" ref="templates"></freightTemplate>
-    <add-attr ref="addattr" @getList="userSearchs"></add-attr>
-    <coupon-list
-      ref="couponTemplates"
-      @nameId="nameId"
-      :couponids="formValidate.coupon_ids"
-      :updateIds="updateIds"
-      :updateName="updateName"
-    ></coupon-list>
-    <coupon-list ref="goodsCoupon" many="one" :luckDraw="true" @getCouponId="goodsCouponId"></coupon-list>
-    <el-dialog :visible.sync="goods_modals" title="商品列表" footerHide class="paymentFooter" scrollable width="1000px">
-      <goods-list v-if="goods_modals" ref="goodslist" :ischeckbox="true" @getProductId="getProductId"></goods-list>
-    </el-dialog>
-    <!-- 用户标签 -->
-    <el-dialog
-      :visible.sync="labelShow"
-      title="请选择用户标签"
-      :show-close="true"
-      width="540px"
-      :close-on-click-modal="false"
-    >
-      <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
-    </el-dialog>
+    <add-attr ref="addattr" @getList="productGetRule"></add-attr>
   </div>
 </template>
 
 <script>
-import userLabel from '@/components/labelList';
 import { mapState } from 'vuex';
 import vuedraggable from 'vuedraggable';
 import uploadPictures from '@/components/uploadPictures';
-import freightTemplate from '@/components/freightTemplate';
-import couponList from '@/components/couponList';
 import addAttr from '../productAttr/addAttr';
-import goodsList from '@/components/goodsList/index';
-import taoBao from './taoBao';
 import WangEditor from '@/components/wangEditor/index.vue';
-import { userLabelAddApi } from '@/api/user';
-import { get_material } from '@/api/product';
-import {
-  productInfoApi,
-  cascaderListApi,
-  productAddApi,
-  generateAttrApi,
-  productGetRuleApi,
-  productGetTemplateApi,
-  productGetTempKeysApi,
-  checkActivityApi,
-  productCache,
-  cacheDelete,
-  uploadType,
-  importCard,
-  productCreateApi,
-} from '@/api/product';
-import Setting from '@/setting';
-import { getCookies } from '@/libs/util';
-import { uploadByPieces } from '@/utils/upload'; //引入uploadByPieces方法
-
+import { productInfoApi, cascaderListApi, productGetRuleApi, productCreateApi } from '@/api/product';
+import { readonly } from 'vue';
+const ruleInit = readonly({
+  name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
+  VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
+  coverImg: [{ required: true, message: '请上传案例封面图', trigger: 'change' }],
+  banner: [{ required: true, message: '请上传案例封面图', trigger: 'change', type: 'array' }],
+  status: [{ required: true, message: '请选择案例状态', trigger: 'change' }],
+  selectRule: [{ required: true, message: '请选择案例详情分类', trigger: 'change' }],
+  attrs: [{ required: true, message: '案例详情菜单不能为空', trigger: 'change', type: 'array' }],
+  attrsImages: [{ required: true, message: '案例详情图片不能为空', trigger: 'change', type: 'array' }],
+  isRecommend: [{ required: true, message: '请选择案例推荐', trigger: 'change' }],
+  recommendImg: [{ required: true, message: '请上传推荐图', trigger: 'change' }],
+  required: [{ required: true, message: '这是一个只加标头的数据', trigger: 'change' }],
+});
 export default {
   name: 'product_productAdd',
   components: {
-    // VueUeditorWrap,
     uploadPictures,
-    freightTemplate,
     addAttr,
-    couponList,
-    taoBao,
     draggable: vuedraggable,
-    goodsList,
     WangEditor,
-    userLabel,
   },
   data() {
     return {
-      labelShow: false,
-      dataLabel: [],
+      spinShow: false, // 获取数据刷新按钮
       headTab: [
         { tit: '基础信息', name: '1' },
         { tit: '详情设置', name: '2' },
         { tit: '商品详情', name: '3' },
         { tit: '其他设置', name: '4' },
       ],
-      virtual: [
-        { tit: '普通商品', id: 0, tit2: '物流发货' },
-        { tit: '卡密/网盘', id: 1, tit2: '自动发货' },
-        { tit: '优惠券', id: 2, tit2: '自动发货' },
-        { tit: '虚拟商品', id: 3, tit2: '虚拟发货' },
-      ],
-      seletVideo: 0, //选择视频类型
-      customBtn: false, //自定义留言开关
-      content: '',
-      contents: '',
-      fileUrl: Setting.apiBaseURL + '/file/upload',
-      fileUrl2: Setting.apiBaseURL + '/file/video_upload',
-      cardUrl: Setting.apiBaseURL + '/file/upload/1',
-      upload_type: '', //视频上传类型 1 本地上传 2 3 4 OSS上传
-      uploadData: {}, // 上传参数
-      header: {},
+      currentTab: '1',
 
-      type: 0,
-      modals: false,
-      goods_modals: false,
-      spinShow: false,
-      openSubimit: false,
-      virtualData: '',
-      virtualList: [
-        {
-          key: '',
-          value: '',
-        },
-      ],
-      grid2: {
-        xl: 10,
-        lg: 12,
-        md: 12,
-        sm: 24,
-        xs: 24,
+      ruleList: [], // 详情模板
+      isSelectRule: false,
+
+      content: '', // 商品详情
+      contents: '', // 商品详情 - 初始化
+      formValidate: {
+        required: true,
+        treeSelect: [], // 案例分类数据
+        name: '', // 案例名称
+        VR_link: '', // 案例效果图链接
+        coverImg: '', // 封面图
+        banner: [], // 轮播图
+        status: 1, // 轮播图
+
+        selectRule: '', // 案例详情分类
+        attrs: [], // 案例详情菜单分类
+        attrsImages: [], // 案例详情图片分类
+
+        description: '', // 简介
+        isRecommend: 0, // 是否推荐列表
+        recommendImg: '',
       },
-      grid3: {
-        xl: 18,
-        lg: 18,
-        md: 20,
-        sm: 24,
-        xs: 24,
-      },
-      // 批量设置表格data
-      oneFormBatch: [
-        {
-          pic: '',
-          price: 0,
-          cost: 0,
-          ot_price: 0,
-          stock: 0,
-          bar_code: '',
-          weight: 0,
-          volume: 0,
-          virtual_list: [],
-        },
-      ],
-      // 规格数据
-      formDynamic: {
-        attrsName: '',
-        attrsVal: '',
-      },
-      disk_type: 1, //卡密类型
-      tabIndex: 0,
-      tabName: '',
-      formDynamicNameData: [],
-      isBtn: false,
-      columns2: [
-        {
-          title: '图片',
-          slot: 'pic',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '售价',
-          slot: 'price',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '成本价',
-          slot: 'cost',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '原价',
-          slot: 'ot_price',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '库存',
-          slot: 'stock',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '商品编号',
-          slot: 'bar_code',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '重量（KG）',
-          slot: 'weight',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '体积(m³)',
-          slot: 'volume',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          align: 'center',
-          minWidth: 120,
-        },
-      ],
-      columns3: [
-        {
-          title: '图片',
-          slot: 'pic',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '售价',
-          slot: 'price',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '成本价',
-          slot: 'cost',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '原价',
-          slot: 'ot_price',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '库存',
-          slot: 'stock',
-          align: 'center',
-          minWidth: 95,
-        },
-        {
-          title: '商品编号',
-          slot: 'bar_code',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          align: 'center',
-          minWidth: 120,
-        },
-      ],
-      columns: [],
-      columnsInstall: [],
-      columnsInstal2: [],
+      ruleValidate: ruleInit,
       gridPic: {
         xl: 6,
         lg: 8,
@@ -686,255 +329,15 @@ export default {
         sm: 8,
         xs: 8,
       },
-      //自定义留言下拉选择
-      CustomList: [
-        {
-          value: 'text',
-          label: '文本框',
-        },
-        {
-          value: 'number',
-          label: '数字',
-        },
-        {
-          value: 'email',
-          label: '邮件',
-        },
-        {
-          value: 'data',
-          label: '日期',
-        },
-        {
-          value: 'time',
-          label: '时间',
-        },
-        {
-          value: 'id',
-          label: '身份证',
-        },
-        {
-          value: 'phone',
-          label: '手机号',
-        },
-        {
-          value: 'img',
-          label: '图片',
-        },
-      ],
-      customess: {
-        content: [],
-      }, //自定义留言内容
+      openSubimit: false, // 提交按钮状态
+      modalPic: false, // 案例图收否显示
+      isChoice: '', // 图片上传规格
 
-      formValidate: {
-        material_id: '', //材质id
-        material_name: '', //材质名称
-        disk_info: '', //卡密类型
-        logistics: ['1'], //选择物流方式
-        freight: 2, //运费设置
-        postage: 0, //设置运费金额
-        recommend: [], //商品推荐
-        presale_day: 1, //预售发货时间-结束
-        presale: false, //预售商品开关
-        is_limit: false,
-        limit_type: 0,
-        limit_num: 0,
-        video_open: false, //视频按钮是否显示
-        vip_product: false, //付费会员专属开关
-        custom_form: [], //自定义留言
-        store_name: '',
-        cate_id: [],
-        label_id: [],
-        keyword: '',
-        unit_name: '',
-        store_info: '',
-        image: '',
-        recommend_image: '',
-        slider_image: [],
-        description: '',
-        ficti: 0,
-        give_integral: 0,
-        sort: 0,
-        is_show: 1,
-        is_hot: 0,
-        is_benefit: 0,
-        is_best: 0,
-        is_new: 0,
-        is_good: 0,
-        is_postage: 0,
-        is_sub: [],
-        recommend_list: [],
-        virtual_type: 0,
-        // is_sub: 0,
-        id: 0,
-        spec_type: 1,
-        is_virtual: 0,
-        video_link: '',
-        // postage: 0,
-        temp_id: '',
-        attrs: [],
-        attrs1: [],
-        items: [
-          {
-            pic: '',
-            price: 0,
-            cost: 0,
-            ot_price: 0,
-            stock: 0,
-            bar_code: '',
-          },
-        ],
-        activity: ['默认', '秒杀', '砍价', '拼团'],
-        couponName: [],
-        header: [],
-        selectRule: '',
-        coupon_ids: [],
-        command_word: '',
-        min_qty: 1,
-      },
-      ruleList: [],
-      templateList: [],
-      createBnt: true,
-      showIput: false,
-      manyFormValidate: [],
-      // 单规格表格data
-      oneFormValidate: [
-        {
-          pic: '',
-          price: 0,
-          cost: 0,
-          ot_price: 0,
-          stock: 0,
-          bar_code: '',
-          weight: 0,
-          volume: 0,
-          brokerage: 0,
-          brokerage_two: 0,
-          vip_price: 0,
-          virtual_list: [],
-          coupon_id: 0,
-        },
-      ],
-      images: [],
-      imagesTable: '',
-      currentTab: '1',
-      isChoice: '',
-      grid: {
-        xl: 8,
-        lg: 8,
-        md: 12,
-        sm: 24,
-        xs: 24,
-      },
-      loading: false,
-      modalPic: false,
-      addVirtualModel: false,
-      template: false,
-      uploadList: [],
-      treeSelect: [],
       picTit: '',
-      tableIndex: 0,
-      ruleValidate: {
-        store_name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
-        cate_id: [
-          {
-            required: true,
-            message: '请选择商品分类',
-            trigger: 'change',
-            type: 'array',
-            min: '1',
-          },
-        ],
-        unit_name: [{ required: true, message: '请输入单位', trigger: 'blur' }],
-        // image: [{ required: true, message: "请上传商品图", trigger: "change" }],
-        slider_image: [
-          {
-            required: true,
-            message: '请上传商品轮播图',
-            type: 'array',
-            trigger: 'change',
-          },
-        ],
-        spec_type: [{ required: true, message: '请选择商品规格', trigger: 'change' }],
-        is_virtual: [{ required: true, message: '请选择商品类型', trigger: 'change' }],
-        selectRule: [{ required: true, message: '请选择商品规格属性', trigger: 'change' }],
-        temp_id: [
-          {
-            required: true,
-            message: '请选择运费模板',
-            trigger: 'change',
-            type: 'number',
-          },
-        ],
-        presale_time: [
-          {
-            required: true,
-            type: 'array',
-            message: '请选择活动时间',
-            trigger: 'change',
-          },
-        ],
-        logistics: [
-          {
-            required: true,
-            type: 'array',
-            min: 1,
-            message: '请选择物流方式',
-            trigger: 'change',
-          },
-          {
-            type: 'array',
-            max: 2,
-            message: '请选择物流方式',
-            trigger: 'change',
-          },
-        ],
-        give_integral: [{ type: 'integer', message: '请输入整数' }],
-      },
-      manyBrokerage: 0,
-      manyBrokerageTwo: 0,
-      manyVipPrice: 0,
-      upload: {
-        videoIng: false, // 是否显示进度条；
-      },
-      videoIng: false, // 是否显示进度条；
-      progress: 0, // 进度条默认0
-      stock: 0,
-      disk_info: '',
-      videoLink: '',
-      attrs: [],
-      activity: { 默认: 'red', 秒杀: 'blue', 砍价: 'green', 拼团: 'yellow' },
-      couponName: [],
-      updateIds: [],
-      updateName: [],
-      couponIds: '',
-      couponNames: [],
-      rakeBack: [
-        {
-          title: '一级返佣',
-          slot: 'brokerage',
-          align: 'center',
-          width: 95,
-        },
-        {
-          title: '二级返佣',
-          slot: 'brokerage_two',
-          align: 'center',
-          width: 95,
-        },
-      ],
-      member: [
-        {
-          title: '会员价',
-          slot: 'vip_price',
-          align: 'center',
-          width: 95,
-        },
-      ],
-      columnsInstalM: [],
-      moveIndex: '',
-      mateList: [], //材质列表
+      tableIndex: null, // 多图上传所以位置 - 第二步
     };
   },
+
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
@@ -943,494 +346,20 @@ export default {
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
     },
-    labelBottom() {
-      return this.isMobile ? undefined : '15px';
-    },
   },
+
   beforeRouteUpdate(to, from, next) {
     this.bus.$emit('onTagsViewRefreshRouterView', this.$route.path);
     next();
   },
-  created() {
-    this.columns = this.columns2.slice(0, 8);
-    this.getToken();
-    this.get_material();
-    // this.columnsInstall = this.columns2.slice(0, 4).concat(this.columnsInstall);
-    // this.columnsInsta8 = this.columns2.slice(0, 4).concat(this.columnsInsta8);
-  },
   mounted() {
-    if (this.$route.params.id !== '0' && this.$route.params.id) {
+    if (this.$route.params.id) {
       this.getInfo();
-    } else if (this.$route.params.id === '0') {
-      productCache()
-        .then((res) => {
-          let data = res.data.info;
-          if (!Array.isArray(data)) {
-            let cate_id = data.cate_id.map(Number);
-            let label_id = data.label_id.map(Number);
-            this.attrs = data.items || [];
-            let ids = [];
-            // let names = [];
-            if (data.coupons) {
-              data.coupons.map((item) => {
-                ids.push(item.id);
-                // names.push(item.title);
-              });
-              this.couponName = data.coupons;
-            }
-
-            this.formValidate = data;
-            // this.couponName = data.coupons;
-            // that.couponName = names;
-            this.dataLabel = data.label_id;
-            this.formValidate.coupon_ids = ids;
-            this.updateIds = ids;
-            this.updateName = data.coupons;
-            this.formValidate.cate_id = cate_id;
-            // this.formValidate.label_id = label_id;
-            this.oneFormValidate = data.attrs;
-            this.formValidate.logistics = data.logistics || ['1'];
-            this.formValidate.header = [];
-            this.generate(0);
-            this.manyFormValidate = data.attrs;
-            this.spec_type = data.spec_type;
-            this.formValidate.is_virtual = data.is_virtual;
-            this.formValidate.custom_form = data.custom_form || [];
-            if (this.formValidate.custom_form.length != 0) {
-              this.customBtn = true;
-            }
-            this.virtualbtn(data.virtual_type, 1);
-            if (data.spec_type === 0) {
-              this.manyFormValidate = [];
-            } else {
-              this.createBnt = true;
-              this.oneFormValidate = [
-                {
-                  pic: data.image,
-                  price: 0,
-                  cost: 0,
-                  ot_price: 0,
-                  stock: 0,
-                  bar_code: '',
-                  weight: 0,
-                  volume: 0,
-                  brokerage: 0,
-                  brokerage_two: 0,
-                  vip_price: 0,
-                  virtual_list: [],
-                  coupon_id: 0,
-                },
-              ];
-            }
-            this.spinShow = false;
-          }
-        })
-        .catch((err) => {
-          this.$message.error(err.msg);
-        });
     }
-    if (this.$route.query.type) {
-      this.modals = true;
-      this.type = this.$route.query.type;
-    } else {
-      this.type = 0;
-    }
-    this.goodsCategory();
-    this.productGetRule();
-    this.productGetTemplate();
-    // this.userLabel();
-    this.uploadType();
+    this.goodsCategory(); // 案例分类
+    this.productGetRule(); // 案例详情分类
   },
   methods: {
-    //查询材质列表
-    get_material() {
-      get_material({
-        page: 1,
-        limit: 99,
-      }).then((res) => {
-        this.mateList = res.data;
-      });
-    },
-    //选择材质
-    changeMate() {
-      let id = this.formValidate.material_id;
-      if (id == '') {
-        this.formValidate.material_name = '';
-      } else {
-        this.formValidate.material_name = this.mateList.find((item) => item.id == id).name;
-      }
-      console.log(id, this.formValidate.material_name);
-    },
-
-    // 分片上传
-    videoSaveToUrl(file) {
-      uploadByPieces({
-        file: file, // 视频实体
-        pieceSize: 3, // 分片大小
-        success: (data) => {
-          this.formValidate.video_link = data.file_path;
-          this.progress = 100;
-        },
-        error: (e) => {
-          this.$message.error(e.msg);
-        },
-        uploading: (chunk, allChunk) => {
-          this.videoIng = true;
-          let st = Math.floor((chunk / allChunk) * 100);
-          this.progress = st;
-        },
-      });
-      return false;
-    },
-    // 类型选择/填入内容判断
-    virtualbtn(index, type) {
-      if (type != 1) {
-        this.formValidate.is_sub = [];
-        let id = this.$route.params.id;
-        if (id) {
-          checkActivityApi(id)
-            .then((res) => {})
-            .catch((res) => {
-              this.formValidate.spec_type = this.spec_type;
-              this.$message.error(res.msg);
-            });
-        } else {
-          if (this.formValidate.spec_type == 1) {
-            this.generate(1);
-          }
-        }
-      }
-    },
-    // 新增分类
-    addCate() {
-      this.$modalForm(productCreateApi()).then(() => this.goodsCategory());
-    },
-    // 物流方式选择
-    logisticsBtn(e) {
-      this.formValidate.logistics = e;
-    },
-    // 新增标签
-    addLabel() {
-      this.$modalForm(userLabelAddApi(0)).then(() => this.userLabel());
-    },
-    // 自定义留言 开启关闭
-    customMessBtn(e) {
-      if (!e) {
-        this.formValidate.custom_form = [];
-      }
-    },
-    // 自定义留言 新增表单
-    addcustom() {
-      if (this.formValidate.custom_form.length > 9) {
-        this.$message.warning('最多添加10条');
-      } else {
-        this.formValidate.custom_form.push({
-          title: '',
-          label: 'text',
-          value: '',
-          status: false,
-        });
-      }
-    },
-    // 删除
-    delcustom(index) {
-      this.formValidate.custom_form.splice(index, 1);
-    },
-    // 预售具体日期
-    onchangeTime(e) {
-      this.formValidate.presale_time = e;
-    },
-    // 商品详情
-    getEditorContent(data) {
-      this.content = data;
-    },
-    cancel() {
-      this.modals = false;
-    },
-    // 上传头部token
-    getToken() {
-      this.header['Authori-zation'] = 'Bearer ' + getCookies('token');
-    },
-    // 导入卡密
-    upFile(res) {
-      importCard({ file: res.data.src }).then((res) => {
-        this.virtualList = this.virtualList.concat(res.data);
-      });
-    },
-    //获取视频上传类型
-    uploadType() {
-      uploadType().then((res) => {
-        this.upload_type = res.data.upload_type;
-      });
-    },
-    // 初始化数据展示
-    infoData(data, isCopy) {
-      let cate_id = data.cate_id.map(Number);
-      let label_id = data.label_id.map(Number);
-      this.attrs = data.items || [];
-      let ids = [];
-      data.coupons.map((item) => {
-        ids.push(item.id);
-      });
-      this.formValidate = data;
-      this.seletVideo = data.seletVideo;
-      this.contents = data.description;
-      this.couponName = data.coupons;
-      this.formValidate.coupon_ids = ids;
-      this.updateIds = ids;
-      this.dataLabel = data.label_id;
-      this.updateName = data.coupons;
-      this.virtualbtn(data.virtual_type, 1);
-      this.formValidate.logistics = data.logistics || ['1'];
-      this.formValidate.custom_form = data.custom_form || [];
-      if (this.formValidate.custom_form.length != 0) {
-        this.customBtn = true;
-      }
-      this.formValidate.cate_id = cate_id;
-      if (data.attr) {
-        this.oneFormValidate = [data.attr];
-      }
-      this.formValidate.header = [];
-      this.generate(0, isCopy, data.attrs);
-      // this.manyFormValidate = data.attrs;
-      // this.$set(this, 'manyFormValidate', data.attrs);
-      this.spec_type = data.spec_type;
-      this.formValidate.is_virtual = data.is_virtual;
-      if (data.spec_type === 0) {
-        this.manyFormValidate = [];
-      } else {
-        this.createBnt = true;
-        this.oneFormValidate = [
-          {
-            pic: '',
-            price: 0,
-            cost: 0,
-            ot_price: 0,
-            stock: 0,
-            bar_code: '',
-            weight: 0,
-            volume: 0,
-            brokerage: 0,
-            brokerage_two: 0,
-            vip_price: 0,
-            virtual_list: [],
-            coupon_id: 0,
-          },
-        ];
-      }
-    },
-    //关闭淘宝弹窗并生成数据；
-    onClose(data) {
-      this.modals = false;
-      this.infoData(data, 1);
-    },
-
-    checkMove(evt) {
-      this.moveIndex = evt.draggedContext.index;
-    },
-    end() {
-      this.moveIndex = '';
-      this.generate(1);
-    },
-    // 单独设置会员设置
-    checkAllGroupChange(data) {
-      this.checkAllGroup(data);
-    },
-    checkAllGroup(data) {
-      if (this.formValidate.spec_type === 0) {
-        if (data.indexOf(0) > -1) {
-          this.columnsInstall = this.columns2.slice(0, 4).concat(this.member);
-        } else if (data.indexOf(1) > -1) {
-          this.columnsInstall = this.columns2.slice(0, 4).concat(this.rakeBack);
-        } else {
-          this.columnsInstall = this.columns2.slice(0, 4);
-        }
-        if (data.length === 2) {
-          this.columnsInstall = this.columns2.slice(0, 4).concat(this.rakeBack).concat(this.member);
-        }
-      } else {
-        if (data.indexOf(0) > -1) {
-          this.columnsInstal2 = this.columnsInstalM.slice(0, 4).concat(this.member);
-        } else if (data.indexOf(1) > -1) {
-          this.columnsInstal2 = this.columnsInstalM.slice(0, 4).concat(this.rakeBack);
-        } else {
-          this.columnsInstal2 = this.columnsInstalM.slice(0, 4);
-        }
-        if (data.length === 2) {
-          this.columnsInstal2 = this.columnsInstalM.slice(0, 4).concat(this.rakeBack).concat(this.member);
-        }
-      }
-    },
-    // 添加优惠券
-    addCoupon() {
-      this.$refs.couponTemplates.isTemplate = true;
-      this.$refs.couponTemplates.tableList();
-    },
-    // 规格中优惠券查看
-    see(data, name, index) {
-      this.tabName = name;
-      this.tabIndex = index;
-
-      if (this.formValidate.virtual_type === 1) {
-        if (data.disk_info != '') {
-          this.disk_type = 1;
-          this.disk_info = data.disk_info;
-          this.stock = data.stock;
-        } else if (data.virtual_list.length) {
-          this.disk_type = 2;
-          this.virtualList = data.virtual_list;
-        }
-        this.addVirtualModel = true;
-      } else {
-        this.$refs.goodsCoupon.isTemplate = true;
-        this.$refs.goodsCoupon.tableList(3);
-      }
-    },
-    // 添加优惠券
-    addGoodsCoupon(index, name) {
-      this.tabIndex = index;
-      this.tabName = name;
-      this.$refs.goodsCoupon.isTemplate = true;
-      this.$refs.goodsCoupon.tableList(3);
-    },
-    addVirtual(index, name) {
-      this.tabIndex = index;
-      this.tabName = name;
-      this.addVirtualModel = true;
-    },
-    // 提交卡密信息
-    upVirtual() {
-      if (this.disk_type == 2) {
-        for (let i = 0; i < this.virtualList.length; i++) {
-          const element = this.virtualList[i];
-          if (!element.value) {
-            this.$message.error('请输入所有卡密');
-            return;
-          }
-        }
-        this.$set(this[this.tabName][this.tabIndex], 'virtual_list', this.virtualList);
-        this.$set(this[this.tabName][this.tabIndex], 'stock', this.virtualList.length);
-        this.virtualList = [
-          {
-            key: '',
-            value: '',
-          },
-        ];
-        this.$set(this[this.tabName][this.tabIndex], 'disk_info', '');
-      } else {
-        if (!this.disk_info.length) {
-          return this.$message.error('请填写卡密信息');
-        }
-        if (!this.stock) {
-          return this.$message.error('请填写库存数量');
-        }
-        this.$set(this[this.tabName][this.tabIndex], 'stock', Number(this.stock));
-        this.$set(this[this.tabName][this.tabIndex], 'stock', Number(this.stock));
-        this.$set(this[this.tabName][this.tabIndex], 'disk_info', this.disk_info);
-        this.$set(this[this.tabName][this.tabIndex], 'virtual_list', []);
-      }
-      this.addVirtualModel = false;
-      this.closeVirtual();
-    },
-    //  初始化卡密数据信息
-    closeVirtual() {
-      this.addVirtualModel = false;
-      this.virtualList = [
-        {
-          key: '',
-          value: '',
-        },
-      ];
-      this.disk_info = '';
-      this.stock = 0;
-    },
-    //对象数组去重；
-    unique(arr) {
-      const res = new Map();
-      return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1));
-    },
-    // 获取优惠券id数据
-    nameId(id, names) {
-      this.formValidate.coupon_ids = id;
-      this.couponName = this.unique(names);
-    },
-    // 获取优惠券信息
-    goodsCouponId(data) {
-      // this[this.tabName][this.tabIndex].coupon_id = data.id;
-      // this[this.tabName][this.tabIndex].coupon_name = data.title;
-      this.$set(this[this.tabName][this.tabIndex], 'coupon_id', data.id);
-      this.$set(this[this.tabName][this.tabIndex], 'coupon_name', data.title);
-      this.$refs.goodsCoupon.isTemplate = false;
-    },
-    handleClose(name) {
-      let index = this.couponName.indexOf(name);
-      this.couponName.splice(index, 1);
-      let couponIds = this.formValidate.coupon_ids;
-      couponIds.splice(index, 1);
-      this.updateIds = couponIds;
-      this.updateName = this.couponName;
-    },
-    // 运费模板
-    getList() {
-      this.productGetTemplate();
-    },
-    // 添加运费模板
-    addTemp() {
-      this.$refs.templates.isTemplate = true;
-    },
-    // 删除视频；
-    delVideo() {
-      let that = this;
-      that.$set(that.formValidate, 'video_link', '');
-      that.$set(that, 'progress', 0);
-      that.videoIng = false;
-      that.upload.videoIng = false;
-    },
-    zh_uploadFile() {
-      if (this.seletVideo == 1) {
-        this.formValidate.video_link = this.videoLink;
-      } else {
-        this.$refs.refid.click();
-      }
-    },
-    // 上传视频
-    zh_uploadFile_change(evfile) {
-      let that = this;
-      let suffix = evfile.target.files[0].name.substr(evfile.target.files[0].name.indexOf('.'));
-      if (suffix.indexOf('.mp4') === -1) {
-        return that.$message.error('只能上传MP4文件');
-      }
-      let types = {
-        key: evfile.target.files[0].name,
-        contentType: evfile.target.files[0].type,
-      };
-      productGetTempKeysApi(types)
-        .then((res) => {
-          that.$videoCloud
-            .videoUpload({
-              type: res.data.type,
-              evfile: evfile,
-              res: res,
-              uploading(status, progress) {
-                that.upload.videoIng = status;
-                if (res.status == 200) {
-                  that.progress = 100;
-                }
-              },
-            })
-            .then((res) => {
-              that.formValidate.video_link = res.url;
-              that.$message.success('视频上传成功');
-              that.upload.videoIng = false;
-            })
-            .catch((res) => {
-              that.$message.error(res);
-            });
-        })
-        .catch((res) => {
-          that.$message.error(res.msg);
-        });
-    },
     // 上一页；
     upTab() {
       this.currentTab = (Number(this.currentTab) - 1).toString();
@@ -1439,288 +368,98 @@ export default {
     downTab() {
       this.currentTab = (Number(this.currentTab) + 1).toString();
     },
-    // 属性弹窗回调函数；
-    userSearchs() {
-      this.productGetRule();
+    // 案例分类
+    goodsCategory() {
+      cascaderListApi(1)
+        .then((res) => {
+          const _list = res.data.map((e) => {
+            return {
+              ...e,
+              select: 0,
+              children: [{ id: 0, label: '全部' }, ...(e.children || [])],
+            };
+          });
+          this.formValidate.treeSelect = _list;
+        })
+        .catch((res) => {
+          this.$message.error(res.msg);
+        });
     },
-    // 添加规则；
+
+    // 新增 案例分类 - 第一步
+    addCate() {
+      this.$modalForm(productCreateApi()).then(() => this.goodsCategory());
+    },
+    // 新增 详情模板 - 第二步
+    addcustom() {
+      if (this.formValidate.attrs.length > 9) {
+        this.$message.warning('最多添加10条');
+      } else {
+        this.formValidate.attrs.push({ value: '', detail: [], status: '' });
+      }
+    },
+    // 删除详情模板 - 第二步
+    delcustom(index) {
+      this.formValidate.attrs.splice(index, 1);
+    },
+
+    // 立即生成 - 第二步
+    generate() {
+      const attrs = [...this.formValidate.attrs];
+      let imagesRule = {};
+      this.formValidate.attrsImages = attrs
+        .sort((a, b) => a.detail[0] - b.detail[0])
+        .filter((e) => e.value && e.detail[0])
+        .map((e) => {
+          if (e.status == 1) {
+            imagesRule = {
+              ...imagesRule,
+              [e.value]: [{ required: false, message: `请上传${e.value}图`, trigger: 'change', type: 'array' }],
+            };
+          }
+          const attrsImages = this.formValidate.attrsImages.find((event) => event.value === e.value);
+          if (attrsImages) {
+            return { ...attrsImages, ...e };
+          } else {
+            return { ...e, images: [] };
+          }
+        });
+      this.ruleValidate = { ...ruleInit, ...imagesRule };
+    },
+    selectChange(formName) {
+      this.$refs[formName].validate();
+    },
+    // 商品详情 - 第三步
+    getEditorContent(data) {
+      this.content = data;
+    },
+    // 初始化数据展示
+    infoData(data, isCopy) {},
+    // 添加详情规则-打开弹窗 - 第二步
     addRule() {
       this.$refs.addattr.modal = true;
     },
-    // 批量设置分佣；
-    brokerageSetUp() {
-      let that = this;
-      if (that.formValidate.is_sub.indexOf(1) > -1) {
-        if (that.manyBrokerage <= 0 || that.manyBrokerageTwo <= 0) {
-          return that.$message.error('请填写返佣金额后进行批量添加');
-        }
-      } else if (that.formValidate.is_sub.indexOf(0) > -1) {
-        if (that.manyVipPrice <= 0) {
-          return that.$message.error('请填写会员价后进行批量添加');
-        }
-      }
-      if (this.formValidate.is_sub.length === 2) {
-        if (that.manyBrokerage <= 0 || that.manyBrokerageTwo <= 0 || that.manyVipPrice <= 0) {
-          return that.$message.error('请填写完金额后进行批量添加');
-        }
-      }
-      for (let val of that.manyFormValidate) {
-        this.$set(val, 'brokerage', that.manyBrokerage);
-        this.$set(val, 'brokerage_two', that.manyBrokerageTwo);
-        this.$set(val, 'vip_price', that.manyVipPrice);
-      }
-    },
-    // 批量设置会员价
-    vipPriceSetUp() {
-      let that = this;
-      if (that.manyVipPrice <= 0) {
-        return that.$message.error('请填写会员价在进行批量添加');
-      } else {
-        for (let val of that.manyFormValidate) {
-          this.$set(val, 'vip_price', that.manyVipPrice);
-        }
-      }
-    },
-    // 新增卡密
-    handleAdd() {
-      this.virtualList.push({
-        key: '',
-        value: '',
-      });
-    },
-    // 初始化卡密信息
-    initVirtualData(status) {
-      this.virtualList = [
-        {
-          key: '',
-          value: '',
-        },
-      ];
-    },
-    removeVirtual(index) {
-      this.virtualList.splice(index, 1);
-    },
-    // 清空批量规格信息
-    batchDel() {
-      this.oneFormBatch = [
-        {
-          pic: '',
-          price: 0,
-          cost: 0,
-          ot_price: 0,
-          stock: 0,
-          bar_code: '',
-          weight: 0,
-          volume: 0,
-          virtual_list: [],
-        },
-      ];
-    },
+    // 添加详情模板 - 第二步
     confirm() {
       let that = this;
-      that.createBnt = true;
-      if (that.formValidate.selectRule.trim().length <= 0) {
+      that.isSelectRule = true;
+      console.log(that.formValidate.selectRule);
+      if (!that.formValidate.selectRule) {
         return that.$message.error('请选择属性');
       }
       that.ruleList.forEach(function (item, index) {
-        if (item.rule_name === that.formValidate.selectRule) {
-          that.attrs = item.rule_value;
+        if (item.id === that.formValidate.selectRule) {
+          that.formValidate.attrs = item.rule_value;
         }
       });
     },
-    // 获取商品属性模板；
+    // 获取/更新案例详情
     productGetRule() {
       productGetRuleApi().then((res) => {
         this.ruleList = res.data;
       });
     },
-    // 获取运费模板；
-    productGetTemplate() {
-      productGetTemplateApi().then((res) => {
-        this.templateList = res.data;
-      });
-    },
-    // 删除表格中的属性
-    delAttrTable(index) {
-      let id = this.$route.params.id;
-      if (id) {
-        checkActivityApi(id)
-          .then((res) => {
-            this.manyFormValidate.splice(index, 1);
-            this.$message.success(res.msg);
-          })
-          .catch((res) => {
-            this.$message.error(res.msg);
-          });
-      } else {
-        this.manyFormValidate.splice(index, 1);
-      }
-    },
-    // 批量添加
-    batchAdd() {
-      for (let val of this.manyFormValidate) {
-        if (this.oneFormBatch[0].pic) {
-          this.$set(val, 'pic', this.oneFormBatch[0].pic);
-        }
-        if (this.oneFormBatch[0].price > 0) {
-          this.$set(val, 'price', this.oneFormBatch[0].price);
-        }
-        if (this.oneFormBatch[0].cost > 0) {
-          this.$set(val, 'cost', this.oneFormBatch[0].cost);
-        }
-        if (this.oneFormBatch[0].ot_price > 0) {
-          this.$set(val, 'ot_price', this.oneFormBatch[0].ot_price);
-        }
-        if (this.oneFormBatch[0].stock > 0) {
-          this.$set(val, 'stock', this.oneFormBatch[0].stock);
-        }
-        if (this.oneFormBatch[0].bar_code !== '') {
-          this.$set(val, 'bar_code', this.oneFormBatch[0].bar_code);
-        }
-        if (this.oneFormBatch[0].weight > 0) {
-          this.$set(val, 'weight', this.oneFormBatch[0].weight);
-        }
-        if (this.oneFormBatch[0].volume > 0) {
-          this.$set(val, 'volume', this.oneFormBatch[0].volume);
-        }
-      }
-    },
-    // 添加按钮
-    addBtn() {
-      this.clearAttr();
-      this.createBnt = false;
-      this.showIput = true;
-    },
-    // 立即生成
-    generate(type, isCopy, arr) {
-      this.formValidate.attrs1 = [...this.attrs];
-      generateAttrApi(
-        {
-          attrs: this.attrs,
-          is_virtual: [1, 2].includes(this.formValidate.virtual_type) ? 1 : 0,
-          virtual_type: this.formValidate.virtual_type,
-        },
-        this.formValidate.id,
-        type,
-      )
-        .then((res) => {
-          let info = res.data.info,
-            header1 = JSON.parse(JSON.stringify(info.header));
-          if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type) && !isCopy) {
-            this.manyFormValidate = info.value;
-          }
-          if (isCopy) {
-            this.manyFormValidate = arr;
-          }
-          let header = info.header;
-          if ([1, 2].includes(this.formValidate.virtual_type)) {
-            this.columnsInstalM = header;
-            this.formValidate.header = header;
-          } else {
-            this.formValidate.header = header1;
-            this.columnsInstalM = info.header;
-          }
-          this.checkAllGroup(this.formValidate.is_sub);
-          if (!this.$route.params.id && this.formValidate.spec_type === 1 && !isCopy) {
-            this.manyFormValidate.map((item) => {
-              item.pic = this.formValidate.image;
-            });
-            this.oneFormBatch[0].pic = this.formValidate.image;
-          } else if (this.$route.params.id) {
-            this.manyFormValidate.map((item) => {
-              if (!item.pic) {
-                item.pic = this.formValidate.image;
-              }
-            });
-            this.oneFormBatch[0].pic = this.formValidate.image;
-          }
-        })
-        .catch((res) => {
-          this.$message.error(res.msg);
-        });
-    },
-    // 取消
-    offAttrName() {
-      this.showIput = false;
-      this.createBnt = true;
-    },
-    clearAttr() {
-      this.formDynamic.attrsName = '';
-      this.formDynamic.attrsVal = '';
-    },
-    // 删除规格
-    handleRemoveRole(index) {
-      this.attrs.splice(index, 1);
-      this.manyFormValidate.splice(index, 1);
-    },
-    // 删除属性
-    handleRemove2(item, index) {
-      item.splice(index, 1);
-    },
-    // 添加规则名称
-    createAttrName() {
-      if (this.formDynamic.attrsName && this.formDynamic.attrsVal) {
-        let data = {
-          value: this.formDynamic.attrsName,
-          detail: [this.formDynamic.attrsVal],
-        };
-        this.attrs.push(data);
-        var hash = {};
-        this.attrs = this.attrs.reduce(function (item, next) {
-          /* eslint-disable */
-          hash[next.value] ? '' : (hash[next.value] = true && item.push(next));
-          return item;
-        }, []);
-        this.clearAttr();
-        this.showIput = false;
-        this.createBnt = true;
-      } else {
-        this.$message.warning('请添加完整的规格！');
-      }
-    },
-    // 添加属性
-    createAttr(num, idx) {
-      if (num) {
-        this.attrs[idx].detail.push(num);
-        var hash = {};
-        this.attrs[idx].detail = this.attrs[idx].detail.reduce(function (item, next) {
-          /* eslint-disable */
-          hash[next] ? '' : (hash[next] = true && item.push(next));
-          return item;
-        }, []);
-      } else {
-        this.$message.warning('请添加属性');
-      }
-    },
-    // 商品分类；
-    goodsCategory() {
-      cascaderListApi(1)
-        .then((res) => {
-          this.treeSelect = res.data;
-        })
-        .catch((res) => {
-          this.$message.error(res.msg);
-        });
-    },
-    //视视上传类型
-    changeVideo(e) {
-      this.formValidate.video_link = '';
-      this.videoLink = '';
-    },
-    // 改变规格
-    changeSpec() {
-      this.formValidate.is_sub = [];
-      let id = this.$route.params.id;
-      if (id) {
-        checkActivityApi(id)
-          .then((res) => {})
-          .catch((res) => {
-            this.formValidate.spec_type = this.spec_type;
-            this.$message.error(res.msg);
-          });
-      }
-    },
-    // 详情
+    // 获取详情
     getInfo() {
       let that = this;
       that.spinShow = true;
@@ -1735,157 +474,137 @@ export default {
           this.$message.error(res.msg);
         });
     },
-    handleRemove(i) {
-      this.images.splice(i, 1);
-      this.formValidate.slider_image.splice(i, 1);
-      this.oneFormValidate[0].pic = this.formValidate.slider_image[0];
+    // 删除图片
+    handleRemove(i, type, index) {
+      switch (type) {
+        case 'banner':
+          this.formValidate[type].splice(i, 1);
+          break;
+        case 'attrsImages':
+          this.formValidate.attrsImages[index].images.splice(i, 1);
+          break;
+        default:
+          '';
+      }
     },
-    // 关闭图片上传模态框
-    changeCancel(msg) {
-      this.modalPic = false;
-    },
+
     // 点击商品图
     modalPicTap(tit, picTit, index) {
       this.modalPic = true;
       this.isChoice = tit === 'dan' ? '单选' : '多选';
       this.picTit = picTit;
-      this.tableIndex = index;
+      this.tableIndex = index === undefined ? null : index;
     },
     // 获取单张图片信息
     getPic(pc) {
       switch (this.picTit) {
-        case 'danFrom':
-          this.formValidate.image = pc.att_dir;
-          if (!this.$route.params.id) {
-            if (this.formValidate.spec_type === 0) {
-              this.oneFormValidate[0].pic = pc.att_dir;
-            } else {
-              this.manyFormValidate.map((item) => {
-                item.pic = pc.att_dir;
-              });
-              this.oneFormBatch[0].pic = pc.att_dir;
-            }
-          }
+        case 'coverImg':
+          this.formValidate.coverImg = pc.att_dir;
           break;
-        case 'danTable':
-          this.oneFormValidate[this.tableIndex].pic = pc.att_dir;
-          break;
-        case 'duopi':
-          this.oneFormBatch[this.tableIndex].pic = pc.att_dir;
-          break;
-        case 'recommend_image':
-          this.formValidate.recommend_image = pc.att_dir;
+        case 'recommendImg':
+          this.formValidate.recommendImg = pc.att_dir;
           break;
         default:
-          this.manyFormValidate[this.tableIndex].pic = pc.att_dir;
+          '';
       }
       this.modalPic = false;
     },
     // 获取多张图信息
     getPicD(pc) {
-      this.images = pc;
-      this.images.map((item) => {
-        this.formValidate.slider_image.push(item.att_dir);
-        this.formValidate.slider_image = this.formValidate.slider_image.splice(0, 10);
+      pc.map((item) => {
+        switch (this.picTit) {
+          case 'banner':
+            this.formValidate.banner.push(item.att_dir);
+            this.formValidate.banner = this.formValidate.banner.splice(0, 10);
+            console.log(this.formValidate.banner);
+            break;
+          case 'attrsImages':
+            this.formValidate.attrsImages[this.tableIndex].images.push(item.att_dir);
+            this.formValidate.attrsImages[this.tableIndex].images = this.formValidate.attrsImages[
+              this.tableIndex
+            ].images.splice(0, 10);
+            break;
+          default:
+            '';
+        }
       });
-      this.oneFormValidate[0].pic = this.formValidate.slider_image[0];
       this.modalPic = false;
+    },
+    // 图片移动模块
+    handleDragStart(e, item) {
+      this.dragging = item;
+    },
+    handleDragEnd() {
+      this.dragging = null;
+    },
+    handleDragOver(e) {
+      e.dataTransfer.dropEffect = 'move';
+    },
+    handleDragEnter(e, item, type, index) {
+      e.dataTransfer.effectAllowed = 'move';
+      if (item === this.dragging) {
+        return;
+      }
+      if (type === 'banner') {
+        const newItems = this.formValidate[type];
+        const src = newItems.indexOf(this.dragging);
+        const dst = newItems.indexOf(item);
+        newItems.splice(dst, 0, ...newItems.splice(src, 1));
+        this.formValidate[type] = newItems;
+      } else if (type === 'attrsImages') {
+        const newItems = this.formValidate[type][index].images;
+        const src = newItems.indexOf(this.dragging);
+        const dst = newItems.indexOf(item);
+        newItems.splice(dst, 0, ...newItems.splice(src, 1));
+        this.formValidate[type][index].images = newItems;
+      }
     },
     // 提交
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
+        console.log({ ...this.formValidate, content: this.content });
         if (valid) {
-          this.formValidate.type = this.type;
-          if (this.formValidate.spec_type === 0) {
-            this.formValidate.attrs = this.oneFormValidate;
-            this.formValidate.header = [];
-            this.formValidate.items = [];
-            this.formValidate.is_copy = 0;
-          } else {
-            this.formValidate.items = this.attrs;
-            this.formValidate.attrs = this.manyFormValidate;
-            this.formValidate.is_copy = 1;
-          }
-          if (this.formValidate.spec_type === 1 && this.manyFormValidate.length === 0) {
-            return this.$message.warning('商品信息-请点击生成多规格');
-            // return this.$message.warning('请点击生成规格！');
-          }
-          let item = this.formValidate.attrs;
-          for (let i = 0; i < item.length; i++) {
-            if (item[i].stock > 1000000) {
-              return this.$message.error('规格库存-库存超出系统范围(1000000)');
+          const form = { ...this.formValidate, content: this.content };
+          if(!this.formValidate.attrs.length) return this.$message.warning('详情设置-请点击详情设置右边确定按钮！');
+          if(!this.formValidate.attrsImages.length) return this.$message.warning('详情设置-请点击立即生成按钮！');
+          form.attrsImages.forEach(e=>{
+            if(e.status && !e.images?.length){
+             this.$message.warning('详情设置-必填图片不能为空！');
+              throw Error();
+
             }
-          }
-          if (this.formValidate.is_sub[0] === 1) {
-            for (let i = 0; i < item.length; i++) {
-              if (item[i].brokerage === null || item[i].brokerage_two === null) {
-                return this.$message.error('营销设置- 一二级返佣不能为空');
-              }
-            }
-          } else {
-            for (let i = 0; i < item.length; i++) {
-              if (item[i].vip_price === null) {
-                return this.$message.error('营销设置-会员价不能为空');
-              }
-            }
-          }
-          if (this.formValidate.is_sub.length === 2) {
-            for (let i = 0; i < item.length; i++) {
-              if (item[i].brokerage === null || item[i].brokerage_two === null || item[i].vip_price === null) {
-                return this.$message.error('营销设置- 一二级返佣和会员价不能为空');
-              }
-            }
-          }
-          if (this.formValidate.freight == 3 && !this.formValidate.temp_id) {
-            return this.$message.warning('商品信息-运费模板不能为空');
-          }
-          let activeIds = [];
-          this.dataLabel.forEach((item) => {
-            activeIds.push(item.id);
-          });
-          this.formValidate.label_id = activeIds;
-          if (this.openSubimit) return;
-          this.openSubimit = true;
-          this.formValidate.description = this.formatRichText(this.content);
-          productAddApi(this.formValidate)
-            .then(async (res) => {
-              this.openSubimit = false;
-              this.$message.success(res.msg);
-              if (this.$route.params.id === '0') {
-                cacheDelete().catch((err) => {
-                  this.$message.error(err.msg);
-                });
-              }
-              setTimeout(() => {
-                this.openSubimit = false;
-                this.$router.push({ path: this.$routeProStr + '/product/product_list' });
-              }, 500);
-            })
-            .catch((res) => {
-              setTimeout((e) => {
-                this.openSubimit = false;
-              }, 1000);
-              this.$message.error(res.msg);
-            });
+          })
+          // if (this.formValidate.spec_type === 1 && this.manyFormValidate.length === 0) {
+          //   return this.$message.warning('商品信息-请点击生成多规格');
+          //   // return this.$message.warning('请点击生成规格！');
+          // }
+          // if (this.openSubimit) return;
+          // this.openSubimit = true;
+          // this.formValidate.description = this.formatRichText(this.content);
+          // productAddApi(this.formValidate)
+          //   .then(async (res) => {
+          //     this.openSubimit = false;
+          //     this.$message.success(res.msg);
+          //     if (this.$route.params.id === '0') {
+          //       cacheDelete().catch((err) => {
+          //         this.$message.error(err.msg);
+          //       });
+          //     }
+          //     setTimeout(() => {
+          //       this.openSubimit = false;
+          //       this.$router.push({ path: this.$routeProStr + '/product/product_list' });
+          //     }, 500);
+          //   })
+          //   .catch((res) => {
+          //     setTimeout((e) => {
+          //       this.openSubimit = false;
+          //     }, 1000);
+          //     this.$message.error(res.msg);
+          //   });
         } else {
-          if (!this.formValidate.store_name) {
-            return this.$message.warning('商品信息-商品名称不能为空');
-          } else if (!this.formValidate.cate_id.length) {
-            return this.$message.warning('商品信息-商品分类不能为空');
-          } else if (!this.formValidate.unit_name) {
-            return this.$message.warning('商品信息-商品单位不能为空');
-          } else if (!this.formValidate.slider_image.length) {
-            return this.$message.warning('商品信息-商品轮播图不能为空');
-          } else if (!this.formValidate.logistics.length && !this.formValidate.virtual_type) {
-            return this.$message.warning('物流设置-至少选择一种物流方式');
-          } else if (!this.formValidate.temp_id && this.formValidate.freight == 3) {
-            return this.$message.warning('商品信息-运费模板不能为空');
-          }
+          this.$message.warning('请检查您的表单');
         }
       });
-    },
-    changeTemplate(msg) {
-      this.template = msg;
     },
     // 表单验证
     validate(prop, status, error) {
@@ -1893,27 +612,7 @@ export default {
         this.$message.warning(error);
       }
     },
-    // 移动
-    handleDragStart(e, item) {
-      this.dragging = item;
-    },
-    handleDragEnd(e, item) {
-      this.dragging = null;
-    },
-    handleDragOver(e) {
-      e.dataTransfer.dropEffect = 'move';
-    },
-    handleDragEnter(e, item) {
-      e.dataTransfer.effectAllowed = 'move';
-      if (item === this.dragging) {
-        return;
-      }
-      const newItems = [...this.formValidate.slider_image];
-      const src = newItems.indexOf(this.dragging);
-      const dst = newItems.indexOf(item);
-      newItems.splice(dst, 0, ...newItems.splice(src, 1));
-      this.formValidate.slider_image = newItems;
-    },
+
     // 过滤详情内容
     formatRichText(html) {
       let newContent = html.replace(/<img[^>]*>/gi, function (match, capture) {
@@ -1932,58 +631,6 @@ export default {
         '<img style="max-width:100%;height:auto;display:block;margin-top:0;margin-bottom:0;"',
       );
       return newContent;
-    },
-    //对象数组去重；
-    unique(arr) {
-      const res = new Map();
-      return arr.filter((arr) => !res.has(arr.product_id) && res.set(arr.product_id, 1));
-    },
-    // 商品id
-    getProductId(data) {
-      this.goods_modals = false;
-      this.formValidate.recommend_list = this.unique(this.formValidate.recommend_list.concat(data));
-    },
-    // 选择推荐商品
-    changeGoods() {
-      this.goods_modals = true;
-      this.$refs.goodslist.getList();
-      this.$refs.goodslist.goodsCategory();
-    },
-    // 选择用户标签
-    activeData(dataLabel) {
-      this.labelShow = false;
-      this.dataLabel = dataLabel;
-    },
-    // 标签弹窗关闭
-    labelClose() {
-      this.labelShow = false;
-    },
-    // 删除用户标签
-    closeLabel(label) {
-      let index = this.dataLabel.indexOf(this.dataLabel.filter((d) => d.id == label.id)[0]);
-      this.dataLabel.splice(index, 1);
-    },
-    // 打开选择用户标签
-    openLabel(row) {
-      this.labelShow = true;
-      this.$nextTick((e) => {
-        console.log(this.$refs.userLabel);
-        // this.$refs.userLabel.userLabel(JSON.parse(JSON.stringify(this.dataLabel)));
-      });
-    },
-    uniques(songs) {
-      let result = {};
-      let finalResult = [];
-      for (let i = 0; i < songs.length; i++) {
-        result[songs[i].product_id] = songs[i];
-      }
-      for (let item in result) {
-        finalResult.push(result[item]);
-      }
-      return finalResult;
-    },
-    handleRemoveRecommend(i) {
-      this.formValidate.recommend_list.splice(i, 1);
     },
   },
 };
@@ -2118,11 +765,6 @@ export default {
   background-color: #ed4014;
 }
 
-.columnsBox {
-  margin-right: 10px;
-  width: 200px;
-}
-
 .priceBox {
   width: 100%;
 }
@@ -2216,27 +858,6 @@ export default {
   font-size: 12px;
 }
 
-
-.virtual-data {
-  display: flex;
-  align-items: center;
-}
-
-.add-more {
-  margin-top: 20px;
-  display: flex;
-}
-
-.virtual-title {
-  width: 60px;
-}
-
-.scroll-virtual {
-  max-height: 400px;
-  overflow-y: auto;
-  margin-top: 10px;
-}
-
 .footer {
   width: 100%;
   display: flex;
@@ -2301,63 +922,6 @@ export default {
 ::v-deep.ivu-date-picker {
   width: 300px;
 }
-
-.virtual_boder {
-  border: 1px solid var(--prev-color-primary);
-}
-
-.virtual_boder2 {
-  border: 1px solid #E7E7E7;
-}
-
-.virtual_san {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-bottom: 26px solid var(--prev-color-primary);
-  border-left: 26px solid transparent;
-}
-
-.virtual_dui {
-  position: absolute;
-  bottom: -2px;
-  right: 2px;
-  color: #FFFFFF;
-  font-family: system-ui;
-}
-
-.virtual {
-  width: 120px;
-  height: 60px;
-  background: #FFFFFF;
-  border-radius: 3px;
-  // border: 1px solid #E7E7E7;
-  float: left;
-  text-align: center;
-  padding-top: 8px;
-  position: relative;
-  cursor: pointer;
-  line-height: 23px;
-
-  .virtual_top {
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.85);
-  }
-
-  .virtual_bottom {
-    font-size: 12px;
-    font-weight: 400;
-    color: #999999;
-  }
-}
-
-.virtual:nth-child(2n) {
-  margin: 0 12px;
-}
-
 .addfont {
   display: inline-block;
   font-size: 12px;
@@ -2389,13 +953,10 @@ export default {
   cursor: pointer;
 }
 
-.addCustom_content {
-  margin-top: 20px;
 
   .custom_box {
     margin-bottom: 10px;
   }
-}
 
 .addCustomBox {
   margin-top: 12px;
@@ -2415,10 +976,6 @@ export default {
 
 .deteal-btn {
   color: #5179ea;
-}
-
-.stock-disk {
-  margin: 10px 0;
 }
 
 .line {
