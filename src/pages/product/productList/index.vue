@@ -4,12 +4,22 @@
       <div class="padding-add">
         <el-form ref="artFrom" :model="artFrom" label-width="80px" label-position="right" inline @submit.native.prevent>
           <el-form-item label="商品分类：" label-for="pid">
-            <el-cascader v-model="artFrom.cate_id" size="small" :options="treeSelect"
-              :props="{ multiple: false, emitPath: false, checkStrictly: true }" clearable
-              class="form_content_width"></el-cascader>
+            <el-cascader
+              v-model="artFrom.cate_id"
+              size="small"
+              :options="treeSelect"
+              :props="{ multiple: false, emitPath: false, checkStrictly: true }"
+              clearable
+              class="form_content_width"
+            ></el-cascader>
           </el-form-item>
           <el-form-item label="商品搜索：" label-for="store_name">
-            <el-input clearable placeholder="请输入商品名称/关键字/ID" v-model="artFrom.store_name" class="form_content_width" />
+            <el-input
+              clearable
+              placeholder="请输入商品名称/关键字/ID"
+              v-model="artFrom.store_name"
+              class="form_content_width"
+            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="userSearchs">查询</el-button>
@@ -19,71 +29,68 @@
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt mt16" :body-style="{ padding: '0 20px 20px' }">
       <el-tabs v-model="artFrom.type" @tab-click="onClickTab">
-        <el-tab-pane :label="item.name + '(' + item.count + ')'" :name="item.type.toString()"
-          v-for="(item, index) in headeNum" :key="index" />
+        <el-tab-pane
+          :label="item.name + '(' + item.count + ')'"
+          :name="item.type.toString()"
+          v-for="(item, index) in headeNum"
+          :key="index"
+        />
       </el-tabs>
       <div class="Button">
-        <router-link v-auth="['product-product-save']" :to="$routeProStr + '/product/add_product'"><el-button
-            type="primary" class="mr14">添加案例</el-button></router-link>
-        <el-button v-auth="['product-product-product_show']" @click="onDismount"
-          v-show="artFrom.type === '1'">批量下架</el-button>
+        <router-link v-auth="['product-product-save']" :to="$routeProStr + '/product/add_product'"
+          ><el-button type="primary" class="mr14">添加案例</el-button></router-link
+        >
+        <!-- <el-button v-auth="['product-product-product_show']" @click="onDismount" v-show="artFrom.type === '1'"
+          >批量下架</el-button
+        > -->
         <!-- <el-button v-auth="['export-storeProduct']" class="export" @click="exports">导出</el-button> -->
       </div>
-      <el-table ref="table" :data="tableList" class="ivu-mt mt14" v-loading="loading" highlight-current-row
-        :row-key="getRowKey" @selection-change="handleSelectRow" empty-text="暂无数据">
+      <el-table
+        ref="table"
+        :data="tableList"
+        class="ivu-mt mt14"
+        v-loading="loading"
+        highlight-current-row
+        :row-key="getRowKey"
+        @selection-change="handleSelectRow"
+        empty-text="暂无数据"
+      >
         <el-table-column type="expand" width="50" v-if="['1', '2'].includes(artFrom.type)">
           <template slot-scope="scope">
             <expandRow :row="scope.row"></expandRow>
           </template>
         </el-table-column>
-        <el-table-column type="selection" width="60" :reserve-selection="true"> </el-table-column>
-        <el-table-column label="商品ID" width="80">
+        <!-- <el-table-column type="selection" width="60" :reserve-selection="true"> </el-table-column> -->
+        <el-table-column label="案例ID" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="商品图" min-width="90">
+        <el-table-column label="案例封面图" min-width="90">
           <template slot-scope="scope">
             <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.image" />
+              <img v-lazy="scope.row.coverImg" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" min-width="250">
+        <el-table-column label="案例名称" min-width="250">
           <template slot-scope="scope">
-            <span>{{ scope.row.store_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品类型" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.product_type }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品售价" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="销量" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sales }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="库存" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.stock }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sort }}</span>
+            <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">
           <template slot-scope="scope">
-            <el-switch class="defineSwitch" :active-value="1" :inactive-value="0" v-model="scope.row.is_show"
-              :value="scope.row.is_show" :disabled="scope.row.stop_status ? true : false"
-              @change="changeSwitch(scope.row)" size="large" active-text="上架" inactive-text="下架">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.status"
+              :value="scope.row.status"
+              @change="changeSwitch(scope.row)"
+              size="large"
+              active-text="上架"
+              inactive-text="下架"
+            >
             </el-switch>
           </template>
         </el-table-column>
@@ -93,126 +100,30 @@
             <el-divider direction="vertical"></el-divider> -->
             <a @click="edit(scope.row)">编辑</a>
             <el-divider direction="vertical"></el-divider>
-            <el-dropdown size="small">
-              <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <router-link
-                    :to="{ path: $routeProStr + '/product/product_reply/' + scope.row.id }"><a>查看评论</a></router-link>
-                </el-dropdown-item>
-                <el-dropdown-item v-if="artFrom.type === '6'"
-                  @click.native="del(scope.row, '恢复商品', scope.$index)">恢复商品</el-dropdown-item>
-                <el-dropdown-item v-else @click.native="del(scope.row, '移入回收站', scope.$index)">移到回收站</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <a v-if="artFrom.type === '4'" @click="del(scope.row, '恢复案例', scope.$index)">恢复案例</a>
+            <a v-else @click="del(scope.row, '移入失效案例', scope.$index)">刪除</a>
           </template>
         </el-table-column>
       </el-table>
       <div class="acea-row row-right page">
-        <pagination v-if="total" :total="total" :page.sync="artFrom.page" :limit.sync="artFrom.limit"
-          @pagination="getDataList" />
+        <pagination
+          v-if="total"
+          :total="total"
+          :page.sync="artFrom.page"
+          :limit.sync="artFrom.limit"
+          @pagination="getDataList"
+        />
       </div>
       <attribute :attrTemplate="attrTemplate" v-on:changeTemplate="changeTemplate"></attribute>
     </el-card>
-    <!-- 生成淘宝京东表单-->
-    <el-dialog :visible.sync="modals" class="Box" title="复制淘宝、天猫、京东、苏宁、1688" :close-on-click-modal="false" width="720px">
-      <tao-bao ref="taobaos" v-if="modals" @on-close="onClose"></tao-bao>
-    </el-dialog>
-    <el-dialog :visible.sync="batchModal" class="batch-box" title="批量设置" :show-close="true" :close-on-click-modal="false"
-      width="540px">
-      <el-form class="batchFormData" ref="batchFormData" :rules="ruleBatch" :model="batchFormData" label-width="90px"
-        label-position="right" @submit.native.prevent>
-        <el-row :gutter="24">
-          <el-col :span="24" v-if="batchType == 1">
-            <!--            <el-divider content-position="left">基础设置</el-divider>-->
-            <el-form-item label="商品分类：" prop="cate_id">
-              <!-- <el-select v-model="batchFormData.cate_id" placeholder="请选择商品分类" multiple class="perW20">
-                <el-option v-for="item in treeSelect" :disabled="item.pid === 0" :value="item.id" :key="item.id">{{
-                  item.html + item.cate_name
-                }}</el-option>
-              </el-select> -->
-              <el-cascader v-model="batchFormData.cate_id" size="small" :options="treeSelect"
-                :props="{ multiple: true, emitPath: false, checkStrictly: true }" clearable
-                style="width: 400px"></el-cascader>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" v-if="batchType == 2">
-            <el-form-item label="物流方式：" prop="logistics">
-              <el-checkbox-group v-model="batchFormData.logistics" @change="logisticsBtn">
-                <el-checkbox label="1">快递</el-checkbox>
-                <el-checkbox label="2">到店核销</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="运费设置：">
-              <el-radio-group v-model="batchFormData.freight">
-                <!-- <el-radio :label="1">包邮</el-radio> -->
-                <el-radio :label="2">固定邮费</el-radio>
-                <el-radio :label="3">运费模板</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="" v-if="batchFormData.freight == 2">
-              <div class="acea-row">
-                <el-input-number :controls="false" :min="0" v-model="batchFormData.postage" placeholder="请输入金额"
-                  class="perW20 maxW" />
-              </div>
-            </el-form-item>
-            <el-form-item label="" v-if="batchFormData.freight == 3" prop="temp_id">
-              <div class="acea-row">
-                <el-select v-model="batchFormData.temp_id" clearable placeholder="请选择运费模板" style="width: 414px">
-                  <el-option v-for="(item, index) in templateList" :value="item.id" :key="index"
-                    :label="item.name"></el-option>
-                </el-select>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" v-if="[3, 4, 5, 6].includes(batchType)">
-            <!--            <el-divider content-position="left" v-if="[3, 4, 5, 6].includes(batchType)">营销设置</el-divider>-->
-            <el-form-item label="赠送积分：" prop="give_integral" v-if="batchType == 3">
-              <el-input-number :controls="false" v-model="batchFormData.give_integral" :min="0" :max="9999999999"
-                placeholder="请输入积分" style="width: 100%" />
-            </el-form-item>
-            <el-form-item label="赠送优惠券：" v-if="batchType == 4">
-              <div v-if="couponName.length" class="mb20">
-                <el-tag closable v-for="(item, index) in couponName" :key="index" @close="handleClose(item)">{{
-                  item.title
-                }}</el-tag>
-              </div>
-              <el-button type="primary" @click="addCoupon">添加优惠券</el-button>
-            </el-form-item>
-            <el-form-item label="关联标签：" prop="label_id" v-if="batchType == 5">
-              <div class="acea-row label_width">
-                <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
-                  <div style="width: 90%">
-                    <div v-if="dataLabel.length">
-                      <el-tag closable v-for="(item, index) in dataLabel" @close="closeLabel(item)" :key="index">{{
-                        item.label_name
-                      }}</el-tag>
-                    </div>
-                    <span class="span" v-else>选择用户关联标签</span>
-                  </div>
-                  <div class="iconfont iconxiayi"></div>
-                </div>
-              </div>
-            </el-form-item>
-            <el-form-item label="商品推荐：" v-if="batchType == 6">
-              <el-checkbox-group v-model="batchFormData.recommend">
-                <el-checkbox label="is_hot">热卖单品</el-checkbox>
-                <el-checkbox label="is_benefit">促销单品</el-checkbox>
-                <el-checkbox label="is_best">精品推荐</el-checkbox>
-                <el-checkbox label="is_new">首发新品</el-checkbox>
-                <el-checkbox label="is_good">优品推荐</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="clearBatchData">取 消</el-button>
-        <el-button type="primary" @click="batchSub">确 定</el-button>
-      </span>
-    </el-dialog>
     <!-- 用户标签 -->
-    <el-dialog :visible.sync="labelShow" title="请选择用户标签" width="540px" :show-close="true" :close-on-click-modal="false">
+    <el-dialog
+      :visible.sync="labelShow"
+      title="请选择用户标签"
+      width="540px"
+      :show-close="true"
+      :close-on-click-modal="false"
+    >
       <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
     </el-dialog>
     <!-- 商品弹窗 -->
@@ -237,13 +148,14 @@ import { exportProductList } from '@/api/export';
 import {
   getGoodHeade,
   getGoods,
-  PostgoodsIsShow,
+  PostgoodsNewIsShow,
   cascaderListApi, // 分类列表
   productShowApi,
   productUnshowApi,
   storeProductApi,
   batchSetting,
   productGetTemplateApi,
+  productNewList,
 } from '@/api/product';
 import userLabel from '@/components/labelList';
 
@@ -310,7 +222,7 @@ export default {
       }
     },
   },
-  created() { },
+  created() {},
   activated() {
     this.goodHeade();
     this.goodsCategory();
@@ -587,7 +499,8 @@ export default {
     getDataList() {
       this.loading = true;
       this.artFrom.cate_id = this.artFrom.cate_id || '';
-      getGoods(this.artFrom)
+      console.log(this.artFrom);
+      productNewList(this.artFrom)
         .then((res) => {
           let data = res.data;
           this.tableList = data.list;
@@ -626,7 +539,7 @@ export default {
     },
     // 上下架
     changeSwitch(row) {
-      PostgoodsIsShow(row.id, row.is_show)
+      PostgoodsNewIsShow(row.id, row.is_show || 0)
         .then((res) => {
           this.$message.success(res.msg);
           this.goodHeade();
@@ -665,7 +578,7 @@ export default {
       let delfromData = {
         title: tit,
         num: num,
-        url: `product/product/${row.id}`,
+        url: `product/product_new/${row.id}`,
         method: 'DELETE',
         ids: '',
         un: 1,

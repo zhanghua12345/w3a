@@ -69,7 +69,7 @@ export default {
       name: `${pre}file`,
       meta: {
         auth: ['system-file'],
-        title: '附件管理',
+        title: '素材管理',
       },
       component: () => import('@/pages/system/file/index'),
     },

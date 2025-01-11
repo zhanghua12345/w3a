@@ -139,7 +139,7 @@
             <!-- 案例详情-->
             <el-col v-if="formValidate.attrsImages && formValidate.attrsImages.length">
               <el-col :span="24" v-for="(item, index) in formValidate.attrsImages" :key="index">
-                <el-form-item :label="item.value" :prop="item.status?'required':''" >
+                <el-form-item :label="item.value" :prop="item.status ? 'required' : ''">
                   <div class="acea-row">
                     <div
                       class="pictrue"
@@ -203,12 +203,12 @@
           <el-col :span="24">
             <el-form-item label="案例推荐：" prop="isRecommend">
               <el-radio-group v-model="formValidate.isRecommend">
-                <el-radio :label="1" class="radio">是</el-radio>
-                <el-radio :label="0">否</el-radio>
+                <el-radio label="1" class="radio">是</el-radio>
+                <el-radio label="0">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="24" v-if="formValidate.isRecommend">
+          <el-col :span="24" v-if="formValidate.isRecommend == '1'">
             <el-form-item label="案例推荐图：" prop="recommendImg">
               <div class="pictrueBox" @click="modalPicTap('dan', 'recommendImg')">
                 <div class="pictrue" v-if="formValidate.recommendImg">
@@ -258,7 +258,14 @@ import vuedraggable from 'vuedraggable';
 import uploadPictures from '@/components/uploadPictures';
 import addAttr from '../productAttr/addAttr';
 import WangEditor from '@/components/wangEditor/index.vue';
-import { productInfoApi, cascaderListApi, productGetRuleApi, productCreateApi } from '@/api/product';
+import {
+  productInfoApi,
+  cascaderListApi,
+  productGetRuleApi,
+  productCreateApi,
+  productNewAdd,
+  productNewData,
+} from '@/api/product';
 import { readonly } from 'vue';
 const ruleInit = readonly({
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
@@ -271,7 +278,7 @@ const ruleInit = readonly({
   attrsImages: [{ required: true, message: '案例详情图片不能为空', trigger: 'change', type: 'array' }],
   isRecommend: [{ required: true, message: '请选择案例推荐', trigger: 'change' }],
   recommendImg: [{ required: true, message: '请上传推荐图', trigger: 'change' }],
-  required: [{ required: true, message: '这是一个只加标头的数据', trigger: 'change' }],
+  // required: [{ required: true, message: '这是一个只加标头的数据', trigger: 'change' }],
 });
 export default {
   name: 'product_productAdd',
@@ -434,7 +441,11 @@ export default {
       this.content = data;
     },
     // 初始化数据展示
-    infoData(data, isCopy) {},
+    infoData(data) {
+      this.isSelectRule = true;
+      this.formValidate = data;
+      this.contents = data.content;
+    },
     // 添加详情规则-打开弹窗 - 第二步
     addRule() {
       this.$refs.addattr.modal = true;
@@ -463,9 +474,9 @@ export default {
     getInfo() {
       let that = this;
       that.spinShow = true;
-      productInfoApi(that.$route.params.id)
+      productNewData(that.$route.params.id)
         .then(async (res) => {
-          let data = res.data.productInfo;
+          let data = res.data.detail;
           this.infoData(data);
           this.spinShow = false;
         })
@@ -561,46 +572,39 @@ export default {
     },
     // 提交
     handleSubmit(name) {
+      console.log({ ...this.formValidate, content: this.content });
       this.$refs[name].validate((valid) => {
-        console.log({ ...this.formValidate, content: this.content });
+        console.log(JSON.stringify({ ...this.formValidate, content: this.content }));
         if (valid) {
           const form = { ...this.formValidate, content: this.content };
-          if(!this.formValidate.attrs.length) return this.$message.warning('详情设置-请点击详情设置右边确定按钮！');
-          if(!this.formValidate.attrsImages.length) return this.$message.warning('详情设置-请点击立即生成按钮！');
-          form.attrsImages.forEach(e=>{
-            if(e.status && !e.images?.length){
-             this.$message.warning('详情设置-必填图片不能为空！');
+          if (!this.formValidate.attrs.length) return this.$message.warning('详情设置-请点击详情设置右边确定按钮！');
+          if (!this.formValidate.attrsImages.length) return this.$message.warning('详情设置-请点击立即生成按钮！');
+          form.attrsImages.forEach((e) => {
+            if (e.status && !e.images?.length) {
+              this.$message.warning('详情设置-必填图片不能为空！');
               throw Error();
-
             }
-          })
-          // if (this.formValidate.spec_type === 1 && this.manyFormValidate.length === 0) {
-          //   return this.$message.warning('商品信息-请点击生成多规格');
-          //   // return this.$message.warning('请点击生成规格！');
-          // }
-          // if (this.openSubimit) return;
-          // this.openSubimit = true;
-          // this.formValidate.description = this.formatRichText(this.content);
-          // productAddApi(this.formValidate)
-          //   .then(async (res) => {
-          //     this.openSubimit = false;
-          //     this.$message.success(res.msg);
-          //     if (this.$route.params.id === '0') {
-          //       cacheDelete().catch((err) => {
-          //         this.$message.error(err.msg);
-          //       });
-          //     }
-          //     setTimeout(() => {
-          //       this.openSubimit = false;
-          //       this.$router.push({ path: this.$routeProStr + '/product/product_list' });
-          //     }, 500);
-          //   })
-          //   .catch((res) => {
-          //     setTimeout((e) => {
-          //       this.openSubimit = false;
-          //     }, 1000);
-          //     this.$message.error(res.msg);
-          //   });
+          });
+          productNewAdd({ type: '1', ...this.formValidate, content: this.content })
+            .then(async (res) => {
+              this.openSubimit = false;
+              this.$message.success(res.msg);
+              if (this.$route.params.id === '0') {
+                cacheDelete().catch((err) => {
+                  this.$message.error(err.msg);
+                });
+              }
+              setTimeout(() => {
+                this.openSubimit = false;
+                this.$router.push({ path: this.$routeProStr + '/product/product_list' });
+              }, 500);
+            })
+            .catch((res) => {
+              setTimeout((e) => {
+                this.openSubimit = false;
+              }, 1000);
+              this.$message.error(res.msg);
+            });
         } else {
           this.$message.warning('请检查您的表单');
         }

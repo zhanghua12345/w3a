@@ -19,7 +19,7 @@ export default {
   name: 'product',
   header: 'product',
   meta: {
-    title: '商品',
+    title: '案例',
     // 授权标识
     auth: ['admin-store-index'],
   },
@@ -32,7 +32,7 @@ export default {
       path: 'product_list',
       name: `${pre}productList`,
       meta: {
-        title: '商品管理',
+        title: '案例列表',
         auth: ['admin-store-storeProuduct-index'],
         keepAlive: true,
       },
@@ -42,7 +42,7 @@ export default {
       path: 'product_classify',
       name: `${pre}productClassify`,
       meta: {
-        title: '商品分类',
+        title: '案例分类',
         auth: ['admin-store-storeCategory-index'],
       },
       component: () => import('@/pages/product/productClassify'),
@@ -52,7 +52,7 @@ export default {
       name: `${pre}productAdd`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品添加',
+        title: '案例添加',
         activeMenu: routePre + '/product/product_list',
       },
       component: () => import('@/pages/product/productAdd'),
@@ -62,7 +62,7 @@ export default {
       name: `${pre}productEvaluate`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品评论',
+        title: '案例评论',
       },
       component: () => import('@/pages/product/productReply'),
     },
@@ -71,7 +71,7 @@ export default {
       name: `${pre}productAttr`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品规格',
+        title: '案例规格',
       },
       component: () => import('@/pages/product/productAttr'),
     },
@@ -80,7 +80,7 @@ export default {
       name: `${pre}material`,
       meta: {
         auth: [''],
-        title: '商品材质',
+        title: '案例材质',
       },
       component: () => import('@/pages/product/material'),
     },

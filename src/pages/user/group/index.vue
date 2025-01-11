@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row>
+      <!-- <el-row>
         <el-col v-bind="grid">
           <el-button v-auth="['admin-user-group']" type="primary" @click="add">添加分组</el-button>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-table
         :data="groupLists"
         ref="table"

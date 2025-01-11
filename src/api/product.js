@@ -451,3 +451,47 @@ export function del_material(data) {
     data,
   });
 }
+
+//案例列表
+export function productNewList(params) {
+  return request({
+    url: `product/product_new`,
+    method: 'get',
+    params
+  });
+}
+
+//案例详情
+export function productNewData(id) {
+  return request({
+    url: `product/product_new/${id}`,
+    method: 'get',
+  });
+}
+
+// 案例保存
+export function productNewAdd(data) {
+  return request({
+    url: `product/product_new/${data.id||0}`,
+    method: 'POST',
+    data
+  });
+}
+
+//案例删除
+export function productNewDelete(data) {
+  return request({
+    url: `product/product_new/${data.id}`,
+    method: 'delete',
+  });
+}
+
+/**
+ * @description 案例管理-- 上下架
+ */
+export function PostgoodsNewIsShow(id, isShow) {
+  return request({
+    url: `product/product_new/set_show/${id}/${isShow}`,
+    method: 'put',
+  });
+}
