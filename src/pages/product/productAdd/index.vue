@@ -254,7 +254,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="HOT图标：" prop="hot">
+            <el-form-item label="热门案例：" prop="hot">
               <el-radio-group v-model="formValidate.hot">
                 <el-radio label="1" class="radio">是</el-radio>
                 <el-radio label="0">否</el-radio>
@@ -262,7 +262,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="NEW图标：" prop="new">
+            <el-form-item label="最新案例：" prop="new">
               <el-radio-group v-model="formValidate.new">
                 <el-radio label="1" class="radio">是</el-radio>
                 <el-radio label="0">否</el-radio>

@@ -10,8 +10,8 @@
           @submit.native.prevent
           inline
         >
-          <el-form-item label="文章分类：" label-for="pid">
-            <el-select v-model="artFrom.pid">
+          <el-form-item label="文章分类：" label-for="cid">
+            <el-select v-model="artFrom.cid">
               <el-option
                 v-for="(e, i) in treeData"
                 :value="e.id"
@@ -66,28 +66,25 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="关联商品" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.store_name }}</span>
-          </template>
-        </el-table-column>
+       
         <el-table-column label="浏览量" min-width="80">
           <template slot-scope="scope">
-            <span>{{ scope.row.visit }}</span>
+            <span>{{ scope.row.browse }}</span>
+          </template>
+        </el-table-column>    
+        <el-table-column label="点赞量" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.praise }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="时间" min-width="130">
+        <el-table-column label="创建时间" min-width="130">
           <template slot-scope="scope">
             <span>{{ scope.row.add_time | formatDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
+        <el-table-column label="操作" fixed="right" width="100">
           <template slot-scope="scope">
             <a @click="edit(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="artRelation(scope.row, '取消关联', index)">{{
-              scope.row.product_id === 0 ? '关联' : '取消关联'
-            }}</a>
             <el-divider direction="vertical"></el-divider>
             <a @click="del(scope.row, '删除文章', scope.$index)">删除</a>
           </template>
@@ -123,7 +120,7 @@ export default {
       modalTitleSs: '',
       loading: false,
       artFrom: {
-        pid: 0,
+        cid: 0,
         title: '',
         page: 1,
         limit: 20,
@@ -170,7 +167,7 @@ export default {
   },
   created() {},
   activated() {
-    this.artFrom.pid = this.$route.query.id ? this.$route.query.id : 0;
+    this.artFrom.cid =Number( this.$route.query.id || 0);
     this.getList();
     this.getClass();
   },
@@ -202,6 +199,7 @@ export default {
     // 等级列表
     getList() {
       this.loading = true;
+      console.log(this.artFrom)
       cmsListApi(this.artFrom)
         .then(async (res) => {
           let data = res.data;
@@ -232,7 +230,7 @@ export default {
     },
     // 下拉树
     handleCheckChange(data) {
-      this.artFrom.pid = data ? data : 0;
+      this.artFrom.cid = data ? data : 0;
       this.artFrom.page = 1;
       this.getList();
     },

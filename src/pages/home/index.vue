@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <div class="box-wrapper h100">
+    <div class="box-wrapper">
       <div class="left-wrapper" v-if="!$route.params.id && groupAll.length">
         <div class="tree-vis">
           <div
@@ -312,9 +312,9 @@
         >
           <div class="right-box">
             <div class="hot_imgs">
-              <div class="title" v-if="name == 'admin_login_slide'">幻灯片设置</div>
+              <div class="title" v-if="name == 'admin_login_slide'">视频设置</div>
               <div class="title" v-else>轮播图设置</div>
-              <div class="title-text">建议尺寸：690 * 240px，拖拽图片可调整图片顺序哦，最多添加五张</div>
+              <div class="title-text">建议尺寸：690 * 240px，拖拽图片可调整图片顺序</div>
               <div class="list-box">
                 <draggable
                   v-if="name == 'admin_login_slide'"
@@ -323,16 +323,16 @@
                   group="peoples"
                   handle=".move-icon"
                 >
-                  <div class="items" v-for="(item, index) in tabList.list" :key="index">
+                  <div class="items">
                     <div class="move-icon">
                       <span class="iconfont icondrag2"></span>
                     </div>
-                    <div class="img-box" @click="modalPicTap('单选', index)">
-                      <img :src="item.slide" alt="" v-if="item.slide" />
+                    <div class="img-box" @click="modalPicTap('单选', 0)">
+                      <img :src="tabList.list[0].slide" alt="" v-if="tabList.list[0]?.slide" />
                       <div class="upload-box" v-else>
                         <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                       </div>
-                      <div class="delect-btn" @click.stop="bindDelete(item, index)">
+                      <div class="delect-btn" @click.stop="bindDelete(tabList.list[0], 0)">
                         <i class="el-icon-circle-close" style="font-size: 24px" />
                       </div>
                     </div>
@@ -355,15 +355,24 @@
                     </div>
                     <div class="info">
                       <div class="info-item">
-                        <span>图片名称：</span>
+                        <span style="width:70px">图片名称：</span>
                         <div class="input-box">
                           <el-input v-model="item.comment" placeholder="请填写名称" />
                         </div>
                       </div>
                       <div class="info-item">
-                        <span>链接地址：</span>
-                        <div class="input-box" @click="link(index)">
-                          <el-input v-model="item.link" readonly placeholder="选择链接" suffix-icon="el-icon-arrow-right" />
+                        <span style="width:70px">链接地址：</span>
+                        <div class="input-box">
+                          <el-select v-model="item.type">
+                            <el-option value="1" label="案例详情"></el-option>
+                            <el-option value="2" label="文章详情"></el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="info-item">
+                        <span style="width:70px">链接 ID：</span>
+                        <div class="input-box">
+                          <el-input v-model="item.id" />
                         </div>
                       </div>
                     </div>
@@ -388,7 +397,7 @@
                 </div>
               </div>
               <template>
-                <div class="add-btn">
+                <div class="add-btn"  v-if="name !== 'admin_login_slide'">
                   <el-button
                     type="primary"
                     ghost
@@ -871,6 +880,7 @@ export default {
     },
     // 删除
     bindDelete(item, index) {
+      console.log(this.tabList.list)
       this.tabList.list.splice(index, 1);
     },
     // 点击图文封面
@@ -882,7 +892,7 @@ export default {
     getPic(pc) {
       this.$nextTick(() => {
         if (this.name == 'admin_login_slide') {
-          this.tabList.list[this.activeIndex].slide = pc.att_dir;
+          this.tabList.list = [{slide:pc.att_dir}]
         } else {
           this.tabList.list[this.activeIndex].img = pc.att_dir;
         }
@@ -1501,6 +1511,7 @@ export default {
   min-width: 213px;
   background: #fff;
   border-right: 1px solid #f2f2f2;
+  height: auto !important;
 }
 
 .menu-item {

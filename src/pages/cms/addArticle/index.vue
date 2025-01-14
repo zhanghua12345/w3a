@@ -26,17 +26,38 @@
             <el-input v-model="formValidate.author" placeholder="请输入" class="content_width" />
           </el-form-item>
           <el-form-item label="文章分类：" label-for="cid" prop="cid">
-            <el-cascader
-              class="content_width"
-              v-model="formValidate.cid"
-              size="small"
-              :options="treeData"
-              :props="{ multiple: false, checkStrictly: true, emitPath: false }"
-              clearable
-            ></el-cascader>
+            <el-select v-model="formValidate.cid" class="content_width">
+              <el-option v-for="(e, i) in treeData" :value="e.id" :key="i" :label="e.title"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="文章简介：" prop="synopsis" label-for="synopsis">
             <el-input v-model="formValidate.synopsis" type="textarea" placeholder="请输入" class="content_width" />
+          </el-form-item>
+          <el-form-item label="浏览量初始值：" prop="browse" label-for="browse">
+            <el-input
+              v-model="formValidate.browse"
+              type="number"
+              placeholder="请输入浏览量初始值"
+              class="content_width"
+            />
+            <div style="color: #666" v-if="$route.params.id">
+              浏览量
+              <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
+              <span style="color: #f30">790</span>
+            </div>
+          </el-form-item>
+          <el-form-item label="点赞初始值：" prop="praise" label-for="praise">
+            <el-input
+              v-model="formValidate.praise"
+              type="number"
+              placeholder="请输入点赞量初始值"
+              class="content_width"
+            />
+            <div style="color: #666" v-if="$route.params.id">
+              点赞量
+              <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
+              <span style="color: #f30">790</span>
+            </div>
           </el-form-item>
           <el-form-item label="图文封面：" prop="image_input">
             <div class="picBox" @click="modalPicTap('单选')">
@@ -56,10 +77,7 @@
         <el-row class="content">
           <el-col :span="16">
             <el-form-item label="" prop="content" label-width="0">
-              <WangEditor
-                :content="formValidate.content"
-                @editorContent="getEditorContent"
-              ></WangEditor>
+              <WangEditor :content="formValidate.content" @editorContent="getEditorContent"></WangEditor>
             </el-form-item>
           </el-col>
           <el-col :span="6" style="width: 33%">
@@ -116,7 +134,7 @@
 import { mapState } from 'vuex';
 import uploadPictures from '@/components/uploadPictures';
 import WangEditor from '@/components/wangEditor/index.vue';
-import { cmsAddApi, createApi, categoryTreeListApi } from '@/api/cms';
+import { cmsAddApi, createApi, categoryListApi } from '@/api/cms';
 export default {
   name: 'addArticle',
   components: { uploadPictures, WangEditor },
@@ -126,13 +144,6 @@ export default {
         callback();
       } else {
         callback(new Error('请上传图文封面'));
-      }
-    };
-    const validateUpload2 = (rule, value, callback) => {
-      if (!this.formValidate.cid) {
-        callback(new Error('请选择文章分类'));
-      } else {
-        callback();
       }
     };
     return {
@@ -171,19 +182,16 @@ export default {
         is_hot: 0,
         is_banner: 0,
         cid: '',
+        browse: null,
+        praise: null,
         visit: 0,
       },
       content: '',
       ruleValidate: {
         title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-        cid: [
-          {
-            required: true,
-            validator: validateUpload2,
-            trigger: 'change',
-            type: 'number',
-          },
-        ],
+        cid: [{ required: true, message: '请选择分类', trigger: 'change' }],
+        browse: [{ required: true, message: '请输入浏览量初始值', trigger: 'blur' }],
+        praise: [{ required: true, message: '请输入点赞量初始值', trigger: 'blur' }],
         image_input: [{ required: true, validator: validateUpload, trigger: 'change' }],
         content: [{ required: true, message: '请输入文章内容', trigger: 'change' }],
       },
@@ -191,9 +199,6 @@ export default {
       modalPic: false,
       template: false,
       treeData: [],
-      formValidate2: {
-        type: 1,
-      },
       myConfig: {
         autoHeightEnabled: false, // 编辑器不自动被内容撑高
         initialFrameHeight: 500, // 初始容器高度
@@ -206,7 +211,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '100px';
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -222,6 +227,9 @@ export default {
           title: '',
           author: '',
           image_input: '',
+          cid: '',
+          browse: null,
+          praise: null,
           content: '',
           synopsis: '',
           url: '',
@@ -246,9 +254,9 @@ export default {
     },
     // 分类
     getClass() {
-      categoryTreeListApi()
+      categoryListApi()
         .then(async (res) => {
-          this.treeData = res.data;
+          this.treeData = res.data.list;
         })
         .catch((res) => {
           this.$message.error(res.msg);
@@ -280,19 +288,7 @@ export default {
         .then(async (res) => {
           let data = res.data;
           let news = data.info;
-          this.formValidate = {
-            id: news.id,
-            title: news.title,
-            author: news.author,
-            image_input: news.image_input,
-            content: news.content,
-            synopsis: news.synopsis,
-            url: news.url,
-            is_hot: news.is_hot,
-            is_banner: news.is_banner,
-            cid: news.cid,
-            visit: news.visit,
-          };
+          this.formValidate = { ...news };
         })
         .catch((res) => {
           this.loading = false;
@@ -318,7 +314,7 @@ export default {
   grid-gap: 0;
 }
 .content_width {
-  width: 414px;
+  width: 300px;
 }
 ::v-deep.ivu-form-item-content {
   line-height: unset !important;
@@ -426,5 +422,4 @@ export default {
     display: none; /* Chrome Safari */
   }
 }
-
 </style>

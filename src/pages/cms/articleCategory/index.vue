@@ -46,12 +46,12 @@
         <vxe-table-column field="title" tree-node title="分类昵称" min-width="130"></vxe-table-column>
         <vxe-table-column field="image" title="分类图片" min-width="130">
           <template v-slot="{ row }">
-            <div class="tabBox_img" v-viewer v-if="row.image">
+            <div class="tabBox_img" v-viewer>
               <img v-lazy="row.image" />
             </div>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="status" title="状态" min-width="120">
+        <vxe-table-column field="status" title="状态" min-width="80">
           <template v-slot="{ row }">
             <el-switch
               :active-value="1"
@@ -64,6 +64,7 @@
             </el-switch>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="sort" tree-node title="排序" min-width="50"></vxe-table-column>
         <vxe-table-column field="date" title="操作" width="160" fixed="right">
           <template v-slot="{ row }">
             <a @click="edit(row)">编辑</a>
