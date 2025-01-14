@@ -1,40 +1,27 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mb-16" :body-style="{padding:0}">
-      <div slot="header" class="h-[100%] flex items-center justify-center">
-        <span>卡片名称</span>
-        <router-link style="float: right; " :to="$routeProStr + '/cms/article/add_article'" v-auth="['cms-article-creat']"
-      ><el-button type="primary" class="bnt">添加文章</el-button></router-link
-      >
-      </div>
+    <el-card :bordered="false" shadow="never" class="ivu-mb-16" :body-style="{ padding: 0 }">
       <div class="padding-add">
         <el-form
-            ref="artFrom"
-            :model="artFrom"
-            :label-width="labelWidth"
-            label-position="right"
-            @submit.native.prevent
-            inline
+          ref="artFrom"
+          :model="artFrom"
+          :label-width="labelWidth"
+          label-position="right"
+          @submit.native.prevent
+          inline
         >
           <el-form-item label="文章分类：" label-for="pid">
-            <el-cascader
-                v-model="artFrom.pid"
-                placeholder="请选择"
-                class="treeSel"
-                @change="handleCheckChange"
-                :options="treeData"
-                :props="props"
-                style="width: 250px"
-            >
-            </el-cascader>
+            <el-select v-model="artFrom.pid">
+              <el-option
+                v-for="(e, i) in treeData"
+                :value="e.id"
+                :key="i"
+                :label="e.title"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="文章搜索：" label-for="title">
-            <el-input
-                clearable
-                placeholder="请输入"
-                v-model="artFrom.title"
-                class="form_content_width"
-            />
+            <el-input clearable placeholder="请输入" v-model="artFrom.title" class="form_content_width" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="userSearchs">查询</el-button>
@@ -43,7 +30,11 @@
       </div>
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      
+      <div class="h-[100%] flex items-center justify-center">
+        <router-link style="float: right" :to="$routeProStr + '/cms/article/add_article'" v-auth="['cms-article-creat']"
+          ><el-button type="primary" class="bnt">添加文章</el-button></router-link
+        >
+      </div>
       <el-table
         :data="cmsList"
         ref="table"

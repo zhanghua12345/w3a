@@ -28,8 +28,8 @@
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <a @click="edit(scope.row.id)">修改</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除分组', scope.$index)">删除</a>
+            <!-- <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除分组', scope.$index)">删除</a> -->
           </template>
         </el-table-column>
       </el-table>

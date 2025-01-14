@@ -12,35 +12,11 @@
         >
           <div class="acea-row search-form" v-if="!collapse">
             <div>
-              <el-form-item label="用户标签：" label-for="label_id">
-                <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
-                  <div style="width: 222px">
-                    <div v-if="selectDataLabel.length">
-                      <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index" class="mr10">{{
-                        item.label_name
-                      }}</el-tag>
-                    </div>
-                    <span class="span" v-else>选择用户关联标签</span>
-                  </div>
-                  <div class="ivu-icon ivu-icon-ios-arrow-down"></div>
-                </div>
-              </el-form-item>
-              <el-form-item label="用户等级：" label-for="level">
-                <el-select v-model="level" placeholder="请选择用户等级" clearable class="form_content_width">
-                  <el-option value="all" label="全部">全部</el-option>
-                  <el-option
-                    :value="item.id"
-                    v-for="(item, index) in levelList"
-                    :key="index"
-                    :label="item.name"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item label="用户搜索：" label-for="nickname">
                 <el-input v-model="userFrom.nickname" placeholder="请输入用户" clearable class="form_content_width">
                   <el-select v-model="field_key" slot="prepend" style="width: 100px">
                     <el-option value="all" label="全部"></el-option>
-                    <el-option value="uid" label="UID"></el-option>
+                    <el-option value="uid" label="用户ID"></el-option>
                     <el-option value="phone" label="手机号"></el-option>
                     <el-option value="nickname" label="用户昵称"></el-option>
                   </el-select>
@@ -50,163 +26,20 @@
             <el-form-item class="search-form-sub">
               <el-button type="primary" @click="userSearchs">搜索</el-button>
               <el-button class="ResetSearch" @click="reset('userFrom')">重置</el-button>
-              <a class="ivu-ml-8 font12 ml10" @click="collapse = !collapse">
-                <template v-if="!collapse"> 展开 <i class="el-icon-arrow-down" /> </template>
-                <template v-else> 收起 <i class="el-icon-arrow-up" /> </template>
-              </a>
-            </el-form-item>
-          </div>
-          <div v-if="collapse" class="acea-row search-form">
-            <div class="search-form-box">
-              <el-form-item label="用户搜索：" label-for="nickname">
-                <el-input v-model="userFrom.nickname" placeholder="请输入用户" clearable class="form_content_width">
-                  <el-select v-model="field_key" slot="prepend" style="width: 100px">
-                    <el-option value="all" label="全部"></el-option>
-                    <el-option value="uid" label="UID"></el-option>
-                    <el-option value="phone" label="手机号"></el-option>
-                    <el-option value="nickname" label="用户昵称"></el-option>
-                  </el-select>
-                </el-input>
-              </el-form-item>
-              <el-form-item label="用户标签：" label-for="label_id">
-                <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
-                  <div style="width: 222px">
-                    <div v-if="selectDataLabel.length">
-                      <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index" class="mr10">{{
-                        item.label_name
-                      }}</el-tag>
-                    </div>
-                    <span class="span" v-else>选择用户关联标签</span>
-                  </div>
-                  <div class="ivu-icon ivu-icon-ios-arrow-down"></div>
-                </div>
-              </el-form-item>
-              <el-form-item label="下单次数：">
-                <el-select v-model="pay_count" placeholder="请选择下单次数" clearable class="form_content_width">
-                  <el-option value="all" label="全部"></el-option>
-                  <el-option value="-1" label="0次"></el-option>
-                  <el-option value="0" label="1次以上"></el-option>
-                  <el-option value="1" label="2次以上"></el-option>
-                  <el-option value="2" label="3次以上"></el-option>
-                  <el-option value="3" label="4次以上"></el-option>
-                  <el-option value="4" label="5次以上"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="用户分组：">
-                <el-select v-model="group_id" placeholder="请选择用户分组" clearable class="form_content_width">
-                  <el-option value="all" label="全部"></el-option>
-                  <el-option
-                    :value="item.id"
-                    v-for="(item, index) in groupList"
-                    :key="index"
-                    :label="item.group_name"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="用户等级：" label-for="level">
-                <el-select v-model="level" placeholder="请选择用户等级" clearable class="form_content_width">
-                  <el-option value="all" label="全部">全部</el-option>
-                  <el-option
-                    :value="item.id"
-                    v-for="(item, index) in levelList"
-                    :key="index"
-                    :label="item.name"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="身份：">
-                <el-select v-model="userFrom.is_promoter" placeholder="请选择" clearable class="form_content_width">
-                  <el-option value="" label="全部"></el-option>
-                  <el-option value="1" label="推广员"></el-option>
-                  <el-option value="0" label="普通用户"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="付费会员：" label-for="isMember">
-                <el-select v-model="userFrom.isMember" placeholder="请选择" clearable class="form_content_width">
-                  <el-option value="" label="全部"></el-option>
-                  <el-option value="1" label="是"></el-option>
-                  <el-option value="0" label="否"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="访问情况：" label-for="user_time_type">
-                <el-select v-model="user_time_type" placeholder="请选择访问情况" clearable class="form_content_width">
-                  <el-option value="" label="全部"></el-option>
-                  <el-option value="visitno" label="时间段未访问"></el-option>
-                  <el-option value="visit" label="时间段访问过"></el-option>
-                  <el-option value="add_time" label="首次访问"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="访问时间：" label-for="user_time" v-if="user_time_type">
-                <el-date-picker
-                  clearable
-                  v-model="timeVal"
-                  type="daterange"
-                  :editable="false"
-                  @change="onchangeTime"
-                  format="yyyy/MM/dd"
-                  value-format="yyyy/MM/dd"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :picker-options="pickerOptions"
-                  style="width: 250px"
-                ></el-date-picker>
-              </el-form-item>
-              <el-form-item label="地区：" label-for="country">
-                <el-select
-                  v-model="userFrom.country"
-                  placeholder="请选择国家"
-                  clearable
-                  @change="changeCountry"
-                  class="form_content_width"
-                >
-                  <el-option value="domestic" label="中国"></el-option>
-                  <el-option value="abroad" label="外国"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="省份：" v-if="userFrom.country === 'domestic'">
-                <el-cascader
-                  :options="addresData"
-                  :value="address"
-                  v-model="address"
-                  @change="handleChange"
-                  clearable
-                  style="width: 250px"
-                ></el-cascader>
-              </el-form-item>
-            </div>
-
-            <el-form-item class="search-form-sub">
-              <el-button type="primary" label="default" @click="userSearchs">搜索</el-button>
-              <el-button class="ResetSearch" @click="reset('userFrom')">重置</el-button>
-              <a class="ivu-ml-8 font12 ml10" @click="collapse = !collapse">
-                <template v-if="!collapse"> 展开 <i class="el-icon-arrow-down" /> </template>
-                <template v-else> 收起 <i class="el-icon-arrow-up" /> </template>
-              </a>
             </el-form-item>
           </div>
         </el-form>
       </div>
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt mt16" :body-style="{ padding: '0 20px 20px' }">
-      <el-tabs v-model="userFrom.user_type" @tab-click="onClickTab">
-        <el-tab-pane :label="item.name" :name="item.type" v-for="(item, index) in headeNum" :key="index" />
+      <el-tabs v-model="userFrom.group_id" @tab-click="onClickTab">
+        <el-tab-pane :label="item.group_name" :name="String(item.id)" v-for="(item, index) in headeNum" :key="index" />
       </el-tabs>
       <el-row :gutter="24" justify="space-between">
         <el-col :span="24">
-          <el-button v-auth="['admin-user-save']" type="primary" @click="edit({ uid: 0 })">添加用户</el-button>
-          <el-button v-auth="['admin-user-coupon']" @click="onSend">发送优惠券</el-button>
-          <el-button
-            v-auth="['admin-wechat-news']"
-            class="greens mr10"
-            @click="onSendPic"
-            v-if="userFrom.user_type === 'wechat'"
-          >
-            发送图文消息
-          </el-button>
+          <!-- <el-button v-auth="['admin-user-save']" type="primary" @click="edit({ uid: 0 })">添加用户</el-button> -->
           <el-button v-auth="['admin-user-group_set']" @click="setGroup">批量设置分组</el-button>
-          <el-button v-auth="['admin-user-set_label']" @click="setLabel">批量设置标签</el-button>
-          <el-button class="mr10" @click="exportList">导出</el-button>
-
+          <!-- <el-button class="mr10" @click="exportList">导出</el-button> -->
           <!-- <el-button v-auth="['admin-user-synchro']" class="mr20" @click="synchro">同步公众号用户</el-button> -->
         </el-col>
         <el-col :span="24" class="userAlert" v-if="selectionList.length">
@@ -247,9 +80,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" min-width="150">
+        <el-table-column label="昵称" min-width="150">
           <template slot-scope="scope">
-            <div class="acea-row">
+            <div class="acea-row" style="align-items: center">
               <i class="el-icon-male" v-show="scope.row.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
               <i class="el-icon-female" v-show="scope.row.sex === '女'" style="color: #ed4014; font-size: 15px"></i>
               <div v-text="scope.row.nickname" class=""></div>
@@ -257,19 +90,14 @@
             <div v-if="scope.row.is_del == 1" style="color: red">用户已注销</div>
           </template>
         </el-table-column>
-        <el-table-column label="付费会员" min-width="90">
+        <el-table-column label="姓名备注" min-width="90">
           <template slot-scope="scope">
-            <div>{{ scope.row.isMember ? '是' : '否' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户等级" min-width="90">
-          <template slot-scope="scope">
-            <div>{{ scope.row.level }}</div>
+            <div>{{ scope.row.real_name||'--' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="分组" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.group_id }}</div>
+            <div>{{ scope.row.group_id||'--'  }}</div>
           </template>
         </el-table-column>
         <el-table-column label="手机号" min-width="100">
@@ -277,33 +105,18 @@
             <div>{{ scope.row.phone }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="用户类型" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.user_type }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="余额" prop="now_money" min-width="100" :sortable="true">
-          <template slot-scope="scope">
-            <div>{{ scope.row.now_money }}</div>
-          </template>
-        </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope">
             <template v-if="scope.row.is_del != 1">
               <a @click="userDetail(scope.row)">详情</a>
-
               <el-divider direction="vertical"></el-divider>
               <el-dropdown size="small" @command="changeMenu(scope.row, $event, scope.$index)" :transfer="true">
                 <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
                 <el-dropdown-menu slot="dropdown">
-                  <!-- <el-dropdown-item command="1">编辑</el-dropdown-item> -->
-                  <el-dropdown-item command="2">积分余额</el-dropdown-item>
-                  <el-dropdown-item command="3">赠送会员</el-dropdown-item>
-                  <!--                                <el-dropdown-item command="4" v-if="row.vip_name">清除等级</el-dropdown-item>-->
                   <el-dropdown-item command="5">设置分组</el-dropdown-item>
-                  <el-dropdown-item command="6">设置标签</el-dropdown-item>
+                  <!-- <el-dropdown-item command="6">设置标签</el-dropdown-item>
                   <el-dropdown-item command="7">修改上级推广人</el-dropdown-item>
-                  <el-dropdown-item command="8" v-if="scope.row.spread_uid">清除上级推广人</el-dropdown-item>
+                  <el-dropdown-item command="8" v-if="scope.row.spread_uid">清除上级推广人</el-dropdown-item> -->
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -324,10 +137,6 @@
         />
       </div>
     </el-card>
-    <!-- 编辑表单 积分余额-->
-    <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
-    <!-- 发送优惠券-->
-    <send-from ref="sends" :userIds="ids.toString()"></send-from>
     <!-- 会员详情-->
     <user-details ref="userDetails"></user-details>
     <!--发送图文消息 -->
@@ -427,8 +236,6 @@ import {
 } from '@/api/user';
 import { agentSpreadApi } from '@/api/agent';
 import { exportUserList } from '@/api/export';
-import editFrom from '../../../components/from/from';
-import sendFrom from '@/components/sendCoupons/index';
 import userDetails from './handle/userDetails';
 import newsCategory from '@/components/newsCategory/index';
 import customerInfo from '@/components/customerInfo';
@@ -438,8 +245,6 @@ export default {
   name: 'user_list',
   components: {
     expandRow,
-    editFrom,
-    sendFrom,
     userDetails,
     newsCategory,
     customerInfo,
@@ -466,13 +271,7 @@ export default {
       },
       pickerOptions: this.$timeOptions,
       collapse: false,
-      headeNum: [
-        { type: '', name: '全部' },
-        { type: 'wechat', name: '普通用户' },
-        { type: 'routine', name: '会员' },
-        { type: 'h5', name: '员工' },
-        { type: 'pc', name: '代理商' },
-      ],
+      headeNum: [],
       address: [],
       addresData: [],
       isShowSend: true,
@@ -543,8 +342,9 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
   },
-  created() {
-    this.getList();
+  async created() {
+    await this.getTabList();
+    await this.getList();
     this.getCityList();
   },
   mounted() {
@@ -553,6 +353,18 @@ export default {
     // this.groupLists();
   },
   methods: {
+    // 分组列表
+    getTabList() {
+      this.loading = true;
+      userGroupApi({ page: 1, limit: 100 })
+        .then(async (res) => {
+          this.headeNum = [{ id: '', group_name: '全部用户' }, ...res.data.list];
+        })
+        .catch((res) => {
+          this.loading = false;
+          this.$message.error(res.msg);
+        });
+    },
     getCityList() {
       cityList().then((res) => {
         this.addresData = res.data;
@@ -895,7 +707,7 @@ export default {
       this.userFrom.user_time_type = this.user_time_type === 'all' ? '' : this.user_time_type;
       this.userFrom.field_key = this.field_key === 'all' ? '' : this.field_key;
       this.userFrom.level = this.level === 'all' ? '' : this.level;
-      this.userFrom.group_id = this.group_id === 'all' ? '' : this.group_id;
+      this.userFrom.group_id = this.group_id === 'all' ? '' : this.userFrom.group_id;
       this.loading = true;
       userList(this.userFrom)
         .then(async (res) => {
@@ -1220,7 +1032,7 @@ img {
 .search-form {
   display: flex;
   justify-content: space-between;
-  .search-form-box{
+  .search-form-box {
     display: flex;
     flex-wrap: wrap;
     flex: 1;

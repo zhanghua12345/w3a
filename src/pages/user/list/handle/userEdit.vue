@@ -3,28 +3,23 @@
     <el-form ref="formItem" :rules="ruleValidate" :model="formItem" label-width="100px" @submit.native.prevent>
       <el-form-item label="用户ID：" v-if="formItem.uid">
         <el-input
-          class="form-sty"
           disabled
           v-model="formItem.uid"
           placeholder="请输入编号"
-          style="width: 80%"
         ></el-input>
       </el-form-item>
       <el-form-item label="真实姓名：" prop="real_name">
         <el-input
-          class="form-sty"
           v-model.trim="formItem.real_name"
           placeholder="请输入真实姓名"
-          style="width: 80%"
         ></el-input>
       </el-form-item>
       <el-form-item label="手机号码：" prop="phone">
-        <el-input class="form-sty" v-model="formItem.phone" placeholder="请输入手机号码" style="width: 80%"></el-input>
+        <el-input  v-model="formItem.phone" placeholder="请输入手机号码" style="width: 80%"></el-input>
       </el-form-item>
       <el-form-item label="生日：">
         <el-date-picker
           clearable
-          class="form-sty"
           type="date"
           v-model="formItem.birthday"
           placeholder="请选择生日"
@@ -35,21 +30,20 @@
       </el-form-item>
       <el-form-item label="身份证号：">
         <el-input
-          class="form-sty"
           v-model.trim="formItem.card_id"
           placeholder="请输入身份证号"
           style="width: 80%"
         ></el-input>
       </el-form-item>
       <el-form-item label="用户地址：">
-        <el-input class="form-sty" v-model="formItem.addres" placeholder="请输入用户地址" style="width: 80%"></el-input>
+        <el-input  v-model="formItem.addres" placeholder="请输入用户地址" style="width: 80%"></el-input>
       </el-form-item>
       <el-form-item label="用户备注：">
-        <el-input class="form-sty" v-model="formItem.mark" placeholder="请输入用户备注" style="width: 80%"></el-input>
+        <el-input  v-model="formItem.mark" placeholder="请输入用户备注" style="width: 80%"></el-input>
       </el-form-item>
       <el-form-item label="登录密码：" prop="pwd">
         <el-input
-          class="form-sty"
+      
           type="password"
           v-model="formItem.pwd"
           placeholder="请输入登录密码（修改用户可不填写，不填写不修改原密码）"
@@ -58,7 +52,7 @@
       </el-form-item>
       <el-form-item label="确认密码：" prop="true_pwd">
         <el-input
-          class="form-sty"
+       
           type="password"
           v-model="formItem.true_pwd"
           placeholder="请输入确认密码（修改用户可不填写，不填写不修改原密码）"
@@ -67,7 +61,7 @@
       </el-form-item>
 
       <el-form-item label="用户等级：">
-        <el-select v-model="formItem.level" class="form-sty" clearable>
+        <el-select v-model="formItem.level" clearable>
           <el-option
             v-for="(item, index) in infoData.levelInfo"
             :key="index"
@@ -77,7 +71,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="用户分组：">
-        <el-select v-model="formItem.group_id" class="form-sty" clearable>
+        <el-select v-model="formItem.group_id" clearable>
           <el-option
             v-for="(item, index) in infoData.groupInfo"
             :key="index"
@@ -305,7 +299,7 @@ export default {
 }
 
 .form-sty {
-  width: 400px !important;
+  width: 250px !important;
 }
 
 .addfont {

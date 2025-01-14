@@ -1,12 +1,12 @@
 <template>
   <div style="width: 100%">
-    <el-drawer :visible.sync="modals" title="用户详情" :wrapperClosable="false" :size="1100" @closed="draChange">
+    <el-drawer :visible.sync="modals" title="用户详情" :wrapperClosable="false" :size="800" @closed="draChange">
       <div class="acea-row head">
         <div class="avatar mr15"><img :src="psInfo.avatar" /></div>
         <div class="dashboard-workplace-header-tip">
           <p class="dashboard-workplace-header-tip-title" v-text="psInfo.nickname || '-'"></p>
           <div class="dashboard-workplace-header-tip-desc">
-            <span class="dashboard-workplace-header-tip-desc-sp" v-for="(item, index) in detailsData" :key="index">{{
+            <span class="dashboard-workplace-header-tip-desc-sp" style="padding: 6px 0;" v-for="(item, index) in detailsData" :key="index">{{
               item.title + '：' + item.value
             }}</span>
           </div>
@@ -85,12 +85,12 @@ export default {
       isEdit: false,
       theme2: 'light',
       list: [
-        { val: 'order', label: '消费记录' },
-        { val: 'integral', label: '积分明细' },
-        { val: 'sign', label: '签到记录' },
-        { val: 'coupon', label: '持有优惠券' },
-        { val: 'balance_change', label: '余额变动' },
-        { val: 'spread', label: '好友关系' },
+        // { val: 'order', label: '消费记录' },
+        // { val: 'integral', label: '积分明细' },
+        // { val: 'sign', label: '签到记录' },
+        // { val: 'coupon', label: '持有优惠券' },
+        // { val: 'balance_change', label: '余额变动' },
+        // { val: 'spread', label: '好友关系' },
       ],
       modals: false,
       spinShow: false,

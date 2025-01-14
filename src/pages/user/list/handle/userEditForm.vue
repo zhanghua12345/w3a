@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="section">
+      <!-- <div class="section">
         <div class="section-hd">密码</div>
         <div class="section-bd">
           <div class="item">
@@ -68,22 +68,10 @@
             </el-form-item>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="section">
         <div class="section-hd">用户概况</div>
         <div class="section-bd">
-          <div class="item">
-            <el-form-item label="用户等级：">
-              <el-select v-model="formItem.level" class="form-sty" clearable>
-                <el-option
-                  v-for="(item, index) in infoData.levelInfo"
-                  :key="index"
-                  :value="item.id"
-                  :label="item.name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </div>
           <div class="item">
             <el-form-item label="用户分组：">
               <el-select v-model="formItem.group_id" class="form-sty" clearable>
@@ -96,55 +84,6 @@
               </el-select>
             </el-form-item>
           </div>
-          <div class="item lang">
-            <el-form-item label="用户标签：">
-              <div style="display: flex">
-                <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
-                  <div style="width: 90%">
-                    <div v-if="dataLabel.length">
-                      <el-tag
-                        closable
-                        v-for="(item, index) in dataLabel"
-                        :key="index"
-                        @close="closeLabel(item)"
-                        class="mr10"
-                        >{{ item.label_name }}</el-tag
-                      >
-                    </div>
-                    <span class="span" v-else>选择用户关联标签</span>
-                  </div>
-                  <div class="ivu-icon ivu-icon-ios-arrow-down"></div>
-                </div>
-                <span class="addfont" @click="addLabel">新增标签</span>
-              </div>
-            </el-form-item>
-          </div>
-          <div class="item lang">
-            <el-form-item label="推广资格：">
-              <el-radio-group v-model="formItem.spread_open" class="form-sty">
-                <el-radio :label="1">开启</el-radio>
-                <el-radio :label="0">关闭</el-radio>
-              </el-radio-group>
-              <div class="tip">关闭用户的推广资格后，在任何分销模式下该用户都无分销权限</div>
-            </el-form-item>
-          </div>
-          <div class="item lang">
-            <el-form-item label="推广权限：">
-              <el-radio-group v-model="formItem.is_promoter" class="form-sty">
-                <el-radio :label="1">开启</el-radio>
-                <el-radio :label="0">关闭</el-radio>
-                <div class="tip">指定分销模式下，开启或关闭用户的推广权限</div>
-              </el-radio-group>
-            </el-form-item>
-          </div>
-          <div class="item lang">
-            <el-form-item label="用户状态：">
-              <el-radio-group v-model="formItem.status" class="form-sty">
-                <el-radio :label="1">开启</el-radio>
-                <el-radio :label="0">锁定</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </div>
         </div>
       </div>
       <div class="section">
@@ -153,7 +92,7 @@
           <div class="item">
             <el-form-item label="用户备注：">
               <el-input
-                class="form-sty"
+                style="width:400px"
                 type="textarea"
                 :rows="5"
                 v-model="formItem.mark"
@@ -408,7 +347,7 @@ export default {
         margin: 16px 0 0;
       }
       .form-sty {
-        width: 300px;
+        width: auto;
       }
       .ivu-form-item {
         margin: 3px 0;

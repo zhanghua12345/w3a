@@ -223,6 +223,52 @@
               </div>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <el-form-item label="浏览量初始值：" prop="browse">
+              <el-input
+                class="content_width"
+                type="number"
+                v-model.trim="formValidate.browse"
+                placeholder="请输入浏览量初始值"
+              />
+              <div style="color: #666">
+                浏览量
+                <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
+                <span style="color: #f30">790</span>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="点赞初始值：" prop="praise">
+              <el-input
+                class="content_width"
+                type="number"
+                v-model.trim="formValidate.praise"
+                placeholder="请输入点赞量初始值"
+              />
+              <div style="color: #666">
+                点赞量
+                <span style="color: #f30">790</span> = 初始值 <span style="color: #f30">790</span> + 真实量
+                <span style="color: #f30">586</span>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="HOT图标：" prop="hot">
+              <el-radio-group v-model="formValidate.hot">
+                <el-radio label="1" class="radio">是</el-radio>
+                <el-radio label="0">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="NEW图标：" prop="new">
+              <el-radio-group v-model="formValidate.new">
+                <el-radio label="1" class="radio">是</el-radio>
+                <el-radio label="0">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-form-item>
           <el-button v-if="currentTab !== '1'" @click="upTab">上一步</el-button>
@@ -319,7 +365,11 @@ export default {
 
         description: '', // 简介
         isRecommend: 0, // 是否推荐列表
-        recommendImg: '',
+        recommendImg: '', // 推荐图片
+        browse: '', // 浏览初始值
+        recommendImg: '', // 点赞初始值
+        hot: 0, // 是否hot
+        new: 0, // 是否new
       },
       ruleValidate: ruleInit,
       gridPic: {

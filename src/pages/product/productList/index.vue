@@ -21,6 +21,18 @@
               class="form_content_width"
             />
           </el-form-item>
+          <el-form-item label="商品状态" label-for="status">
+            <el-select v-model.trim="artFrom.status" class="content_width mr14">
+              <el-option :value="0" label="下架"></el-option>
+              <el-option :value="1" label="上架"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否推荐" label-for="isRecommend">
+            <el-select v-model.trim="artFrom.isRecommend" class="content_width mr14">
+              <el-option :value="1" label="是"></el-option>
+              <el-option :value="0" label="否"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="userSearchs">查询</el-button>
           </el-form-item>
@@ -76,6 +88,11 @@
         <el-table-column label="案例名称" min-width="250">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否推荐" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.isRecommend==0?'否':'是' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">

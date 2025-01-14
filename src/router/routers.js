@@ -8,6 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
+import home from './modules/home';
 import index from './modules/index';
 import product from './modules/product';
 import order from './modules/order';
@@ -45,7 +46,7 @@ const frameIn = [
   {
     path: '/',
     meta: {
-      title: 'CRMEB',
+      title: 'FMN',
     },
     redirect: {
       name: 'home_index',
@@ -157,6 +158,7 @@ const frameIn = [
     },
     component: () => import('@/components/uploadVideo/index'),
   },
+  home,
   index,
   agent,
   cms,
