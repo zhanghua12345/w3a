@@ -23,289 +23,61 @@
           <div class="tab-item" :class="{ active: pageId == 1617 }" @click="edits(2)">开屏广告</div>
         </div>
       </div>
-      <div v-if="name == 'user_recharge_quota'" class="iframe">
-        <div class="iframe-boxs">
-          <div class="moneyBox">
-            <div class="box1">
-              <div class="font1">我的余额</div>
-              <div>￥ <i class="font2">0.00</i></div>
-            </div>
-            <div class="moneyBox_content">
-              <div class="box2">
-                <div>账户充值</div>
-                <div>佣金导入</div>
-              </div>
-              <div class="box3">
-                <div v-show="item.status != 0" class="box3_box" v-for="(item, index) in sginList.list" :key="index">
-                  <div>{{ item.price }}<i class="font">元</i></div>
-                  <div class="font">赠送:{{ item.give_money }}元</div>
-                </div>
-                <div class="box3_box">
-                  <div class="other">其他</div>
-                </div>
-              </div>
-              <div class="box4">
-                <div class="tips">注意事项：</div>
-                <div class="tips-samll">
-                  <p>充值后帐户的金额不能提现，可用于商城消费使用。</p>
-                  <p>佣金导入账户之后不能再次导出、不可提现。</p>
-                  <p>账户充值出现问题可联系商城客服，也可拨打商城客服热线：40088888889。</p>
-                </div>
-              </div>
-              <div class="box5">立即充值</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="name == 'admin_login_slide'" class="pciframe" :bordered="false" shadow="never">
-        <img src="../../assets/images/pclogin.png" class="pciframe-box" />
-        <div class="pcmoddile_goods">
-          <div class="nofont" v-if="tabList.list == ''">暂无照片，请添加~</div>
-          <swiper v-else :options="swiperOption" class="pcswiperimg_goods">
-            <swiper-slide class="spcwiperimg_goods" v-for="(item, index) in tabList.list" :key="index">
-              <img :src="item.slide" />
-            </swiper-slide>
-          </swiper>
-        </div>
-      </div>
-      <div v-if="name == 'integral_shop_banner'" class="iframe" :bordered="false">
-        <div class="iframe-box">
-          <img src="../../assets/images/integral.png" style="width: 100%" />
-          <div class="moddile_goods">
-            <div class="nofonts" v-if="tabList.list == '' || !tabList.list.length || !tabList.list[0].img">
-              暂无照片，请添加~
-            </div>
-            <swiper v-else :options="swiperOption" class="pcswiperimg_goods">
-              <swiper-slide class="swiperimg_goods" v-for="(item, index) in tabList.list" :key="index">
+      <div class="iframe content1" shadow="never">
+        <div class="moddile_box">
+          <div class="model">
+            <swiper :options="swiperOption" class="swiperimg">
+              <swiper-slide class="swiperimg" v-for="(item, index) in tabList.list" :key="index">
                 <img :src="item.img" />
               </swiper-slide>
             </swiper>
           </div>
-        </div>
-      </div>
-      <div
-        v-if="
-          name != 'sign_day_num' &&
-          name != 'admin_login_slide' &&
-          name != 'user_recharge_quota' &&
-          name != 'integral_shop_banner' &&
-          a != 1 &&
-          guide != 2
-        "
-        class="iframe"
-        :bordered="false"
-        shadow="never"
-      >
-        <iframe :src="url" class="iframe-box" frameborder="0"></iframe>
-        <div class="moddile"></div>
-        <div
-          v-if="
-            name == 'routine_home_bast_banner' ||
-            name == 'routine_home_hot_banner' ||
-            name == 'routine_home_new_banner' ||
-            name == 'routine_home_benefit_banner'
-          "
-          class="moddile_box"
-        >
-          <div class="nofonts" v-if="!tabList.list || !tabList.list.length || !tabList.list[0].img">
-            暂无照片，请添加~
-          </div>
-          <swiper v-else :options="swiperOption" class="swiperimg">
-            <swiper-slide class="swiperimg" v-for="(item, index) in tabList.list" :key="index">
-              <img :src="item.img" />
-            </swiper-slide>
-          </swiper>
-        </div>
-        <div v-if="name == 'combination_banner'" class="moddile_goods">
-          <div class="nofonts" v-if="tabList.list == ''">暂无照片，请添加~</div>
-          <swiper v-else :options="swiperOption" class="swiperimg_goods">
-            <swiper-slide class="swiperimg_goods" v-for="(item, index) in tabList.list" :key="index">
-              <img :src="item.img" />
-            </swiper-slide>
-          </swiper>
-        </div>
-      </div>
-      <div v-if="name == 'sign_day_num'" class="iframe" :bordered="false">
-        <div class="iframe-box">
-          <img v-if="bgimg == 1" src="../../assets/images/bluesgin.png" />
-          <img v-if="bgimg == 2" src="../../assets/images/greesgin.png" />
-          <img v-if="bgimg == 3" src="../../assets/images/redsgin.png" />
-          <img v-if="bgimg == 4" src="../../assets/images/pinksgin.png" />
-          <img v-if="bgimg == 5" src="../../assets/images/oragesgin.png" />
-        </div>
-      </div>
-      <div v-if="a == 1" class="iframe" :bordered="false">
-        <div class="agreement-box">
-          <div class="template"></div>
-          <div class="htmls_box">
-            <div class="htmls_top">服务协议与隐私政策</div>
-            <div class="htmls_font">
-              <div class="ok">我同意</div>
-              <div>不同意</div>
+          <div style="padding-left: 10px; padding-right: 10px; display: flex; flex-direction: column; width: 290px">
+            <div class="model mt-20">
+              <div class="model_title">全屋方案</div>
+              <div class="container-scroll" style="height: 100px">
+                <div class="item">Item 1</div>
+                <div class="item">Item 2</div>
+                <div class="item">Item 3</div>
+                <div class="item">Item 4</div>
+                <!-- 可以继续添加更多的子元素 -->
+              </div>
             </div>
-            <div class="htmls" v-html="formValidate.content"></div>
-          </div>
-        </div>
-      </div>
-      <div v-if="a == 1" style="margin-left: 40px">
-        <div class="table_box">
-          <div>
-            <div v-bind="grid">
-              <div class="title">隐私权限页面展示：</div>
-            </div>
-          </div>
-          <div>
-            <el-form
-              class="form"
-              ref="formValidate"
-              :model="formValidate"
-              :rules="ruleValidate"
-              :label-width="labelWidth"
-              :label-position="labelPosition"
-              @submit.native.prevent
-            >
-              <div class="goodsTitle acea-row"></div>
-              <el-form-item label="" prop="content" style="margin: 0px">
-                <WangEditor
-                  style="width: 90%"
-                  :content="formValidate.content"
-                  @editorContent="getEditorContent"
-                ></WangEditor>
-              </el-form-item>
-            </el-form>
-          </div>
-        </div>
-      </div>
-      <div v-if="guide == 2" class="iframe" :bordered="false">
-        <div class="nofonts" v-if="tabList.list == '' || !tabList.list.length || !tabList.list[0].img">
-          暂无照片，请添加~
-        </div>
-        <swiper :options="swiperOption" class="swiperimgs" v-else>
-          <swiper-slide class="swiperimgs" v-for="(item, index) in tabList.list" :key="index">
-            <img :src="item.img" />
-          </swiper-slide>
-        </swiper>
-      </div>
-      <div v-if="name == 'sign_day_num'" style="margin-left: 20px">
-        <div class="table_box">
-          <div>
-            <div v-bind="grid">
-              <div class="title">签到天数设置</div>
-              <el-button type="primary" @click="groupAdd('添加数据')" style="margin-left: 14px; margin-top: 30px"
-                >添加数据</el-button
-              >
-            </div>
-          </div>
-          <div class="table">
-            <el-table
-              :data="cmsList"
-              ref="table"
-              class="mt14"
-              v-loading="loading"
-              highlight-current-row
-              no-userFrom-text="暂无数据"
-              no-filtered-userFrom-text="暂无筛选结果"
-            >
-              <el-table-column label="编号" width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.id }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="第几天" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.day }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="获取积分" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.sign_num }}</span>
-                </template>
-              </el-table-column>
-
-              <el-table-column label="是否可用" min-width="80">
-                <template slot-scope="scope">
-                  <el-switch
-                    :active-value="1"
-                    :inactive-value="0"
-                    v-model="scope.row.status"
-                    :value="scope.row.status"
-                    @change="onchangeIsShow(scope.row)"
-                    size="large"
-                  >
-                  </el-switch>
-                </template>
-              </el-table-column>
-              <el-table-column label="排序" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.sort }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" fixed="right" width="150">
-                <template slot-scope="scope">
-                  <a @click="edit(scope.row, '编辑')">编辑</a>
-                  <el-divider direction="vertical"></el-divider>
-                  <a @click="del(scope.row, '删除这条信息', scope.$index)">删除</a>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </div>
-      </div>
-      <div v-if="name == 'user_recharge_quota'" style="margin-left: 20px">
-        <div class="table_box">
-          <div>
-            <div v-bind="grid">
-              <div class="title">充值金额设置</div>
-              <el-button type="primary" @click="groupAdd('添加数据')" style="margin-left: 14px; margin-top: 30px"
-                >添加数据</el-button
-              >
-            </div>
-          </div>
-          <div class="table">
-            <el-table
-              :data="sginList.list"
-              ref="table"
-              class="mt14"
-              v-loading="loading"
-              highlight-current-row
-              no-userFrom-text="暂无数据"
-              no-filtered-userFrom-text="暂无筛选结果"
-            >
-              <el-table-column
-                :label="item.title"
-                :min-width="item.minWidth"
-                v-for="(item, index) in columns1"
-                :key="index"
-              >
-                <template slot-scope="scope">
-                  <template v-if="item.key">
-                    <div>
-                      <span>{{ scope.row[item.key] }}</span>
+            <div class="mx-main mt-40">
+              <div class="grid grid-rows-2 grid-cols-9 gap-20 h-330">
+                <div
+                  class="rounded-main text-fff relative"
+                  v-for="(item, index) in actives"
+                  :key="index"
+                  :class="
+                    index === 0
+                      ? ['row-span-2', 'col-span-4', 'bg-fdf2e0']
+                      : index === 1
+                      ? ['col-span-5', 'bg-f5f4d6']
+                      : ['row-span-1', 'col-span-5', 'bg-f9ebea']
+                  "
+                >
+                  <div class="p-main absolute z-10 flex flex-col justify-between">
+                    <div class="text-[#866350] text-36 font-600">{{ item.name }}</div>
+                    <div class="text-tip text-24 pt-10 flex items-center">
+                      {{ item.subName }}
+                      <i class="iconfont text-20">&#xe671;</i>
                     </div>
-                  </template>
-                  <template v-else-if="item.slot === 'status'">
-                    <el-switch
-                      :active-value="1"
-                      :inactive-value="0"
-                      v-model="scope.row.status"
-                      :value="scope.row.status"
-                      @change="onchangeIsShow(scope.row)"
-                      size="large"
-                    >
-                    </el-switch>
-                  </template>
-                  <template v-else-if="item.slot === 'action'">
-                    <a @click="edit(scope.row, '编辑')">编辑</a>
-                    <el-divider direction="vertical"></el-divider>
-                    <a @click="del(scope.row, '删除这条信息', scope.$index)">删除</a>
-                  </template>
-                </template>
-              </el-table-column>
-            </el-table>
+                  </div>
+                  <div
+                    class="border-[#e1a490] text-[#e1a490] px-20 py-10 border-2 border-solid rounded-8 absolute bottom-80 left-main"
+                    v-if="index === 0"
+                  >
+                    立即邀请
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div v-else>
+
+      <div>
         <div
           v-if="name != 'sign_day_num' && a != 1 && guide != 2"
           :class="name != 'admin_login_slide' ? 'content' : 'contents'"
@@ -316,29 +88,21 @@
               <div class="title" v-else>轮播图设置</div>
               <div class="title-text">建议尺寸：690 * 240px，拖拽图片可调整图片顺序</div>
               <div class="list-box">
-                <draggable
-                  v-if="name == 'admin_login_slide'"
-                  class="dragArea list-group Bbox"
-                  :list="tabList.list"
-                  group="peoples"
-                  handle=".move-icon"
-                >
-                  <div class="items">
-                    <div class="move-icon">
-                      <span class="iconfont icondrag2"></span>
-                    </div>
-                    <div class="img-box" @click="modalPicTap('单选', 0)">
-                      <img :src="tabList.list[0].slide" alt="" v-if="tabList.list[0]?.slide" />
-                      <div class="upload-box" v-else>
-                        <i class="el-icon-picture-outline" style="font-size: 24px"></i>
-                      </div>
-                      <div class="delect-btn" @click.stop="bindDelete(tabList.list[0], 0)">
-                        <i class="el-icon-circle-close" style="font-size: 24px" />
-                      </div>
-                    </div>
-                    <div class="info"></div>
-                  </div>
-                </draggable>
+                <div class="add-btn" v-if="name == 'admin_login_slide'">
+                  <el-button
+                    type="primary"
+                    ghost
+                    style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
+                    @click="getvideoint"
+                    >{{ video ? '修改视频' : '添加视频' }}
+                  </el-button>
+                  <video
+                    v-if="video"
+                    :src="video"
+                    controls
+                    style="width: 500px; min-height: 500rpx; padding-top: 20px"
+                  ></video>
+                </div>
                 <draggable v-else class="dragArea list-group" :list="tabList.list" group="peoples" handle=".move-icon">
                   <div class="item" v-for="(item, index) in tabList.list" :key="index">
                     <div class="move-icon">
@@ -355,13 +119,13 @@
                     </div>
                     <div class="info">
                       <div class="info-item">
-                        <span style="width:70px">图片名称：</span>
+                        <span style="width: 70px">图片名称：</span>
                         <div class="input-box">
                           <el-input v-model="item.comment" placeholder="请填写名称" />
                         </div>
                       </div>
                       <div class="info-item">
-                        <span style="width:70px">链接地址：</span>
+                        <span style="width: 70px">链接地址：</span>
                         <div class="input-box">
                           <el-select v-model="item.type">
                             <el-option value="1" label="案例详情"></el-option>
@@ -370,7 +134,7 @@
                         </div>
                       </div>
                       <div class="info-item">
-                        <span style="width:70px">链接 ID：</span>
+                        <span style="width: 70px">链接 ID：</span>
                         <div class="input-box">
                           <el-input v-model="item.id" />
                         </div>
@@ -397,7 +161,7 @@
                 </div>
               </div>
               <template>
-                <div class="add-btn"  v-if="name !== 'admin_login_slide'">
+                <div class="add-btn" v-if="name !== 'admin_login_slide'">
                   <el-button
                     type="primary"
                     ghost
@@ -411,86 +175,11 @@
           </div>
         </div>
       </div>
-      <div v-if="guide === 2" :class="name != 'admin_login_slide' ? 'content' : 'contents'">
-        <div class="right-box">
-          <div class="hot_imgs">
-            <div class="title">引导页设置</div>
-            <div class="title-text">建议尺寸：750 * 1334px，拖拽图片可调整图片顺序哦，最多添加五张</div>
-            <div class="list-box">
-              <div>
-                <el-form :model="formItem" label-width="85px">
-                  <el-form-item label="开屏广告:">
-                    <el-switch active-value="1" inactive-value="0" v-model="formItem.status" size="large"> </el-switch>
-                  </el-form-item>
-                  <el-form-item label="广告时间:">
-                    <el-input
-                      v-model.number="formItem.time"
-                      type="number"
-                      placeholder="请输入开屏广告时间"
-                      style="width: 150px"
-                    ></el-input>
-                    单位(秒)
-                  </el-form-item>
-                </el-form>
-              </div>
-              <draggable class="dragArea list-group" :list="tabList.list" group="peoples" handle=".move-icon">
-                <div class="item" v-for="(item, index) in tabList.list" :key="index">
-                  <div class="move-icon">
-                    <span class="iconfont icondrag2"></span>
-                  </div>
-                  <div class="img-box" @click="modalPicTap('单选', index)">
-                    <img :src="item.img" alt="" v-if="item.img" />
-                    <div class="upload-box" v-else>
-                      <i class="el-icon-picture-outline" style="font-size: 24px"></i>
-                    </div>
-                    <div class="delect-btn" @click.stop="bindDelete(item, index)">
-                      <i class="el-icon-circle-close" style="font-size: 24px" />
-                    </div>
-                  </div>
-                  <div class="info">
-                    <div class="info-item">
-                      <span>图片名称：</span>
-                      <div class="input-box">
-                        <el-input v-model="item.comment" placeholder="请填写名称" />
-                      </div>
-                    </div>
-                    <div class="info-item">
-                      <span>链接地址：</span>
-                      <div class="input-box" @click="link(index)">
-                        <el-input v-model="item.link" readonly placeholder="选择链接" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </draggable>
-              <div>
-                <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
-                  <uploadPictures
-                    :isChoice="isChoice"
-                    @getPic="getPic"
-                    :gridBtn="gridBtn"
-                    :gridPic="gridPic"
-                    v-if="modalPic"
-                  ></uploadPictures>
-                </el-dialog>
-              </div>
-            </div>
-            <template v-if="tabList.list.length < 5">
-              <div class="add-btn">
-                <el-button
-                  type="primary"
-                  ghost
-                  style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
-                  @click="addBox"
-                  >添加图片
-                </el-button>
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
     </div>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
+    <el-dialog :visible.sync="modalVideo" width="720px" title="上传视频" :close-on-click-modal="false">
+      <uploadVideo v-if="modalVideo" @getVideo="getvideo"></uploadVideo>
+    </el-dialog>
   </div>
 </template>
 
@@ -501,6 +190,7 @@ import { diyGetInfo, diySave, getColorChange } from '@/api/diy';
 import { mapState } from 'vuex';
 import editFrom from '@/components/from/from';
 import { productGetTempKeysApi, uploadType } from '@/api/product';
+import uploadVideo from '@/components/uploadVideo2';
 import {
   groupAllApi,
   groupDataListApi,
@@ -527,6 +217,7 @@ export default {
     uploadPictures,
     linkaddress,
     WangEditor,
+    uploadVideo,
   },
   computed: {
     bgcolors() {
@@ -544,6 +235,46 @@ export default {
   },
   data() {
     return {
+      //活动
+      actives: [
+        {
+          name: '推荐有礼',
+          subName: '邀好友得门店好礼',
+        },
+        {
+          name: '免费设计',
+          subName: '省2880元设计礼包',
+        },
+        {
+          name: '来点灵感',
+          subName: '实景装修案例',
+        },
+      ],
+      // 家·空间
+      spaces: [
+        {
+          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
+          name: '客餐厅',
+        },
+        {
+          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
+          name: '卧室',
+        },
+        {
+          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
+          name: '厨房',
+        },
+        {
+          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
+          name: '入户',
+        },
+        {
+          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
+          name: '书房',
+        },
+      ],
+      modalVideo: false,
+      video: '',
       formValidate: {
         content: '',
       },
@@ -586,7 +317,6 @@ export default {
         //开启循环模式
         loop: false,
       },
-      url: '',
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
       pageId: 0,
       theme3: 'light',
@@ -649,9 +379,15 @@ export default {
   mounted() {
     this.getGroupAll();
     this.info();
-    this.url = this.BaseURL + 'pages/columnGoods/HotNewGoods/index?type=1';
   },
   methods: {
+    getvideoint() {
+      this.modalVideo = true;
+    },
+    getvideo(data) {
+      this.modalVideo = false;
+      this.video = data;
+    },
     getEditorContent(data) {
       this.formValidate.content = data;
     },
@@ -761,7 +497,6 @@ export default {
     groupAdd() {
       this.$modalForm(groupDataAddApi({ gid: this.pageId, config_name: this.name }, 'setting/group_data/create')).then(
         () => {
-          this.url = this.BaseURL + 'pages/users/user_sgin/index';
           this.info();
         },
       );
@@ -823,37 +558,6 @@ export default {
         this.info();
         this.guide = 0;
         this.a = 0;
-        switch (row.config_name) {
-          case 'routine_home_bast_banner':
-            this.url = this.BaseURL + 'pages/columnGoods/HotNewGoods/index?type=1&name=精品推荐';
-            break;
-          case 'sign_day_num':
-            this.url = '';
-            this.getListHeader();
-            break;
-          case 'combination_banner':
-            this.url = this.BaseURL + 'pages/activity/goods_combination/index';
-            break;
-          case 'routine_home_hot_banner':
-            this.url = this.BaseURL + 'pages/columnGoods/HotNewGoods/index?type=2&name=热门榜单';
-            break;
-          case 'routine_home_new_banner':
-            this.url = this.BaseURL + 'pages/columnGoods/HotNewGoods/index?type=3&name=首发新品';
-            break;
-          case 'routine_home_benefit_banner':
-            this.url = this.BaseURL + 'pages/columnGoods/HotNewGoods/index?type=4&name=促销单品';
-            break;
-          case 'user_recharge_quota':
-            this.url = '';
-            this.getListHeader();
-            break;
-          case 'admin_login_slide':
-            this.url = '';
-            break;
-          case 'integral_shop_banner':
-            this.url = '';
-            break;
-        }
       }
     },
     addBox() {
@@ -880,7 +584,7 @@ export default {
     },
     // 删除
     bindDelete(item, index) {
-      console.log(this.tabList.list)
+      console.log(this.tabList.list);
       this.tabList.list.splice(index, 1);
     },
     // 点击图文封面
@@ -892,7 +596,7 @@ export default {
     getPic(pc) {
       this.$nextTick(() => {
         if (this.name == 'admin_login_slide') {
-          this.tabList.list = [{slide:pc.att_dir}]
+          this.tabList.list = [{ slide: pc.att_dir }];
         } else {
           this.tabList.list[this.activeIndex].img = pc.att_dir;
         }
@@ -949,7 +653,6 @@ export default {
         groupDataEditApi({ gid: this.pageId, config_name: this.name }, 'setting/group_data/' + row.id + '/edit'),
       ).then(() => {
         this.info();
-        this.url = this.BaseURL + 'pages/users/user_sgin/index';
       });
     },
     // 删除
@@ -974,12 +677,10 @@ export default {
     onchangeIsShow(row) {
       groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
         .then(async (res) => {
-          this.url = this.BaseURL + '/pages/users/user_sgin/index';
           this.$message.success(res.msg);
           this.info();
         })
         .catch((res) => {
-          this.url = this.BaseURL + '/pages/users/user_sgin/index';
           this.$message.error(res.msg);
         });
     },
@@ -1659,7 +1360,18 @@ export default {
 .sgin_iframe::-webkit-scrollbar {
   display: none;
 }
+.content1 {
+  height: 560px;
+  overflow: hidden;
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
+.content1::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
 .iframe-boxs {
   width: 310px;
   height: 550px;
@@ -1857,6 +1569,43 @@ export default {
     background-color: var(--prev-bg-main-color);
     color: var(--prev-color-primary);
     border-right: 2px solid var(--prev-color-primary);
+  }
+}
+.mt-20 {
+  margin-top: 20px;
+}
+
+.container-scroll {
+  margin-top: 8px;
+  width: 100%; /* 设置父容器的宽度 */
+  overflow-x: scroll; /* 启用横向滚动条 */
+  overflow-y: hidden;
+  white-space: nowrap; /* 防止内容换行 */
+  &::-webkit-scrollbar {
+    width: 8px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置滚动条的高度 */
+  }
+
+  /* 设置滚动条内滑块的样式 */
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey; /* 设置滑块的颜色 */
+    border-radius: 4px; /* 设置滑块的圆角 */
+  }
+
+  /* 设置滚动条内的滑道样式 */
+  &::-webkit-scrollbar-track {
+    background-color: lightgrey; /* 设置滑道的颜色 */
+    border-radius: 4px; /* 设置滑道的圆角 */
+  }
+  .item {
+    border-radius: 4px;
+    overflow: hidden;
+    height: 100%;
+    display: inline-block; /* 使子元素水平排列 */
+    width: 100px; /* 设置子元素的宽度 */
+    background-color: lightblue; /* 可选：为子元素设置背景颜色 */
+    margin-right: 10px; /* 可选：为子元素之间添加间距 */
+    text-align: center; /* 可选：使文本在子元素中居中 */
   }
 }
 </style>
