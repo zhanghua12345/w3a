@@ -25,6 +25,8 @@ import { directive as clickOutside } from 'v-click-outside-x';
 import installPlugin from '@/plugin';
 import '@/assets/icons/iconfont.css';
 import '@/assets/iconfont/iconfont.css';
+import '@/styles/iconfont.css';
+
 import '@/theme/index.scss';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -38,6 +40,7 @@ import VOrgTree from 'v-org-tree';
 import 'xe-utils';
 import 'vxe-table/lib/style.css';
 
+import './assets/tailwendcss.css'
 import 'v-org-tree/dist/v-org-tree.css';
 import './styles/index.scss';
 import 'swiper/css/swiper.css';

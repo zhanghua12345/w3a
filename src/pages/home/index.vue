@@ -1,5 +1,5 @@
 <template>
-  <div :style="bgcolors">
+  <div class=" flex flex-col " style="height: calc(100vh - 144px);">
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
@@ -8,175 +8,344 @@
         </div>
       </div>
     </div>
-    <div class="box-wrapper">
-      <div class="left-wrapper" v-if="!$route.params.id && groupAll.length">
+    <div class="box-wrapper flex-1 flex flex-wrap " style="height: calc(100% - 40px)">
+      <div class="left-wrapper">
         <div class="tree-vis">
           <div
             class="tab-item"
-            :class="{ active: item.id == pageId }"
-            v-for="(item, index) in groupAll"
+            :class="{ active: index == pageIndex }"
+            v-for="(item, index) in info"
             :key="index"
-            @click="edits(item)"
+            @click="edits(item, index)"
           >
-            {{ item.name }}
+            {{ item.name }} - {{ item.title }}
           </div>
-          <div class="tab-item" :class="{ active: pageId == 1617 }" @click="edits(2)">开屏广告</div>
         </div>
       </div>
-      <div class="iframe content1" shadow="never">
-        <div class="moddile_box">
-          <div class="model">
-            <swiper :options="swiperOption" class="swiperimg">
-              <swiper-slide class="swiperimg" v-for="(item, index) in tabList.list" :key="index">
-                <img :src="item.img" />
-              </swiper-slide>
-            </swiper>
-          </div>
-          <div style="padding-left: 10px; padding-right: 10px; display: flex; flex-direction: column; width: 290px">
-            <div class="model mt-20">
-              <div class="model_title">全屋方案</div>
-              <div class="container-scroll" style="height: 100px">
-                <div class="item">Item 1</div>
-                <div class="item">Item 2</div>
-                <div class="item">Item 3</div>
-                <div class="item">Item 4</div>
-                <!-- 可以继续添加更多的子元素 -->
+      <div
+        class="w-374 h-600 rounded-8 border-2 border-solid border-[#aaa] ml-20 overflow-y-scroll overflow-x-hidden container-scroll-y"
+      >
+        <!-- 顶部banner -->
+        <div class="w-full h-350 relative">
+          <swiper :options="swiperOption" class="w-full h-350">
+            <swiper-slide class="w-full h-full" v-for="(item, index) in info[0].list" :key="index">
+              <el-image class="w-full h-full" :src="item.img" fit="cover" />
+            </swiper-slide>
+          </swiper>
+          <div
+            class="absolute bottom-main left-main right-main py-6 rounded-main bg-000-4 flex items-center justify-around shadow-md z-10"
+            v-show="info[1].list.length"
+          >
+            <div
+              v-for="(item, index) in info[1].list"
+              :key="index"
+              class="relative w-74 h-50 overflow-hidden rounded-main"
+            >
+              <el-image class="w-full h-full" :src="item.img" fit="cover" />
+              <div
+                class="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full text-fff bg-000-1 z-[12]"
+              >
+                <!-- <i class="iconfont text-fff text-40" v-html="e.icon" /> -->
+                <div class="text-12">{{ item.title }}</div>
               </div>
             </div>
-            <div class="mx-main mt-40">
-              <div class="grid grid-rows-2 grid-cols-9 gap-20 h-330">
+          </div>
+        </div>
+        <!-- 案例 -->
+        <div class="mt-20 mx-main">
+          <Title className="mb-10" :title="info[2].title" :subTitleBottom="info[2].subTitle" :isMore="true" />
+          <div class="container-scroll h-150 w-full">
+            <div
+              class="inline-block w-124 h-full mr-main last:mr-0 shadow-md"
+              v-for="(item, index) in info[2].list"
+              :key="index"
+            >
+              <div class="h-full overflow-hidden rounded-main relative bg-main">
+                <el-image class="w-full h-full" :src="item.img" fit="cover" />
                 <div
-                  class="rounded-main text-fff relative"
-                  v-for="(item, index) in actives"
-                  :key="index"
-                  :class="
-                    index === 0
-                      ? ['row-span-2', 'col-span-4', 'bg-fdf2e0']
-                      : index === 1
-                      ? ['col-span-5', 'bg-f5f4d6']
-                      : ['row-span-1', 'col-span-5', 'bg-f9ebea']
-                  "
+                  class="absolute top-20 left-0 bg-fff-8 text-main font-600 p-6 pr-8 min-w-80 rounded-r-full flex justify-center"
+                  v-if="item.title"
                 >
-                  <div class="p-main absolute z-10 flex flex-col justify-between">
-                    <div class="text-[#866350] text-36 font-600">{{ item.name }}</div>
-                    <div class="text-tip text-24 pt-10 flex items-center">
-                      {{ item.subName }}
-                      <i class="iconfont text-20">&#xe671;</i>
-                    </div>
-                  </div>
-                  <div
-                    class="border-[#e1a490] text-[#e1a490] px-20 py-10 border-2 border-solid rounded-8 absolute bottom-80 left-main"
-                    v-if="index === 0"
-                  >
-                    立即邀请
-                  </div>
+                  {{ item.title || '--' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- info[3].list -->
+        <div class="grid grid-rows-2 grid-cols-9 gap-10 h-164 mt-20 mx-main">
+          <div
+            class="rounded-main text-fff relative"
+            v-for="(item, index) in info[3].list"
+            :key="index"
+            :class="
+              index === 0
+                ? ['row-span-2', 'col-span-4', 'bg-fdf2e0']
+                : index === 1
+                ? ['col-span-5', 'bg-f5f4d6']
+                : ['row-span-1', 'col-span-5', 'bg-f9ebea']
+            "
+          >
+            <div class="p-main absolute z-10 flex flex-col justify-between">
+              <div class="text-18 font-600">{{ item.title }}</div>
+              <div class="text-tip text-12 pt-10 flex items-center">
+                {{ item.subTitle }}
+                <i class="iconfont text-10">&#xe671;</i>
+              </div>
+            </div>
+            <div
+              class="border-main text-main px-10 py-6 border-2 border-solid rounded-8 absolute top-100 left-main"
+              v-if="index === 0"
+            >
+              立即邀请
+            </div>
+            <div class="w-50 h-50 absolute right-0 bottom-10">
+              <el-image class="w-full h-full opacity-60" :src="item.img" fit="cover" />
+            </div>
+          </div>
+        </div>
+        <!-- 家空间 -->
+        <div class="mt-20 mx-main">
+          <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
+          <div class="mt-main grid grid-rows-5 grid-cols-6 gap-main h-230">
+            <div
+              class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
+              :class="{
+                'row-span-3 col-span-3': index === 0 || index === 1,
+                'row-span-2 col-span-2': index === 2 || index === 3 || index === 4,
+              }"
+              v-for="(item, index) in info[4].list"
+              :key="index"
+            >
+              <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
+              <div class="absolute bottom-6 left-0 right-0 flex justify-center z-10">
+                <div class="bg-000-6 text-fff rounded-full px-10 py-4">
+                  {{ item.title }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 公司介绍 -->
+        <div class="mx-main mt-20">
+          <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
+          <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
+            <div v-for="item in info[5].list" :key="item" class="relative h-100 rounded-main overflow-hidden">
+              <image class="w-full h-full bg-cover" :src="item.img" alt="" />
+              <div
+                class="absolute left-0 top-0 bottom-0 right-0 z-1 bg-000-2 text-fff flex justify-center items-center"
+              >
+                {{ item.title }}
+                <div
+                  class="w-18 h-18 rounded-full bg-000-5 flex justify-center items-center ml-6 animation-zoom-in-out"
+                >
+                  <i class="iconfont text-10 text-fff">&#xe674;</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 品牌介绍 -->
+        <div class="mx-main mt-20 pb-20">
+          <Title :title="info[6].title" :subTitle="info[6].subTitle" />
+          <el-image
+            class="rounded-main mt-main overflow-hidden w-full"
+            v-if="info[6].img"
+            :src="info[6].img"
+            fit="cover"
+          />
+          <video
+            class="w-full h-200 rounded-main mt-main"
+            v-if="info[6].video"
+            :src="info[6].video"
+            controls="controls"
+          />
+          <div class="container-scroll">
+            <div
+              class="mt-main ml-main first-0 shadow-md inline-block"
+              v-for="(item, index) in info[6].list"
+              :key="index"
+            >
+              <div class="h-full overflow-hidden rounded-main relative">
+                <el-image class="w-140 h-200" :src="item.img" fit="cover" />
+                <div
+                  class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main text-16 font-600"
+                >
+                  {{ item.title }}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div>
-        <div
-          v-if="name != 'sign_day_num' && a != 1 && guide != 2"
-          :class="name != 'admin_login_slide' ? 'content' : 'contents'"
-        >
-          <div class="right-box">
-            <div class="hot_imgs">
-              <div class="title" v-if="name == 'admin_login_slide'">视频设置</div>
-              <div class="title" v-else>轮播图设置</div>
-              <div class="title-text">建议尺寸：690 * 240px，拖拽图片可调整图片顺序</div>
-              <div class="list-box">
-                <div class="add-btn" v-if="name == 'admin_login_slide'">
-                  <el-button
-                    type="primary"
-                    ghost
-                    style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
-                    @click="getvideoint"
-                    >{{ video ? '修改视频' : '添加视频' }}
-                  </el-button>
-                  <video
-                    v-if="video"
-                    :src="video"
-                    controls
-                    style="width: 500px; min-height: 500rpx; padding-top: 20px"
-                  ></video>
-                </div>
-                <draggable v-else class="dragArea list-group" :list="tabList.list" group="peoples" handle=".move-icon">
-                  <div class="item" v-for="(item, index) in tabList.list" :key="index">
-                    <div class="move-icon">
-                      <span class="iconfont icondrag2"></span>
+    <div class="content flex-1 h-full">
+        <div class="right-box container-scroll-y" v-if="info?.length">
+          <div class="hot_imgs">
+            <div class="title">{{ info[pageIndex].title || '设置' }}</div>
+            <div class="title-text">
+              建议尺寸：{{
+                pageIndex === 0
+                  ? '750 * 700'
+                  : pageIndex === 1
+                  ? '148 * 100'
+                  : pageIndex === 2
+                  ? '250 * 300'
+                  : pageIndex === 3
+                  ? '100 * 100'
+                  : pageIndex === 4
+                  ? '332 * 260'
+                  : pageIndex === 5
+                  ? '313 * 200'
+                  : pageIndex === 6
+                  ? '280 * 400'
+                  : pageIndex === 7
+                  ? '100 * 100'
+                  : ''
+              }}px，拖拽图片可调整图片顺序
+            </div>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[1, 2, 3, 4, 5, 6, 7].includes(pageIndex)">
+              <span style="width: 70px">模块名称：</span>
+              <div class="flex-1">
+                <el-input v-model="info[pageIndex].title" placeholder="请填写名称" />
+              </div>
+            </div>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 3, 4, 5, 6, 7].includes(pageIndex)">
+              <span style="width: 70px">二级标签：</span>
+              <div class="flex-1">
+                <el-input v-model="info[pageIndex].subTitle" placeholder="请填写名称" />
+              </div>
+            </div>
+            <div class="flex flex-wrap mt-20 items-center">
+              <span style="width: 70px">模块备注：</span>
+              <div class="flex-1">
+                <el-input v-model="info[pageIndex].remark" placeholder="请填写名称" />
+              </div>
+            </div>
+            <div class="add-btn" v-show="pageIndex === 6">
+              <el-button
+                type="primary"
+                style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
+                @click="getvideoint"
+                >{{ info[pageIndex].video ? '修改视频' : '添加视频' }}
+              </el-button>
+              <video
+                class="w-full h-200 rounded-main mt-main"
+                style="max-width: 300px"
+                v-if="info[6].video"
+                :src="info[6].video"
+                controls="controls"
+              />
+              <div class="mt-10"></div>
+              <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
+                >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
+              </el-button>
+              <div class="mt-10">
+                <el-image
+                  class="rounded-main overflow-hidden w-full"
+                  style="max-width: 300px"
+                  v-show="info[6].img"
+                  :src="info[6].img"
+                  fit="cover"
+                />
+              </div>
+            </div>
+            <div class="list-box">
+              <draggable
+                class="dragArea list-group"
+                :list="info[pageIndex]?.list || []"
+                group="peoples"
+                handle=".move-icon"
+              >
+                <div class="item" v-for="(item, index) in info[pageIndex].list || []" :key="index">
+                  <div class="delect-btn" @click.stop="bindDelete(item, index)">
+                    <i class="el-icon-circle-close" style="font-size: 24px" />
+                  </div>
+                  <div class="move-icon">
+                    <span class="iconfont icondrag2"></span>
+                  </div>
+                  <div class="img-box" @click="modalPicTap('单选', index)">
+                    <img :src="item.img" alt="" v-if="item.img" />
+                    <div class="upload-box" v-else>
+                      <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                     </div>
-                    <div class="img-box" @click="modalPicTap('单选', index)">
-                      <img :src="item.img" alt="" v-if="item.img" />
-                      <div class="upload-box" v-else>
-                        <i class="el-icon-picture-outline" style="font-size: 24px"></i>
-                      </div>
-                      <div class="delect-btn" @click.stop="bindDelete(item, index)">
-                        <i class="el-icon-circle-close" style="font-size: 24px" />
+                    <div class="delect-btn" @click.stop="deleteImg(item, index)">
+                      <i class="el-icon-circle-close" style="font-size: 24px" />
+                    </div>
+                  </div>
+                  <div class="info">
+                    <div class="info-item">
+                      <span style="width: 70px">标题 (备注)</span>
+                      <div class="input-box">
+                        <el-input v-model="item.title" placeholder="请填写标题 (备注)" />
                       </div>
                     </div>
-                    <div class="info">
-                      <div class="info-item">
-                        <span style="width: 70px">图片名称：</span>
-                        <div class="input-box">
-                          <el-input v-model="item.comment" placeholder="请填写名称" />
-                        </div>
+                    <div class="info-item" v-show="[3].includes(pageIndex)">
+                      <span style="width: 70px">二级标题</span>
+                      <div class="input-box">
+                        <el-input v-model="item.subTitle" placeholder="请填写二级标题" />
                       </div>
-                      <div class="info-item">
-                        <span style="width: 70px">链接地址：</span>
-                        <div class="input-box">
-                          <el-select v-model="item.type">
-                            <el-option value="1" label="案例详情"></el-option>
-                            <el-option value="2" label="文章详情"></el-option>
-                          </el-select>
-                        </div>
+                    </div>
+                    <div class="info-item">
+                      <span style="width: 70px">链接位置</span>
+                      <div class="input-box">
+                        <el-select v-model="item.type">
+                          <el-option :value="1" label="案例详情"></el-option>
+                          <el-option :value="2" label="文章详情"></el-option>
+                          <el-option :value="3" label="自定义路径"></el-option>
+                        </el-select>
                       </div>
-                      <div class="info-item">
-                        <span style="width: 70px">链接 ID：</span>
-                        <div class="input-box">
-                          <el-input v-model="item.id" />
-                        </div>
+                    </div>
+                    <div class="info-item" v-show="item.type === 3">
+                      <span style="width: 70px">自定义</span>
+                      <div class="input-box">
+                        <el-select v-model="item.router">
+                          <el-option :value="1" label="第一表单"></el-option>
+                          <el-option :value="2" label="第二表单"></el-option>
+                          <el-option :value="3" label="第三表单"></el-option>
+                        </el-select>
+                      </div>
+                    </div>
+                    <div class="info-item" v-show="[1, 2].includes(item.type)">
+                      <span style="width: 70px">ID</span>
+                      <div class="input-box">
+                        <el-input v-model="item.id" />
                       </div>
                     </div>
                   </div>
-                </draggable>
-                <div>
-                  <el-dialog
-                    :visible.sync="modalPic"
-                    width="950px"
-                    title="上传商品图"
-                    :close-on-click-modal="false"
-                    :show-close="true"
-                  >
-                    <uploadPictures
-                      :isChoice="isChoice"
-                      @getPic="getPic"
-                      :gridBtn="gridBtn"
-                      :gridPic="gridPic"
-                      v-if="modalPic"
-                    ></uploadPictures>
-                  </el-dialog>
                 </div>
-              </div>
-              <template>
-                <div class="add-btn" v-if="name !== 'admin_login_slide'">
-                  <el-button
-                    type="primary"
-                    ghost
-                    style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
-                    @click="addBox"
-                    >添加图片
-                  </el-button>
-                </div>
-              </template>
+              </draggable>
             </div>
+            <template>
+              <div class="add-btn">
+                <el-button
+                  v-show="info[pageIndex].list.length < info[pageIndex].maxLength"
+                  type="primary"
+                  ghost
+                  style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
+                  @click="addBox"
+                  >添加模块
+                </el-button>
+              </div>
+            </template>
           </div>
         </div>
       </div>
     </div>
-    <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
+    <el-dialog
+      :visible.sync="modalPic"
+      width="950px"
+      title="上传商品图"
+      :close-on-click-modal="false"
+      :show-close="true"
+    >
+      <uploadPictures
+        :isChoice="isChoice"
+        @getPic="getPic"
+        :gridBtn="gridBtn"
+        :gridPic="gridPic"
+        v-if="modalPic"
+      ></uploadPictures>
+    </el-dialog>
     <el-dialog :visible.sync="modalVideo" width="720px" title="上传视频" :close-on-click-modal="false">
       <uploadVideo v-if="modalVideo" @getVideo="getvideo"></uploadVideo>
     </el-dialog>
@@ -185,46 +354,26 @@
 
 <script>
 import WangEditor from '@/components/wangEditor/index.vue';
+import Title from '@/components/title/index.vue';
 import Setting from '@/setting';
-import { diyGetInfo, diySave, getColorChange } from '@/api/diy';
 import { mapState } from 'vuex';
 import editFrom from '@/components/from/from';
-import { productGetTempKeysApi, uploadType } from '@/api/product';
 import uploadVideo from '@/components/uploadVideo2';
-import {
-  groupAllApi,
-  groupDataListApi,
-  groupSaveApi,
-  openAdvSave,
-  groupDataAddApi,
-  groupDataHeaderApi,
-  groupDataEditApi,
-  groupDataSetApi,
-  getAgreement,
-  setAgreement,
-  getOpenAdv,
-} from '@/api/system';
+import { postSaveData, getAllData } from '@/api/system';
 import draggable from 'vuedraggable';
 import uploadPictures from '@/components/uploadPictures';
-import linkaddress from '@/components/linkaddress';
-import { getCookies } from '@/libs/util';
 
 export default {
   name: 'list',
   components: {
+    Title,
     editFrom,
     draggable,
     uploadPictures,
-    linkaddress,
     WangEditor,
     uploadVideo,
   },
   computed: {
-    bgcolors() {
-      return {
-        '--color-theme': this.bgCol,
-      };
-    },
     labelWidth() {
       return this.isMobile ? undefined : '120px';
     },
@@ -235,63 +384,25 @@ export default {
   },
   data() {
     return {
+      swiperOption: {
+        //自动轮播
+        autoplay: false,
+        //开启循环模式
+        loop: true,
+      },
+      info: [],
+      pageIndex: 0,
+      pageNextIndex: 0,
+
       //活动
-      actives: [
-        {
-          name: '推荐有礼',
-          subName: '邀好友得门店好礼',
-        },
-        {
-          name: '免费设计',
-          subName: '省2880元设计礼包',
-        },
-        {
-          name: '来点灵感',
-          subName: '实景装修案例',
-        },
-      ],
+      actives: [],
       // 家·空间
-      spaces: [
-        {
-          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
-          name: '客餐厅',
-        },
-        {
-          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
-          name: '卧室',
-        },
-        {
-          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
-          name: '厨房',
-        },
-        {
-          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
-          name: '入户',
-        },
-        {
-          image_url: 'https://pic.rmb.bdstatic.com/bjh/240515/events/c6504bf50d27c072e7f2927f0f5d75849572.jpeg',
-          name: '书房',
-        },
-      ],
+      spaces: [],
+      introduces: [],
       modalVideo: false,
       video: '',
-      formValidate: {
-        content: '',
-      },
-      ruleValidate: {},
-      myConfig: {
-        autoHeightEnabled: false, // 编辑器不自动被内容撑高
-        initialFrameHeight: 500, // 初始容器高度
-        initialFrameWidth: '100%', // 初始容器宽度
-        UEDITOR_HOME_URL: '/UEditor/',
-        serverUrl: '',
-      },
-      a: 0, //判断的隐私协议
-      guide: 0,
-      bgimg: 0,
-      columns1: [],
-      bgCol: '',
-      name: 'routine_home_bast_banner',
+
+      name: '',
       grid: {
         xl: 7,
         lg: 7,
@@ -302,37 +413,12 @@ export default {
       loading: false,
       sginList: [],
       progress: 0, // 进度条默认0
-      swiperOption: {
-        //显示分页
-        pagination: {
-          el: '.swiper-pagination',
-        },
-        //设置点击箭头
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        //自动轮播
-        autoplay: false,
-        //开启循环模式
-        loop: false,
-      },
+
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
-      pageId: 0,
       theme3: 'light',
       tabList: [],
-      upload_type: '', //视频上传类型 1 本地上传 2 3 4 OSS上传
       uploadData: {}, // 上传参数
-      lastObj: {
-        add_time: '',
-        comment: '',
-        gid: '',
-        id: '',
-        img: '',
-        link: '',
-        sort: '',
-        status: 1,
-      },
+
       isChoice: '单选',
       modalPic: false,
       gridPic: {
@@ -349,36 +435,20 @@ export default {
         sm: 8,
         xs: 8,
       },
-      groupAll: [],
       activeIndex: 0,
       sortName: null,
       activeIndexs: 0,
       cmsList: [],
       loadingExist: false,
-      formItem: {
-        time: '',
-        type: 'pic',
-        status: 1,
-        value: [],
-        video_link: '',
-      },
-      fileUrl: Setting.apiBaseURL + '/file/upload',
-      cardUrl: Setting.apiBaseURL + '/file/upload/1',
-      header: {},
       type: 0,
       upload: {
         videoIng: false, // 是否显示进度条；
       },
     };
   },
-  created() {
-    this.color();
-    this.uploadType();
-    this.getToken();
-  },
+  created() {},
   mounted() {
-    this.getGroupAll();
-    this.info();
+    this.getInfo();
   },
   methods: {
     getvideoint() {
@@ -386,342 +456,66 @@ export default {
     },
     getvideo(data) {
       this.modalVideo = false;
-      this.video = data;
+      this.info[this.pageIndex].video = data;
     },
-    getEditorContent(data) {
-      this.formValidate.content = data;
-    },
-    // 删除视频；
-    delVideo() {
-      let that = this;
-      that.$set(that.formItem, 'video_link', '');
-    },
-    //获取视频上传类型
-    uploadType() {
-      uploadType().then((res) => {
-        this.upload_type = res.data.upload_type;
-      });
-    },
-    // 上传成功
-    handleSuccess(res, file, fileList) {
-      if (res.status === 200) {
-        this.$set(this.formItem, 'video_link', res.data.src);
-        this.$message.success(res.msg);
-      } else {
-        this.$message.error(res.msg);
-      }
-    },
-    zh_uploadFile() {
-      if (this.video_link) {
-        this.formValidate.video_link = this.video_link;
-      } else {
-        this.$refs.refid.click();
-      }
-    },
-    zh_uploadFile_change(evfile) {
-      let that = this;
-      let suffix = evfile.target.files[0].name.substr(evfile.target.files[0].name.indexOf('.'));
-      if (suffix.indexOf('.mp4') === -1) {
-        return that.$message.error('只能上传MP4文件');
-      }
-      let types = {
-        key: evfile.target.files[0].name,
-        contentType: evfile.target.files[0].type,
-      };
-      productGetTempKeysApi(types)
-        .then((res) => {
-          that.$videoCloud
-            .videoUpload({
-              type: res.data.type,
-              evfile: evfile,
-              res: res,
-              uploading(status, progress) {
-                that.upload.videoIng = status;
-              },
-            })
-            .then((res) => {
-              that.formValidate.video_link = res.url;
-              that.$message.success('视频上传成功');
-            })
-            .catch((res) => {
-              that.$message.error(res);
-            });
-        })
-        .catch((res) => {
-          that.$message.error(res.msg);
-        });
-    },
-    // 上传头部token
-    getToken() {
-      this.header['Authori-zation'] = 'Bearer ' + getCookies('token');
-    },
-    beforeUpload() {
-      this.uploadData = {};
-      let promise = new Promise((resolve) => {
-        this.$nextTick(function () {
-          resolve(true);
-        });
-      });
-      return promise;
-    },
-    linkUrl(e) {
-      this.tabList.list[this.activeIndexs].link = e;
-    },
-    color() {
-      getColorChange('color_change').then((res) => {
-        switch (res.data.status) {
-          case 1:
-            this.bgCol = '#3875EA';
-            this.bgimg = 1;
-            break;
-          case 2:
-            this.bgCol = '#00C050';
-            this.bgimg = 2;
-            break;
-          case 3:
-            this.bgCol = '#E93323';
-            this.bgimg = 3;
-            break;
-          case 4:
-            this.bgCol = '#FF448F';
-            this.bgimg = 4;
-            break;
-          case 5:
-            this.bgCol = '#FE5C2D';
-            this.bgimg = 5;
-            break;
-        }
-      });
-    },
-    // 添加表单
-    groupAdd() {
-      this.$modalForm(groupDataAddApi({ gid: this.pageId, config_name: this.name }, 'setting/group_data/create')).then(
-        () => {
-          this.info();
-        },
-      );
-    },
-    info() {
-      groupDataListApi({ config_name: this.name }, 'setting/group_data')
+    getInfo() {
+      getAllData()
         .then(async (res) => {
-          this.tabList = res.data;
-          if (this.name == 'admin_login_slide') {
-            this.tabList.list.forEach((item, index, array) => {
-              if (typeof item.slide != 'string' && item.slide != 'undefined') {
-                item.slide = item.slide[0];
-              }
-            });
-          } else if (this.name == 'sign_day_num') {
-            this.cmsList = res.data.list;
-          } else if (this.name == 'user_recharge_quota') {
-            this.sginList = res.data;
-          } else {
-            this.tabList.list.forEach((item, index, array) => {
-              if (typeof item.img != 'string' && item.img != 'undefined') {
-                item.img = item.img[0];
-              }
-            });
-          }
+          console.log(res.data);
+          this.info = res.data.data;
         })
         .catch((res) => {
           this.loading = false;
           this.$message.error(res.msg);
         });
     },
-    edits(row) {
-      this.pageId = row.id || 0;
-      this.name = row.config_name || '';
-      if (row == 1) {
-        this.a = 1;
-        this.guide = 0;
-        this.getAgreement();
-      } else if (row == 2) {
-        this.a = 0;
-        this.guide = 2;
-        this.pageId = 1617;
-        getOpenAdv().then((res) => {
-          if (res.data) {
-            this.formItem = res.data;
-            this.tabList.list = res.data.value;
-          } else {
-            this.formItem = {
-              time: '',
-              type: 'pic',
-              status: 1,
-              value: [],
-              video_link: '',
-            };
-            this.tabList.list = [];
-          }
-        });
-      } else {
-        this.info();
-        this.guide = 0;
-        this.a = 0;
-      }
+    // 左边菜单点击
+    edits(row, index) {
+      console.log(row, index);
+      this.pageIndex = index;
+      this.name = row.name || '';
     },
+    // 右边 - 添加数据
     addBox() {
-      if (this.tabList.list.length == 0) {
-        this.tabList.list.push(this.lastObj);
-        this.lastObj = {
-          add_time: '',
-          comment: '',
-          gid: '',
-          id: '',
-          img: '',
-          link: '',
-          sort: '',
-          status: 1,
-        };
-      } else {
-        if (this.tabList.list.length == 5) {
-          this.$message.warning('最多添加五张呦');
-        } else {
-          let obj = JSON.parse(JSON.stringify(this.lastObj));
-          this.tabList.list.push(obj);
-        }
-      }
+      this.info[this.pageIndex].list.push({
+        title: '',
+        subTitle: '',
+        img: '',
+        id: '',
+        type: '',
+      });
+    },
+    deleteImg(item, index) {
+      this.info[this.pageIndex].list[index].img = '';
     },
     // 删除
     bindDelete(item, index) {
-      console.log(this.tabList.list);
-      this.tabList.list.splice(index, 1);
+      this.info[this.pageIndex].list.splice(index, 1);
     },
     // 点击图文封面
     modalPicTap(title, index) {
-      this.activeIndex = index;
+      this.pageNextIndex = index;
       this.modalPic = true;
     },
     // 获取图片信息
     getPic(pc) {
+      console.log(pc.att_dir);
       this.$nextTick(() => {
-        if (this.name == 'admin_login_slide') {
-          this.tabList.list = [{ slide: pc.att_dir }];
+        if (this.pageNextIndex === -1) {
+          this.info[this.pageIndex].img = pc.att_dir;
         } else {
-          this.tabList.list[this.activeIndex].img = pc.att_dir;
+          this.info[this.pageIndex].list[this.pageNextIndex].img = pc.att_dir;
         }
+
         this.modalPic = false;
       });
     },
+    // 保存
     save() {
-      if (this.a == 1) {
-        this.onsubmit('formValidate');
-      } else if (this.guide == 2) {
-        this.formItem.value = this.tabList.list;
-        openAdvSave(this.formItem).then((res) => {
-          this.$message.success(res.msg);
-        });
-      } else {
-        this.loadingExist = true;
-        groupSaveApi({
-          gid: this.pageId,
-          config_name: this.name,
-          data: this.tabList.list,
-        })
-          .then((res) => {
-            this.loadingExist = false;
-            this.$message.success(res.msg);
-          })
-          .catch((err) => {
-            this.loadingExist = false;
-            this.$message.error(err.msg);
-          });
-      }
-    },
-    link(index) {
-      this.activeIndexs = index;
-      this.$refs.linkaddres.modals = true;
-    },
-    getListHeader() {
-      this.loading = true;
-      groupDataHeaderApi({ config_name: this.name }, 'setting/sign_data/header')
+      postSaveData(this.info)
         .then((res) => {
-          let data = res.data;
-          let header = data.header;
-          let index = [];
-          this.columns1 = header;
-          this.loading = false;
-        })
-        .catch((res) => {
-          this.loading = false;
-          this.$message.error(res.msg);
-        });
-    },
-    // 编辑
-    edit(row) {
-      this.$modalForm(
-        groupDataEditApi({ gid: this.pageId, config_name: this.name }, 'setting/group_data/' + row.id + '/edit'),
-      ).then(() => {
-        this.info();
-      });
-    },
-    // 删除
-    del(row, tit, num) {
-      let delfromData = {
-        title: tit,
-        num: num,
-        url: 'setting/group_data/' + row.id,
-        method: 'DELETE',
-        ids: '',
-      };
-      this.$modalSure(delfromData)
-        .then((res) => {
-          this.info();
           this.$message.success(res.msg);
-        })
-        .catch((res) => {
-          this.$message.error(res.msg);
-        });
-    },
-    // 修改是否显示
-    onchangeIsShow(row) {
-      groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
-        .then(async (res) => {
-          this.$message.success(res.msg);
-          this.info();
-        })
-        .catch((res) => {
-          this.$message.error(res.msg);
-        });
-    },
-    getGroupAll() {
-      groupAllApi()
-        .then(async (res) => {
-          this.groupAll = res.data;
-          this.sortName = res.data[0].config_name;
-          this.pageId = res.data[0].id;
-        })
-        .catch((res) => {
-          this.$message.error(res.msg);
-        });
-    },
-    getContent(val) {
-      this.formValidate.content = val;
-    },
-    // 提交数据
-    onsubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          setAgreement(this.formValidate)
-            .then(async (res) => {
-              this.$message.success(res.msg);
-            })
-            .catch((res) => {
-              this.$message.error(res.msg);
-            });
-        } else {
-          return false;
-        }
-      });
-    },
-    //详情
-    getAgreement() {
-      getAgreement()
-        .then(async (res) => {
-          let data = res.data;
-          this.formValidate = {
-            content: data.content,
-          };
+          this.getInfo();
         })
         .catch((res) => {
           this.loading = false;
@@ -973,11 +767,6 @@ export default {
     right: -12px;
     top: -12px;
     color: #999999;
-
-    .iconfont {
-      font-size: 28px;
-      color: #999;
-    }
   }
 }
 
@@ -1124,8 +913,16 @@ export default {
 
 .content {
   // width 510px;
+display: flex;
+flex-direction: column;
+height: 100%;
+margin-left: 20px;
+
   .right-box {
-    margin-left: 40px;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 }
 
@@ -1325,11 +1122,6 @@ export default {
         right: -12px;
         top: -12px;
         color: #999999;
-
-        .iconfont {
-          font-size: 28px;
-          color: #999;
-        }
       }
     }
   }
@@ -1346,11 +1138,6 @@ export default {
   width: 100%;
   height: 100%;
   background: #ccc;
-}
-
-.iconfont {
-  color: #dddddd;
-  font-size: 28px;
 }
 
 .iframe-boxs::-webkit-scrollbar {
@@ -1521,7 +1308,7 @@ export default {
 
 .box-wrapper {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
@@ -1576,8 +1363,6 @@ export default {
 }
 
 .container-scroll {
-  margin-top: 8px;
-  width: 100%; /* 设置父容器的宽度 */
   overflow-x: scroll; /* 启用横向滚动条 */
   overflow-y: hidden;
   white-space: nowrap; /* 防止内容换行 */
@@ -1598,14 +1383,29 @@ export default {
     border-radius: 4px; /* 设置滑道的圆角 */
   }
   .item {
-    border-radius: 4px;
-    overflow: hidden;
-    height: 100%;
     display: inline-block; /* 使子元素水平排列 */
-    width: 100px; /* 设置子元素的宽度 */
-    background-color: lightblue; /* 可选：为子元素设置背景颜色 */
-    margin-right: 10px; /* 可选：为子元素之间添加间距 */
-    text-align: center; /* 可选：使文本在子元素中居中 */
   }
+}
+
+.container-scroll-y {
+  &::-webkit-scrollbar {
+    width: 8px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置滚动条的高度 */
+  }
+
+  /* 设置滚动条内滑块的样式 */
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey; /* 设置滑块的颜色 */
+    border-radius: 4px; /* 设置滑块的圆角 */
+  }
+
+  /* 设置滚动条内的滑道样式 */
+  &::-webkit-scrollbar-track {
+    background-color: lightgrey; /* 设置滑道的颜色 */
+    border-radius: 4px; /* 设置滑道的圆角 */
+  }
+}
+.first-0:first-child {
+  margin-left: 0;
 }
 </style>

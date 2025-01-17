@@ -825,3 +825,29 @@ export function timerTask() {
     url: `system/crontab/mark`,
   });
 }
+
+/**
+ * 获取首页小程序装修配置
+ * @param {*} data
+ * @returns
+ */
+export function getAllData( ) {
+  return request({
+    url: 'setting/allData',
+    method: 'get',
+  });
+}
+
+
+/**
+ * 保存首页小程序装修配置
+ * @param {*} data
+ * @returns
+ */
+export function postSaveData( data) {
+  return request({
+    url: `setting/saveData`,
+    method: 'post',
+    data,
+  });
+}

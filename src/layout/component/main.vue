@@ -60,7 +60,7 @@ export default {
     // 设置 main 的高度
     initHeaderHeight() {
       let { isTagsview } = this.$store.state.themeConfig.themeConfig;
-      if (isTagsview) return (this.headerHeight = `84px`);
+      if (isTagsview) return (this.headerHeight = `96px`);
       else return (this.headerHeight = `50px`);
     },
     // 子组件触发更新
@@ -72,7 +72,7 @@ export default {
     // 监听 vuex 数据变化
     '$store.state.themeConfig.themeConfig': {
       handler(val) {
-        this.headerHeight = val.isTagsview ? '84px' : '50px';
+        this.headerHeight = val.isTagsview ? '96px' : '50px';
         if (val.isFixedHeaderChange !== val.isFixedHeader) {
           if (!this.$refs.layoutScrollbarRef) return false;
           this.$refs.layoutScrollbarRef.update();
