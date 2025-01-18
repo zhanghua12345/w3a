@@ -22,6 +22,9 @@
           <div class="title">文章信息</div>
         </div>
         <div class="grid_box">
+          <el-form-item label="id：" prop="id" >
+            <div class="text-main"> {{ formValidate.id || '--' }}</div>
+          </el-form-item>
           <el-form-item label="标题：" prop="title" label-for="title">
             <el-input v-model="formValidate.title" placeholder="请输入" class="content_width" />
           </el-form-item>

@@ -291,11 +291,13 @@
                         <el-select v-model="item.type">
                           <el-option :value="1" label="案例详情"></el-option>
                           <el-option :value="2" label="文章详情"></el-option>
-                          <el-option :value="3" label="自定义路径"></el-option>
+                          <el-option :value="3" label="公司介绍"></el-option>
+                          <el-option :value="4" label="品牌介绍"></el-option>
+                          <el-option :value="11" label="自定义路径"></el-option>
                         </el-select>
                       </div>
                     </div>
-                    <div class="info-item" v-show="item.type === 3">
+                    <div class="info-item" v-show="item.type === 11">
                       <span style="width: 70px">自定义</span>
                       <div class="input-box">
                         <el-select v-model="item.router">
@@ -305,7 +307,7 @@
                         </el-select>
                       </div>
                     </div>
-                    <div class="info-item" v-show="[1, 2].includes(item.type)">
+                    <div class="info-item" v-show="[1, 2,3,4].includes(item.type)">
                       <span style="width: 70px">ID</span>
                       <div class="input-box">
                         <el-input v-model="item.id" />
