@@ -23,7 +23,7 @@
         </div>
       </div>
       <div
-        class="w-374 h-600 rounded-8 border-2 border-solid border-[#aaa] ml-20 overflow-y-scroll overflow-x-hidden container-scroll-y"
+        class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 overflow-y-scroll overflow-x-hidden container-scroll-y"
       >
         <!-- 顶部banner -->
         <div class="w-full h-350 relative">
@@ -87,19 +87,20 @@
             "
           >
             <div class="p-main absolute z-10 flex flex-col justify-between">
-              <div class="text-18 font-600">{{ item.title }}</div>
+              <div class="text-18 font-600" style="font-size: #866350;">{{ item.title }}</div>
               <div class="text-tip text-12 pt-10 flex items-center">
                 {{ item.subTitle }}
-                <i class="iconfont text-10">&#xe671;</i>
+                <i class="iconfont text-10" style="font-size: 10px;">&#xe671;</i>
               </div>
             </div>
             <div
-              class="border-main text-main px-10 py-6 border-2 border-solid rounded-8 absolute top-100 left-main"
+              class=" px-10 py-6 border-2 border-solid rounded-8 absolute top-100 left-main"
+              style="border-color: #e1a490; color:#e1a490"
               v-if="index === 0"
             >
               立即邀请
             </div>
-            <div class="w-50 h-50 absolute right-0 bottom-10">
+            <div class="w-50 h-50 absolute right-0 bottom-14">
               <el-image class="w-full h-full opacity-60" :src="item.img" fit="cover" />
             </div>
           </div>
@@ -139,7 +140,7 @@
                 <div
                   class="w-18 h-18 rounded-full bg-000-5 flex justify-center items-center ml-6 animation-zoom-in-out"
                 >
-                  <i class="iconfont text-10 text-fff">&#xe674;</i>
+                  <i class="iconfont text-10 text-fff" style="font-size: 10px;">&#xe674;</i>
                 </div>
               </div>
             </div>

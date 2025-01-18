@@ -23,7 +23,7 @@
     </div>
     <div class="flex items-center" v-if="isMore">
       {{ moreTitle }}
-      <i class="iconfont text-12 ml-6 text-tip">&#xe671;</i>
+      <i class="iconfont text-12 ml-6 text-tip"  style="font-size: 12px;">&#xe671;</i>
     </div>
   </div>
 </template>
