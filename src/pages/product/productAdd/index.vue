@@ -46,15 +46,28 @@
               <el-input class="content_width" v-model="formValidate.VR_link" placeholder="请添加VR链接" />
             </el-form-item>
           </el-col>
-          <el-col :span="24" v-for="(item, index) in formValidate.treeSelect" Key="item">
+          <!-- <el-col :span="24" v-for="(item, index) in formValidate.treeSelect" Key="item">
             <el-form-item :label="item.label + '：'" prop="required">
               <el-select v-model.trim="formValidate.treeSelect[index].select" class="content_width mr14">
                 <el-option v-for="(e, i) in item.children" :value="e.id" :key="i" :label="e.label"></el-option>
               </el-select>
+            </el-form-item> 
+          </el-col> -->
+          <el-col :span="24">
+            <el-form-item label="案例分类：" prop="cate_id">
+              <el-cascader
+                class="content_width"
+                v-model="formValidate.cate_id"
+                size="small"
+                :options="formValidate.treeSelect"
+                :props="{ multiple: true, checkStrictly: true, emitPath: false }"
+                clearable
+              ></el-cascader>
+              <span class="addfont" @click="addCate">新增分类</span>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="封面图：" prop="coverImg">
+            <el-form-item label="列表页封面图：" prop="coverImg">
               <div class="pictrueBox" @click="modalPicTap('dan', 'coverImg')">
                 <div class="pictrue" v-if="formValidate.coverImg">
                   <img v-lazy="formValidate.coverImg" />
@@ -69,7 +82,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="轮播图：" prop="banner">
+            <el-form-item label="详情页轮播图：" prop="banner">
               <div class="acea-row">
                 <div
                   class="pictrue"
@@ -97,7 +110,7 @@
             </el-form-item>
           </el-col>
           <el-col>
-            <el-form-item label="商品状态：" prop="status">
+            <el-form-item label="案例状态：" prop="status">
               <el-radio-group v-model="formValidate.status">
                 <el-radio :label="1" class="radio">上架</el-radio>
                 <el-radio :label="0">下架</el-radio>
@@ -111,7 +124,7 @@
           <el-col :span="24" class="noForm">
             <el-form-item label="详情设置：" prop="selectRule">
               <div class="acea-row row-middle">
-                <el-select v-model="formValidate.selectRule" class="content_width mr14">
+                <el-select v-model="formValidate.selectRule" class="mr14" style="width: 200px">
                   <el-option
                     v-for="(item, index) in ruleList"
                     :value="item.id"
@@ -189,10 +202,10 @@
             </el-col>
           </el-col>
         </el-row>
-        <!-- 商品详情-->
+        <!-- 案例详情-->
         <el-row v-show="currentTab === '3'" :gutter="24">
           <el-col :span="16">
-            <el-form-item label="商品详情：">
+            <el-form-item label="案例详情：">
               <WangEditor style="width: 100%" :content="contents" @editorContent="getEditorContent"></WangEditor>
             </el-form-item>
           </el-col>
@@ -205,9 +218,44 @@
 
         <!-- 其他设置-->
         <el-row justify="space-between" v-show="currentTab === '4'">
-          
           <el-col :span="24">
-            <el-form-item label="案例推荐：" prop="isRecommend">
+            <el-form-item label="浏览量初始值：" prop="browse">
+              <el-input
+                class="content_width"
+                type="number"
+                v-model.trim="formValidate.browse"
+                placeholder="请输入浏览量初始值"
+              />
+              <div style="color: #666" v-if="$route.params.id">
+                浏览量
+                <span class="text-main">{{
+                  Number(formValidate.browse || 0) + Number(formValidate.realBrowse || 0)
+                }}</span>
+                = 初始值 <span class="text-main">{{ formValidate.browse }}</span> + 真实量
+                <span class="text-main">{{ formValidate.realBrowse || 0 }}</span>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="点赞初始值：" prop="praise">
+              <el-input
+                class="content_width"
+                type="number"
+                v-model.trim="formValidate.praise"
+                placeholder="请输入点赞量初始值"
+              />
+              <div style="color: #666" v-if="$route.params.id">
+                点赞量
+                <span class="text-main">{{
+                  Number(formValidate.praise || 0) + Number(formValidate.realPraise || 0)
+                }}</span>
+                = 初始值 <span class="text-main">{{ formValidate.praise }}</span> + 真实量
+                <span class="text-main">{{ formValidate.realPraise || 0 }}</span>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="是否推荐：" prop="isRecommend">
               <el-radio-group v-model="formValidate.isRecommend">
                 <el-radio label="1" class="radio">是</el-radio>
                 <el-radio label="0">否</el-radio>
@@ -230,48 +278,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="浏览量初始值：" prop="browse">
-              <el-input
-                class="content_width"
-                type="number"
-                v-model.trim="formValidate.browse"
-                placeholder="请输入浏览量初始值"
-              />
-              <div style="color: #666">
-                浏览量
-                <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
-                <span style="color: #f30">790</span>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="点赞初始值：" prop="praise">
-              <el-input
-                class="content_width"
-                type="number"
-                v-model.trim="formValidate.praise"
-                placeholder="请输入点赞量初始值"
-              />
-              <div style="color: #666">
-                点赞量
-                <span style="color: #f30">790</span> = 初始值 <span style="color: #f30">790</span> + 真实量
-                <span style="color: #f30">586</span>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
             <el-form-item label="热门案例：" prop="hot">
-              <el-radio-group v-model="formValidate.hot">
-                <el-radio label="1" class="radio">是</el-radio>
-                <el-radio label="0">否</el-radio>
+              <el-radio-group v-model="formValidate.hot" element-id="hot">
+                <el-radio :label="1" class="radio">显示</el-radio>
+                <el-radio :label="0">不显示</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="最新案例：" prop="new">
-              <el-radio-group v-model="formValidate.new">
-                <el-radio label="1" class="radio">是</el-radio>
-                <el-radio label="0">否</el-radio>
+              <el-radio-group v-model="formValidate.new" element-id="new">
+                <el-radio :label="1" class="radio">显示</el-radio>
+                <el-radio :label="0">不显示</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -320,7 +338,7 @@ import {
 } from '@/api/product';
 import { readonly } from 'vue';
 const ruleInit = readonly({
-  name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入案例名称', trigger: 'blur' }],
   VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
   coverImg: [{ required: true, message: '请上传案例封面图', trigger: 'change' }],
   banner: [{ required: true, message: '请上传案例封面图', trigger: 'change', type: 'array' }],
@@ -346,7 +364,7 @@ export default {
       headTab: [
         { tit: '基础信息', name: '1' },
         { tit: '详情设置', name: '2' },
-        { tit: '商品详情', name: '3' },
+        { tit: '案例详情', name: '3' },
         { tit: '其他设置', name: '4' },
       ],
       currentTab: '1',
@@ -354,8 +372,8 @@ export default {
       ruleList: [], // 详情模板
       isSelectRule: false,
 
-      content: '', // 商品详情
-      contents: '', // 商品详情 - 初始化
+      content: '', // 案例详情
+      contents: '', // 案例详情 - 初始化
       formValidate: {
         required: true,
         treeSelect: [], // 案例分类数据
@@ -364,7 +382,7 @@ export default {
         coverImg: '', // 封面图
         banner: [], // 轮播图
         status: 1, // 轮播图
-
+        cate_id:[],
         selectRule: '', // 案例详情分类
         attrs: [], // 案例详情菜单分类
         attrsImages: [], // 案例详情图片分类
@@ -492,7 +510,7 @@ export default {
     selectChange(formName) {
       this.$refs[formName].validate();
     },
-    // 商品详情 - 第三步
+    // 案例详情 - 第三步
     getEditorContent(data) {
       this.content = data;
     },
@@ -555,7 +573,7 @@ export default {
       }
     },
 
-    // 点击商品图
+    // 点击案例图
     modalPicTap(tit, picTit, index) {
       this.modalPic = true;
       this.isChoice = tit === 'dan' ? '单选' : '多选';
@@ -641,6 +659,19 @@ export default {
               throw Error();
             }
           });
+          form.attrsImages.forEach((e) => {
+            if (e.status && !e.images?.length) {
+              this.$message.warning('详情设置-必填图片不能为空！');
+              throw Error();
+            }
+          });
+          form.treeSelect.forEach((e) => {
+            e.children.forEach
+            if (e.status && !e.images?.length) {
+              this.$message.warning('详情设置-必填图片不能为空！');
+              throw Error();
+            }
+          });
           productNewAdd({ type: '1', ...this.formValidate, content: this.content })
             .then(async (res) => {
               this.openSubimit = false;
@@ -702,7 +733,7 @@ export default {
 }
 
 .content_width {
-  width: 460px;
+  width: 380px;
 }
 
 .list-group {

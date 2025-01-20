@@ -105,7 +105,7 @@
           <!--                        </el-form-item>-->
           <!--                    </el-col>-->
           <el-col :span="24">
-            <el-form-item label="轮播图显示：" label-for="is_banner">
+            <el-form-item label="列表页推荐显示：" label-for="is_banner">
               <el-radio-group v-model="formValidate.is_banner" element-id="is_banner">
                 <el-radio :label="1" class="radio">显示</el-radio>
                 <el-radio :label="0">不显示</el-radio>

@@ -10,25 +10,28 @@
           @submit.native.prevent
           inline
         >
-          <el-form-item label="文章搜索：" label-for="title">
-            <el-input clearable placeholder="请输入" v-model="artFrom.title" class="" />
+          <el-form-item label="文章：" label-for="title">
+            <el-input clearable placeholder="请搜索文章标题" v-model="artFrom.title" />
           </el-form-item>
-          <el-form-item label="作者搜索：" label-for="author">
-            <el-input clearable placeholder="请输入" v-model="artFrom.author" class="" />
+          <el-form-item label="作者：" label-for="author">
+            <el-input clearable placeholder="请搜索作者" v-model="artFrom.author"  />
           </el-form-item>
-          <el-form-item label="文章分类：" label-for="cid">
+          <el-form-item label="ID：" label-for="id">
+            <el-input clearable placeholder="请搜索文章ID" v-model="artFrom.id" />
+          </el-form-item>
+          <el-form-item label="分类：" label-for="cid">
             <el-select v-model="artFrom.cid">
               <el-option v-for="(e, i) in treeData" :value="e.id" :key="i" :label="e.title"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="热门文章：" label-for="is_hot">
+          <el-form-item label="是否热门：" label-for="is_hot">
             <el-select v-model="artFrom.is_hot">
               <el-option value="" label="全部"></el-option>
               <el-option :value="1" label="显示"></el-option>
               <el-option :value="0" label="不显示"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="轮播图显示：" label-for="is_banner">
+          <el-form-item label="是否推荐：" label-for="is_banner">
             <el-select v-model="artFrom.is_banner">
               <el-option value="" label="全部"></el-option>
               <el-option :value="1" label="显示"></el-option>
@@ -106,7 +109,7 @@
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="轮播图显示" width="80">
+        <el-table-column label="列表页推荐" width="80">
           <template slot-scope="scope">
             <el-tag :type="scope.row.is_banner == 0 ? 'info' : 'success'">{{
               scope.row.is_hot == 0 ? '不显示' : '显示'

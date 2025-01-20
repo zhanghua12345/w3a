@@ -2,35 +2,64 @@
   <div class="article-manager">
     <el-card :bordered="false" shadow="never" class="ivu-mt" :body-style="{ padding: 0 }">
       <div class="padding-add">
-        <el-form ref="artFrom" :model="artFrom" label-width="80px" label-position="right" inline @submit.native.prevent>
-          <el-form-item label="商品分类：" label-for="pid">
+        <el-form ref="artFrom" :model="artFrom" label-width="90px" label-position="right" inline @submit.native.prevent>
+          
+          <el-form-item label="标题：" label-for="name">
+            <el-input
+              clearable
+              placeholder="请搜索案例名称"
+              v-model="artFrom.name"
+            />
+          </el-form-item>
+          <el-form-item label="作者：" label-for="name">
+            <el-input
+              clearable
+              placeholder="请搜索作者"
+              v-model="artFrom.name"
+            />
+          </el-form-item>
+          <el-form-item label="ID：" label-for="id">
+            <el-input
+              clearable
+              placeholder="请搜索案例ID"
+              v-model="artFrom.id"
+            />
+          </el-form-item>
+          <el-form-item label="分类：" label-for="pid">
             <el-cascader
               v-model="artFrom.cate_id"
               size="small"
               :options="treeSelect"
               :props="{ multiple: false, emitPath: false, checkStrictly: true }"
               clearable
-              class="form_content_width"
             ></el-cascader>
           </el-form-item>
-          <el-form-item label="商品搜索：" label-for="store_name">
-            <el-input
-              clearable
-              placeholder="请输入商品名称/关键字/ID"
-              v-model="artFrom.store_name"
-              class="form_content_width"
-            />
-          </el-form-item>
-          <el-form-item label="商品状态" label-for="status">
-            <el-select v-model.trim="artFrom.status" class="content_width mr14">
+          <el-form-item label="状态" label-for="status">
+            <el-select v-model.trim="artFrom.status" >
+              <el-option value="" label="全部"></el-option>
               <el-option :value="0" label="下架"></el-option>
               <el-option :value="1" label="上架"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="是否推荐" label-for="isRecommend">
-            <el-select v-model.trim="artFrom.isRecommend" class="content_width mr14">
-              <el-option :value="1" label="是"></el-option>
-              <el-option :value="0" label="否"></el-option>
+          <el-form-item label="是否推荐：" label-for="isRecommend">
+            <el-select v-model.trim="artFrom.isRecommend">
+              <el-option value="" label="全部"></el-option>
+              <el-option :value="1" label="显示"></el-option>
+              <el-option :value="0" label="不显示"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否热门：" label-for="hot">
+            <el-select v-model="artFrom.hot">
+              <el-option value="" label="全部"></el-option>
+              <el-option :value="1" label="显示"></el-option>
+              <el-option :value="0" label="不显示"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否最新：" label-for="new">
+            <el-select v-model="artFrom.new">
+              <el-option value="" label="全部"></el-option>
+              <el-option :value="1" label="显示"></el-option>
+              <el-option :value="0" label="不显示"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -162,7 +191,7 @@
     >
       <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
     </el-dialog>
-    <!-- 商品弹窗 -->
+    <!-- 案例弹窗 -->
     <div v-if="isProductBox">
       <div class="bg" @click="isProductBox = false"></div>
       <goodsDetail :goodsId="goodsId"></goodsDetail>
@@ -310,10 +339,10 @@ export default {
       this.batchModal = false;
       this.$refs.table.clearSelection();
     },
-    // 批量设置商品
+    // 批量设置案例
     batchSelect(type) {
       if (!this.ids.length) {
-        this.$message.warning('请选择要修改的商品');
+        this.$message.warning('请选择要修改的案例');
       } else {
         this.batchType = type;
         this.batchModal = true;
@@ -411,7 +440,7 @@ export default {
     // 批量上架
     onShelves() {
       if (this.ids.length === 0) {
-        this.$message.warning('请选择要上架的商品');
+        this.$message.warning('请选择要上架的案例');
       } else {
         let data = {
           ids: this.ids,
@@ -430,7 +459,7 @@ export default {
     // 批量下架
     onDismount() {
       if (this.ids.length === 0) {
-        this.$message.warning('请选择要下架的商品');
+        this.$message.warning('请选择要下架的案例');
       } else {
         let data = {
           ids: this.ids,
@@ -473,7 +502,7 @@ export default {
       this.ids = ids;
       this.multipleSelection = uniqueArr;
     },
-    // 添加淘宝商品成功
+    // 添加淘宝案例成功
     onClose() {
       this.modals = false;
     },
@@ -511,7 +540,7 @@ export default {
       this.artFrom.cate_id = value;
       this.getDataList();
     },
-    // 获取商品表单头数量
+    // 获取案例表单头数量
     goodHeade() {
       getGoodHeade({ cate_id: this.artFrom.cate_id, store_name: this.artFrom.store_name })
         .then((res) => {
@@ -521,7 +550,7 @@ export default {
           this.$message.error(res.msg);
         });
     },
-    // 商品分类；
+    // 案例分类；
     goodsCategory() {
       cascaderListApi(1)
         .then((res) => {
@@ -531,7 +560,7 @@ export default {
           this.$message.error(res.msg);
         });
     },
-    // 商品列表；
+    // 案例列表；
     getDataList() {
       this.loading = true;
       this.artFrom.cate_id = this.artFrom.cate_id || '';
@@ -588,7 +617,7 @@ export default {
     },
     // 数据导出；
     exportData: function () {
-      let th = ['商品名称', '商品简介', '商品分类', '价格', '库存', '销量', '收藏人数'];
+      let th = ['案例名称', '案例简介', '案例分类', '价格', '库存', '销量', '收藏人数'];
       let filterVal = ['store_name', 'store_info', 'cate_name', 'price', 'stock', 'sales', 'collect'];
       this.where.page = 'nopage';
       getGoods(this.where).then((res) => {
