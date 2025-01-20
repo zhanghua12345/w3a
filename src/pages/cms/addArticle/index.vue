@@ -42,8 +42,11 @@
             />
             <div style="color: #666" v-if="$route.params.id">
               浏览量
-              <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
-              <span style="color: #f30">790</span>
+              <span class="text-main">{{
+                Number(formValidate.browse || 0) + Number(formValidate.realBrowse || 0)
+              }}</span>
+              = 初始值 <span class="text-main">{{ formValidate.browse }}</span> + 真实量
+              <span class="text-main">{{formValidate.realBrowse ||0}}</span>
             </div>
           </el-form-item>
           <el-form-item label="点赞初始值：" prop="praise" label-for="praise">
@@ -55,8 +58,11 @@
             />
             <div style="color: #666" v-if="$route.params.id">
               点赞量
-              <span style="color: #f30">790</span> = 初始值<span style="color: #f30">790</span> + 真实量
-              <span style="color: #f30">790</span>
+              <span class="text-main">{{
+                Number(formValidate.praise || 0) + Number(formValidate.realPraise || 0)
+              }}</span>
+              = 初始值 <span class="text-main">{{ formValidate.praise }}</span> + 真实量 
+              <span class="text-main">{{formValidate.realPraise ||0}}</span>
             </div>
           </el-form-item>
           <el-form-item label="图文封面：" prop="image_input">
@@ -68,7 +74,7 @@
                 <i class="el-icon-plus" style="font-size: 24px"></i>
               </div>
             </div>
-            <div class="tip">建议尺寸：500 x 312 px</div>
+            <div class="tip">建议尺寸：480 x 360 px</div>
           </el-form-item>
         </div>
         <div class="goodsTitle acea-row">
@@ -99,7 +105,7 @@
           <!--                        </el-form-item>-->
           <!--                    </el-col>-->
           <el-col :span="24">
-            <el-form-item label="banner显示：" label-for="is_banner">
+            <el-form-item label="轮播图显示：" label-for="is_banner">
               <el-radio-group v-model="formValidate.is_banner" element-id="is_banner">
                 <el-radio :label="1" class="radio">显示</el-radio>
                 <el-radio :label="0">不显示</el-radio>

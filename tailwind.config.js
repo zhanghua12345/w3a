@@ -97,7 +97,7 @@ module.exports = {
     extend: {
       colors: {
         bg: '#f8f8f8',
-        main: '#cf5d38',
+        main: '#f00',
         tip: '#9c9c9c',
         line: '#f0f0f0',
         'main-sub': '#b3ecff',

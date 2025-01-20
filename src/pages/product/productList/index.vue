@@ -73,26 +73,45 @@
           </template>
         </el-table-column>
         <!-- <el-table-column type="selection" width="60" :reserve-selection="true"> </el-table-column> -->
-        <el-table-column label="案例ID" width="80">
+        <el-table-column label="ID" width="50">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="案例封面图" min-width="90">
+        <el-table-column label="封面图" min-width="50">
           <template slot-scope="scope">
             <div class="tabBox_img" v-viewer>
               <img v-lazy="scope.row.coverImg" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="案例名称" min-width="250">
+        <el-table-column label="案例名称" min-width="130">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="作者" min-width="60">
+          <template slot-scope="scope">
+            <el-tooltip placement="top-start" :content="scope.row.author || '--'">
+              <div class="line2">{{ scope.row.author || '--' }}</div>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column label="是否推荐" min-width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.isRecommend==0?'否':'是' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总浏览量（真实值）" width="140">
+          <template slot-scope="scope">
+            <span class="mr-10">{{ Number(scope.row.browse || 0) + Number(scope.row.realBrowse || 0) }}</span>
+            <el-tag size="mini" type="danger">{{ scope.row.realBrowse || 0 }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="总点赞量（真实值）" width="140">
+          <template slot-scope="scope">
+            <span class="mr-10">{{ Number(scope.row.praise || 0) + Number(scope.row.realPraise || 0) }}</span>
+            <el-tag size="mini" type="success">{{ scope.row.realPraise || 0 }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">

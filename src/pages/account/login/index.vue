@@ -391,6 +391,7 @@ export default {
 }
 
 .container {
+  width:auto;
   padding: 0 !important;
   border-radius: 12px;
   z-index: 1;

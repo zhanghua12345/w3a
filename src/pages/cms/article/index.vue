@@ -10,18 +10,30 @@
           @submit.native.prevent
           inline
         >
+          <el-form-item label="文章搜索：" label-for="title">
+            <el-input clearable placeholder="请输入" v-model="artFrom.title" class="" />
+          </el-form-item>
+          <el-form-item label="作者搜索：" label-for="author">
+            <el-input clearable placeholder="请输入" v-model="artFrom.author" class="" />
+          </el-form-item>
           <el-form-item label="文章分类：" label-for="cid">
             <el-select v-model="artFrom.cid">
-              <el-option
-                v-for="(e, i) in treeData"
-                :value="e.id"
-                :key="i"
-                :label="e.title"
-              ></el-option>
+              <el-option v-for="(e, i) in treeData" :value="e.id" :key="i" :label="e.title"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="文章搜索：" label-for="title">
-            <el-input clearable placeholder="请输入" v-model="artFrom.title" class="form_content_width" />
+          <el-form-item label="热门文章：" label-for="is_hot">
+            <el-select v-model="artFrom.is_hot">
+              <el-option value="" label="全部"></el-option>
+              <el-option :value="1" label="显示"></el-option>
+              <el-option :value="0" label="不显示"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="轮播图显示：" label-for="is_banner">
+            <el-select v-model="artFrom.is_banner">
+              <el-option value="" label="全部"></el-option>
+              <el-option :value="1" label="显示"></el-option>
+              <el-option :value="0" label="不显示"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="userSearchs">查询</el-button>
@@ -30,7 +42,7 @@
       </div>
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <div class="h-[100%] flex items-center justify-center">
+      <div class="h-[100%] flex items-center justify-left">
         <router-link style="float: right" :to="$routeProStr + '/cms/article/add_article'" v-auth="['cms-article-creat']"
           ><el-button type="primary" class="bnt">添加文章</el-button></router-link
         >
@@ -44,12 +56,12 @@
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
+        <el-table-column label="ID" width="50">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="文章图片" min-width="90">
+        <el-table-column label="文章图片" min-width="50">
           <template slot-scope="scope">
             <div v-if="scope.row.image_input.length !== 0" v-viewer>
               <div class="tabBox_img" v-for="(item, index) in scope.row.image_input" :key="index">
@@ -60,24 +72,48 @@
         </el-table-column>
         <el-table-column label="文章名称" min-width="130">
           <template slot-scope="scope">
-            <el-tooltip placement="top" :open-delay="600">
-              <div slot="content">{{ ' [ ' + scope.row.catename + ' ] ' + scope.row.title }}</div>
+            <el-tooltip content="Top Left 提示文字" placement="top-start">
               <span class="line2">{{ scope.row.title }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
-       
-        <el-table-column label="浏览量" min-width="80">
+        <el-table-column label="作者" min-width="60">
           <template slot-scope="scope">
-            <span>{{ scope.row.browse }}</span>
-          </template>
-        </el-table-column>    
-        <el-table-column label="点赞量" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.praise }}</span>
+            <div class="line2">{{ scope.row.author || '--' }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" min-width="130">
+        <el-table-column label="分类" min-width="70">
+          <template slot-scope="scope">
+            <span class="line2">{{ scope.row.catename }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总浏览量（真实值）" width="140">
+          <template slot-scope="scope">
+            <span class="mr-10">{{ Number(scope.row.browse || 0) + Number(scope.row.realBrowse || 0) }}</span>
+            <el-tag size="mini" type="danger">{{ scope.row.realBrowse || 0 }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="总点赞量（真实值）" width="140">
+          <template slot-scope="scope">
+            <span class="mr-10">{{ Number(scope.row.praise || 0) + Number(scope.row.realPraise || 0) }}</span>
+            <el-tag size="mini" type="danger">{{ scope.row.realPraise || 0 }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="热门文章" width="80">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.is_hot == 0 ? 'info' : 'success'">{{
+              scope.row.is_hot == 0 ? '不显示' : '显示'
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="轮播图显示" width="80">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.is_banner == 0 ? 'info' : 'success'">{{
+              scope.row.is_hot == 0 ? '不显示' : '显示'
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" min-width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.add_time | formatDate }}</span>
           </template>
@@ -151,7 +187,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '80px';
+      return this.isMobile ? undefined : '90px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -167,7 +203,7 @@ export default {
   },
   created() {},
   activated() {
-    this.artFrom.cid =Number( this.$route.query.id || 0);
+    this.artFrom.cid = Number(this.$route.query.id || 0);
     this.getList();
     this.getClass();
   },
@@ -199,7 +235,7 @@ export default {
     // 等级列表
     getList() {
       this.loading = true;
-      console.log(this.artFrom)
+      console.log(this.artFrom);
       cmsListApi(this.artFrom)
         .then(async (res) => {
           let data = res.data;

@@ -1,6 +1,6 @@
 // 请求接口地址 如果没有配置自动获取当前网址路径
 // const VUE_APP_API_URL = process.env.VUE_APP_API_URL || `${location.origin}/adminapi`;
-const VUE_APP_API_URL = 'https://fanminitop.com/adminapi'
+const VUE_APP_API_URL = 'http://120.27.141.193:8088/adminapi'
 const Setting = {
   // 路由前缀
   routePre: '/admin',

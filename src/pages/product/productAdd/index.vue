@@ -26,6 +26,22 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
+            <el-form-item label="案例简介：">
+              <el-input
+                class="content_width"
+                v-model.trim="formValidate.description"
+                type="textarea"
+                :rows="3"
+                placeholder="请输入案例简介"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="案例作者：">
+              <el-input class="content_width" v-model.trim="formValidate.author" placeholder="请输入案例名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
             <el-form-item label="VR链接：" prop="VR_link">
               <el-input class="content_width" v-model="formValidate.VR_link" placeholder="请添加VR链接" />
             </el-form-item>
@@ -189,17 +205,7 @@
 
         <!-- 其他设置-->
         <el-row justify="space-between" v-show="currentTab === '4'">
-          <el-col :span="24">
-            <el-form-item label="案例简介：">
-              <el-input
-                class="content_width"
-                v-model.trim="formValidate.description"
-                type="textarea"
-                :rows="3"
-                placeholder="请输入案例简介"
-              />
-            </el-form-item>
-          </el-col>
+          
           <el-col :span="24">
             <el-form-item label="案例推荐：" prop="isRecommend">
               <el-radio-group v-model="formValidate.isRecommend">
