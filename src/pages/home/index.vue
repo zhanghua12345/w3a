@@ -1,5 +1,5 @@
 <template>
-  <div class=" flex flex-col " style="height: calc(100vh - 144px);">
+  <div class="flex flex-col" style="height: calc(100vh - 144px)">
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <div class="box-wrapper flex-1 flex flex-wrap " style="height: calc(100% - 40px)">
+    <div class="box-wrapper flex-1 flex flex-wrap" style="height: calc(100% - 40px)">
       <div class="left-wrapper">
         <div class="tree-vis">
           <div
@@ -22,168 +22,169 @@
           </div>
         </div>
       </div>
-      <div
-        class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 overflow-y-scroll overflow-x-hidden container-scroll-y"
-      >
-        <!-- 顶部banner -->
-        <div class="w-full h-350 relative">
-          <swiper :options="swiperOption" class="w-full h-350">
-            <swiper-slide class="w-full h-full" v-for="(item, index) in info[0].list" :key="index">
-              <el-image class="w-full h-full" :src="item.img" fit="cover" />
-            </swiper-slide>
-          </swiper>
-          <div
-            class="absolute bottom-main left-main right-main py-6 rounded-main bg-000-4 flex items-center justify-around shadow-md z-10"
-            v-show="info[1].list.length"
-          >
+      <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative">
+        <div class="w-full h-full overflow-y-scroll overflow-x-hidden container-scroll-y relative">
+          <!-- 顶部banner -->
+          <div class="w-full h-350 relative">
+            <swiper :options="swiperOption" class="w-full h-350">
+              <swiper-slide class="w-full h-full" v-for="(item, index) in info[0].list" :key="index">
+                <el-image class="w-full h-full" :src="item.img" fit="cover" />
+              </swiper-slide>
+            </swiper>
             <div
-              v-for="(item, index) in info[1].list"
-              :key="index"
-              class="relative w-74 h-50 overflow-hidden rounded-main"
+              class="absolute bottom-main left-main right-main py-6 rounded-main bg-000-4 flex items-center justify-around shadow-md z-10"
+              v-show="info[1].list.length"
             >
-              <el-image class="w-full h-full" :src="item.img" fit="cover" />
               <div
-                class="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full text-fff bg-000-1 z-[12]"
+                v-for="(item, index) in info[1].list"
+                :key="index"
+                class="relative w-74 h-50 overflow-hidden rounded-main"
               >
-                <!-- <i class="iconfont text-fff text-40" v-html="e.icon" /> -->
-                <div class="text-12">{{ item.title }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 案例 -->
-        <div class="mt-20 mx-main">
-          <Title className="mb-10" :title="info[2].title" :subTitleBottom="info[2].subTitle" :isMore="true" />
-          <div class="container-scroll h-150 w-full">
-            <div
-              class="inline-block w-124 h-full mr-main last:mr-0 shadow-md"
-              v-for="(item, index) in info[2].list"
-              :key="index"
-            >
-              <div class="h-full overflow-hidden rounded-main relative bg-main">
                 <el-image class="w-full h-full" :src="item.img" fit="cover" />
                 <div
-                  class="absolute top-20 left-0 bg-fff-8 text-main font-600 p-6 pr-8 min-w-80 rounded-r-full flex justify-center"
-                  v-if="item.title"
+                  class="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full text-fff bg-000-1 z-[12]"
                 >
-                  {{ item.title || '--' }}
+                  <!-- <i class="iconfont text-fff text-40" v-html="e.icon" /> -->
+                  <div class="text-12">{{ item.title }}</div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- info[3].list -->
-        <div class="grid grid-rows-2 grid-cols-9 gap-10 h-164 mt-20 mx-main">
-          <div
-            class="rounded-main text-fff relative"
-            v-for="(item, index) in info[3].list"
-            :key="index"
-            :class="
-              index === 0
-                ? ['row-span-2', 'col-span-4', 'bg-fdf2e0']
-                : index === 1
-                ? ['col-span-5', 'bg-f5f4d6']
-                : ['row-span-1', 'col-span-5', 'bg-f9ebea']
-            "
-          >
-            <div class="p-main absolute z-10 flex flex-col justify-between">
-              <div class="text-18 font-600" style="font-size: #866350;">{{ item.title }}</div>
-              <div class="text-tip text-12 pt-10 flex items-center">
-                {{ item.subTitle }}
-                <i class="iconfont text-10" style="font-size: 10px;">&#xe671;</i>
+          <!-- 案例 -->
+          <div class="mt-20 mx-main">
+            <Title className="mb-10" :title="info[2].title" :subTitleBottom="info[2].subTitle" :isMore="true" />
+            <div class="container-scroll h-150 w-full pb-10">
+              <div
+                class="inline-block w-124 h-full mr-main last:mr-0 shadow-md"
+                v-for="(item, index) in info[2].list"
+                :key="index"
+              >
+                <div class="h-full overflow-hidden rounded-main relative bg-main-wx">
+                  <el-image class="w-full h-full" :src="item.img" fit="cover" />
+                  <div
+                    class="absolute top-20 left-0 bg-fff-8 text-main-wx font-600 p-6 pr-8 min-w-80 rounded-r-full flex justify-center"
+                    v-if="item.title"
+                  >
+                    {{ item.title || '--' }}
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+          <!-- info[3].list -->
+          <div class="grid grid-rows-2 grid-cols-9 gap-10 h-164 mt-20 mx-main">
             <div
-              class=" px-10 py-6 border-2 border-solid rounded-8 absolute top-100 left-main"
-              style="border-color: #e1a490; color:#e1a490"
+              class="rounded-main text-main-wx relative"
+              v-for="(item, index) in info[3].list"
+              :key="index"
+              :class="
+                index === 0
+                  ? ['row-span-2', 'col-span-4', 'bg-fdf2e0']
+                  : index === 1
+                  ? ['col-span-5', 'bg-f5f4d6']
+                  : ['row-span-1', 'col-span-5', 'bg-f9ebea']
+              "
+            >
+              <div class="p-main absolute z-10 flex flex-col justify-between">
+                <div class="text-18 font-600" style="font-size: #866350">{{ item.title }}</div>
+                <div class="text-tip text-12 pt-10 flex items-center">
+                  {{ item.subTitle }}
+                  <i class="iconfont text-10" style="font-size: 10px">&#xe671;</i>
+                </div>
+              </div>
+              <!-- <div
+              class="px-10 py-6 border-2 border-solid rounded-8 absolute top-100 left-main"
+              style="border-color: #e1a490; color: #e1a490"
               v-if="index === 0"
             >
               立即邀请
-            </div>
-            <div class="w-50 h-50 absolute right-0 bottom-14">
-              <el-image class="w-full h-full opacity-60" :src="item.img" fit="cover" />
-            </div>
-          </div>
-        </div>
-        <!-- 家空间 -->
-        <div class="mt-20 mx-main">
-          <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
-          <div class="mt-main grid grid-rows-5 grid-cols-6 gap-main h-230">
-            <div
-              class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
-              :class="{
-                'row-span-3 col-span-3': index === 0 || index === 1,
-                'row-span-2 col-span-2': index === 2 || index === 3 || index === 4,
-              }"
-              v-for="(item, index) in info[4].list"
-              :key="index"
-            >
-              <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
-              <div class="absolute bottom-6 left-0 right-0 flex justify-center z-10">
-                <div class="bg-000-6 text-fff rounded-full px-10 py-4">
-                  {{ item.title }}
-                </div>
+            </div> -->
+              <div class="w-50 h-50 absolute right-0 bottom-14">
+                <el-image class="w-full h-full opacity-60" :src="item.img" fit="cover" />
               </div>
             </div>
           </div>
-        </div>
-        <!-- 公司介绍 -->
-        <div class="mx-main mt-20">
-          <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
-          <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
-            <div v-for="item in info[5].list" :key="item" class="relative h-100 rounded-main overflow-hidden">
-              <image class="w-full h-full bg-cover" :src="item.img" alt="" />
+          <!-- 家空间 -->
+          <div class="mt-20 mx-main">
+            <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
+            <div class="mt-main grid grid-rows-5 grid-cols-6 gap-main h-230">
               <div
-                class="absolute left-0 top-0 bottom-0 right-0 z-1 bg-000-2 text-fff flex justify-center items-center"
+                class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
+                :class="{
+                  'row-span-3 col-span-3': index === 0 || index === 1,
+                  'row-span-2 col-span-2': index === 2 || index === 3 || index === 4,
+                }"
+                v-for="(item, index) in info[4].list"
+                :key="index"
               >
-                {{ item.title }}
+                <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
+                <div class="absolute bottom-6 left-0 right-0 flex justify-center z-10">
+                  <div class="bg-000-6 text-fff rounded-full px-10 py-4">
+                    {{ item.title }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 公司介绍 -->
+          <div class="mx-main mt-20">
+            <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
+            <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
+              <div v-for="item in info[5].list" :key="item" class="relative h-100 rounded-main overflow-hidden">
+                <el-image class="w-full h-full" :src="item.img" fit="cover" />
+
                 <div
-                  class="w-18 h-18 rounded-full bg-000-5 flex justify-center items-center ml-6 animation-zoom-in-out"
+                  class="absolute left-0 top-0 bottom-0 right-0 z-1 bg-000-2 text-fff flex justify-center items-center"
+                  v-show="item.title"
                 >
-                  <i class="iconfont text-10 text-fff" style="font-size: 10px;">&#xe674;</i>
+                  {{ item.title }}
+                  <div
+                    class="w-18 h-18 rounded-full bg-000-5 flex justify-center items-center ml-6 animation-zoom-in-out"
+                  >
+                    <i class="iconfont text-10 text-fff" style="font-size: 10px">&#xe674;</i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 品牌介绍 -->
+          <div class="mx-main mt-20 pb-20">
+            <Title :title="info[6].title" :subTitle="info[6].subTitle" />
+            <el-image
+              class="rounded-main mt-main overflow-hidden w-full"
+              v-if="info[6].img"
+              :src="info[6].img"
+              fit="cover"
+            />
+            <video class="w-full h-200 rounded-main mt-main" v-if="info[6].video" :src="info[6].video" controls />
+            <div class="container-scroll">
+              <div
+                class="mt-main ml-main first-0 shadow-md inline-block"
+                v-for="(item, index) in info[6].list"
+                :key="index"
+              >
+                <div class="h-full overflow-hidden rounded-main relative">
+                  <el-image class="w-140 h-200" :src="item.img" fit="cover" />
+                  <div
+                    class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main-wx text-16 font-600"
+                  >
+                    {{ item.title }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- 品牌介绍 -->
-        <div class="mx-main mt-20 pb-20">
-          <Title :title="info[6].title" :subTitle="info[6].subTitle" />
-          <el-image
-            class="rounded-main mt-main overflow-hidden w-full"
-            v-if="info[6].img"
-            :src="info[6].img"
-            fit="cover"
-          />
-          <video
-            class="w-full h-200 rounded-main mt-main"
-            v-if="info[6].video"
-            :src="info[6].video"
-            controls="controls"
-          />
-          <div class="container-scroll">
-            <div
-              class="mt-main ml-main first-0 shadow-md inline-block"
-              v-for="(item, index) in info[6].list"
-              :key="index"
-            >
-              <div class="h-full overflow-hidden rounded-main relative">
-                <el-image class="w-140 h-200" :src="item.img" fit="cover" />
-                <div
-                  class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main text-16 font-600"
-                >
-                  {{ item.title }}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="absolute right-0 bottom-150 rounded-l-full bg-main-wx pl-20 pr-10 py-6 text-fff shadow-sm">
+          {{ info[7]?.title || '---' }}
         </div>
       </div>
-    <div class="content flex-1 h-full">
+
+      <div class="content flex-1 h-full">
         <div class="right-box container-scroll-y" v-if="info?.length">
           <div class="hot_imgs">
             <div class="title">{{ info[pageIndex].title || '设置' }}</div>
-            <div class="title-text">
+            <div class="title-text" v-show="pageIndex !== 7">
               建议尺寸：{{
                 pageIndex === 0
                   ? '750 * 700'
@@ -198,59 +199,74 @@
                   : pageIndex === 5
                   ? '313 * 200'
                   : pageIndex === 6
-                  ? '280 * 400'
+                  ? '横图：750 * 任意高；竖图为280 * 400'
                   : pageIndex === 7
                   ? '100 * 100'
                   : ''
               }}px，拖拽图片可调整图片顺序
             </div>
-            <div class="flex flex-wrap mt-20 items-center" v-show="[1, 2, 3, 4, 5, 6, 7].includes(pageIndex)">
-              <span style="width: 70px">模块名称：</span>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 6, 7].includes(pageIndex)">
+              <span style="width: 70px">模块标题：</span>
               <div class="flex-1">
-                <el-input v-model="info[pageIndex].title" placeholder="请填写名称" />
+                <el-input class="input-class" v-model="info[pageIndex].title" placeholder="请填写一级名称" />
               </div>
             </div>
-            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 3, 4, 5, 6, 7].includes(pageIndex)">
-              <span style="width: 70px">二级标签：</span>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 6].includes(pageIndex)">
+              <span style="width: 70px">二级标题：</span>
               <div class="flex-1">
-                <el-input v-model="info[pageIndex].subTitle" placeholder="请填写名称" />
+                <el-input class="input-class" v-model="info[pageIndex].subTitle" placeholder="请填写二级标题" />
               </div>
             </div>
-            <div class="flex flex-wrap mt-20 items-center">
-              <span style="width: 70px">模块备注：</span>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[0, 1, 3].includes(pageIndex)">
+              <span style="width: 70px">备注：</span>
               <div class="flex-1">
-                <el-input v-model="info[pageIndex].remark" placeholder="请填写名称" />
+                <el-input class="input-class" v-model="info[pageIndex].remark" placeholder="请填写备注" />
+              </div>
+            </div>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 7].includes(pageIndex)">
+              <span style="width: 70px">跳转位置：</span>
+              <div class="flex-1">
+                <el-select v-model="info[pageIndex].router" class="input-class">
+                  <el-option :value="1" label="案例详情"></el-option>
+                  <el-option :value="2" label="文章详情"></el-option>
+                  <el-option :value="3" label="公司介绍"></el-option>
+                  <el-option :value="4" label="品牌介绍"></el-option>
+                  <el-option :value="11" label="自定义路径"></el-option>
+                </el-select>
+                <span class="text-tip ml-10">谨慎修改，可咨询管理员</span>
               </div>
             </div>
             <div class="add-btn" v-show="pageIndex === 6">
+              <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
+                >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
+              </el-button>
+              <div class="rounded-main mt-main relative" v-show="info[6].img">
+                <el-image
+                  class="rounded-main overflow-hidden w-full"
+                  style="width: 360px"
+                  v-show="info[6].img"
+                  :src="info[6].img"
+                  fit="cover"
+                />
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[6].img = ''">
+                  <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
+                </div>
+              </div>
+              <div class="mt-10"></div>
               <el-button
                 type="primary"
                 style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
                 @click="getvideoint"
                 >{{ info[pageIndex].video ? '修改视频' : '添加视频' }}
               </el-button>
-              <video
-                class="w-full h-200 rounded-main mt-main"
-                style="max-width: 300px"
-                v-if="info[6].video"
-                :src="info[6].video"
-                controls="controls"
-              />
-              <div class="mt-10"></div>
-              <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
-                >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
-              </el-button>
-              <div class="mt-10">
-                <el-image
-                  class="rounded-main overflow-hidden w-full"
-                  style="max-width: 300px"
-                  v-show="info[6].img"
-                  :src="info[6].img"
-                  fit="cover"
-                />
+              <div class="rounded-main mt-main relative" v-show="info[6].video">
+                <video class="w-full h-200" style="width: 360px" v-if="info[6].video" :src="info[6].video" controls />
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[6].video = ''">
+                  <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
+                </div>
               </div>
             </div>
-            <div class="list-box">
+            <div class="list-box" v-if="info[pageIndex].list">
               <draggable
                 class="dragArea list-group"
                 :list="info[pageIndex]?.list || []"
@@ -275,21 +291,23 @@
                   </div>
                   <div class="info">
                     <div class="info-item">
-                      <span style="width: 70px">标题 (备注)</span>
+                      <span style="width: 70px">{{
+                        [1, 2, 3, 4, 5, 6, 7].includes(pageIndex) ? '标题：' : '备注：'
+                      }}</span>
                       <div class="input-box">
-                        <el-input v-model="item.title" placeholder="请填写标题 (备注)" />
+                        <el-input class="input-class" v-model="item.title" placeholder="请填写标题 (备注)" />
                       </div>
                     </div>
                     <div class="info-item" v-show="[3].includes(pageIndex)">
                       <span style="width: 70px">二级标题</span>
                       <div class="input-box">
-                        <el-input v-model="item.subTitle" placeholder="请填写二级标题" />
+                        <el-input class="input-class" v-model="item.subTitle" placeholder="请填写二级标题" />
                       </div>
                     </div>
                     <div class="info-item">
                       <span style="width: 70px">链接位置</span>
                       <div class="input-box">
-                        <el-select v-model="item.type">
+                        <el-select v-model="item.type" class="input-class">
                           <el-option :value="1" label="案例详情"></el-option>
                           <el-option :value="2" label="文章详情"></el-option>
                           <el-option :value="3" label="公司介绍"></el-option>
@@ -301,17 +319,17 @@
                     <div class="info-item" v-show="item.type === 11">
                       <span style="width: 70px">自定义</span>
                       <div class="input-box">
-                        <el-select v-model="item.router">
+                        <el-select v-model="item.router" class="input-class">
                           <el-option :value="1" label="第一表单"></el-option>
                           <el-option :value="2" label="第二表单"></el-option>
                           <el-option :value="3" label="第三表单"></el-option>
                         </el-select>
                       </div>
                     </div>
-                    <div class="info-item" v-show="[1, 2,3,4].includes(item.type)">
+                    <div class="info-item" v-show="[1, 2, 3, 4].includes(item.type)">
                       <span style="width: 70px">ID</span>
                       <div class="input-box">
-                        <el-input v-model="item.id" />
+                        <el-input class="input-class" v-model="item.id" />
                       </div>
                     </div>
                   </div>
@@ -916,10 +934,10 @@ export default {
 
 .content {
   // width 510px;
-display: flex;
-flex-direction: column;
-height: 100%;
-margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-left: 20px;
 
   .right-box {
     height: 100%;
@@ -1013,6 +1031,11 @@ margin-left: 20px;
   background: #fff;
   border-right: 1px solid #f2f2f2;
   height: auto !important;
+}
+
+.input-class {
+  max-width: 300px;
+  width: 100%;
 }
 
 .menu-item {
@@ -1356,7 +1379,7 @@ margin-left: 20px;
     cursor: pointer;
   }
   .active {
-    background-color: var(--prev-bg-main-color);
+    background-color: var(--prev-bg-main-wx-color);
     color: var(--prev-color-primary);
     border-right: 2px solid var(--prev-color-primary);
   }

@@ -11,11 +11,11 @@
               v-model="artFrom.name"
             />
           </el-form-item>
-          <el-form-item label="作者：" label-for="name">
+          <el-form-item label="作者：" label-for="author">
             <el-input
               clearable
               placeholder="请搜索作者"
-              v-model="artFrom.name"
+              v-model="artFrom.author"
             />
           </el-form-item>
           <el-form-item label="ID：" label-for="id">

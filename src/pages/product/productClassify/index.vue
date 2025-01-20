@@ -3,10 +3,10 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt" :body-style="{ padding: 0 }">
       <div class="padding-add">
         <el-form ref="artFrom" :model="artFrom" inline label-width="80px" label-position="right" @submit.native.prevent>
-          <el-form-item label="商品分类：" prop="pid" label-for="pid">
+          <el-form-item label="案例分类：" prop="pid" label-for="pid">
             <el-select
               v-model="artFrom.pid"
-              placeholder="请选择商品分类"
+              placeholder="请选择案例分类"
               @change="userSearchs"
               clearable
               class="form_content_width"
@@ -82,7 +82,7 @@
           <template v-slot="{ row, index }">
             <a @click="edit(row)">编辑</a>
             <el-divider direction="vertical"></el-divider>
-            <a @click="del(row, '删除商品分类', index)">删除</a>
+            <a @click="del(row, '删除案例分类', index)">删除</a>
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -132,7 +132,7 @@ export default {
     this.getList();
   },
   methods: {
-    // 商品分类；
+    // 案例分类；
     goodsCategory() {
       treeListApi(0)
         .then((res) => {

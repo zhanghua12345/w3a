@@ -98,6 +98,7 @@ module.exports = {
       colors: {
         bg: '#f8f8f8',
         main: '#f00',
+        'main-wx': '#cf5d38',
         tip: '#9c9c9c',
         line: '#f0f0f0',
         'main-sub': '#b3ecff',

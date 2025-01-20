@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="案例作者：">
-              <el-input class="content_width" v-model.trim="formValidate.author" placeholder="请输入案例名称" />
+              <el-input class="content_width" v-model.trim="formValidate.author" placeholder="请输入作者" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -257,8 +257,8 @@
           <el-col :span="24">
             <el-form-item label="是否推荐：" prop="isRecommend">
               <el-radio-group v-model="formValidate.isRecommend">
-                <el-radio label="1" class="radio">是</el-radio>
-                <el-radio label="0">否</el-radio>
+                <el-radio :label="1" class="radio">是</el-radio>
+                <el-radio :label="0">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -382,7 +382,7 @@ export default {
         coverImg: '', // 封面图
         banner: [], // 轮播图
         status: 1, // 轮播图
-        cate_id:[],
+        cate_id: [],
         selectRule: '', // 案例详情分类
         attrs: [], // 案例详情菜单分类
         attrsImages: [], // 案例详情图片分类
@@ -456,8 +456,7 @@ export default {
           const _list = res.data.map((e) => {
             return {
               ...e,
-              select: 0,
-              children: [{ id: 0, label: '全部' }, ...(e.children || [])],
+              ...(e.children || []),
             };
           });
           this.formValidate.treeSelect = _list;
@@ -666,7 +665,7 @@ export default {
             }
           });
           form.treeSelect.forEach((e) => {
-            e.children.forEach
+            e.children.forEach;
             if (e.status && !e.images?.length) {
               this.$message.warning('详情设置-必填图片不能为空！');
               throw Error();

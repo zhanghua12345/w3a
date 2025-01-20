@@ -11,11 +11,11 @@
           @submit.native.prevent
           inline
         >
-          <el-form-item label="规格搜索：">
+          <el-form-item label="模版名称：">
             <el-input
               clearable
               v-model="artFrom.rule_name"
-              placeholder="请输入规格名称"
+              placeholder="请输入模版名称"
               class="form_content_width"
             ></el-input>
           </el-form-item>
