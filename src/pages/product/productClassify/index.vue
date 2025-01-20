@@ -4,16 +4,26 @@
       <div class="padding-add">
         <el-form ref="artFrom" :model="artFrom" inline label-width="80px" label-position="right" @submit.native.prevent>
           <el-form-item label="商品分类：" prop="pid" label-for="pid">
-            <el-select v-model="artFrom.pid" placeholder="请选择商品分类" @change="userSearchs" clearable
-              class="form_content_width">
+            <el-select
+              v-model="artFrom.pid"
+              placeholder="请选择商品分类"
+              @change="userSearchs"
+              clearable
+              class="form_content_width"
+            >
               <el-option v-for="item in treeSelect" :value="item.id" :label="item.cate_name" :key="item.id">{{
                 item.cate_name
               }}</el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="分类状态：" label-for="is_show">
-            <el-select v-model="artFrom.is_show" placeholder="请选择分类状态" clearable @change="userSearchs"
-              class="form_content_width">
+            <el-select
+              v-model="artFrom.is_show"
+              placeholder="请选择分类状态"
+              clearable
+              @change="userSearchs"
+              class="form_content_width"
+            >
               <el-option value="1" label="显示"></el-option>
               <el-option value="0" label="隐藏"></el-option>
             </el-select>
@@ -29,8 +39,14 @@
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt mt16">
       <el-button v-auth="['product-save-cate']" type="primary" class="bnt" @click="addClass">添加分类</el-button>
-      <vxe-table class="mt14" highlight-hover-row :loading="loading" header-row-class-name="false"
-        :tree-config="{ children: 'children' }" :data="tableData">
+      <vxe-table
+        class="mt14"
+        highlight-hover-row
+        :loading="loading"
+        header-row-class-name="false"
+        :tree-config="{ children: 'children' }"
+        :data="tableData"
+      >
         <vxe-table-column field="id" title="ID" tooltip width="80"></vxe-table-column>
         <vxe-table-column field="cate_name" tree-node title="分类名称" min-width="250"></vxe-table-column>
         <vxe-table-column field="pic" title="分类图标" min-width="100">
@@ -41,10 +57,24 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="sort" title="排序" min-width="100" tooltip="true"></vxe-table-column>
+        <vxe-table-column field="is_show" title="列表筛选" min-width="120">
+          <template v-slot="{ row }">
+            <el-tag :type="row.list_show ? 'success' : 'info'">{{ row.list_show ? '显示' : '不显示' }}</el-tag>
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="is_show" title="状态" min-width="120">
           <template v-slot="{ row }">
-            <el-switch class="defineSwitch" :active-value="1" :inactive-value="0" v-model="row.is_show"
-              :value="row.is_show" @change="onchangeIsShow(row)" size="large" active-text="开启" inactive-text="关闭">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="row.is_show"
+              :value="row.is_show"
+              @change="onchangeIsShow(row)"
+              size="large"
+              active-text="开启"
+              inactive-text="关闭"
+            >
             </el-switch>
           </template>
         </vxe-table-column>
@@ -140,7 +170,7 @@ export default {
     // 编辑
     edit(row) {
       this.$modalForm(productEditApi(row.id)).then(() => {
-        this.getList()
+        this.getList();
       });
     },
     // 修改状态
