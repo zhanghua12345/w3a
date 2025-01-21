@@ -1,9 +1,9 @@
-
 import home from './modules/home';
 import index from './modules/index';
 import product from './modules/product';
 import user from './modules/user';
 import setting from './modules/setting';
+import system from './modules/system';
 import cms from './modules/cms';
 import LayoutMain from '@/layout';
 import settings from '@/setting';
@@ -134,6 +134,7 @@ const frameIn = [
   product,
   cms,
   setting,
+  system,
   index,
   ...routers,
 ];
@@ -141,9 +142,6 @@ const frameIn = [
 /**
  * 在主框架之外显示
  */
-
-
-
 
 // 导出需要显示菜单的
 export const frameInRoutes = frameIn;

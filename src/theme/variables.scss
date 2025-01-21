@@ -696,6 +696,10 @@
 
   /* Loading 加载
 ------------------------------- */
+.el-loading-spinner{
+  display: flex;
+  justify-content: center;
+}
   .el-loading-spinner .path {
     stroke: var(--prev-color-primary);
   }
