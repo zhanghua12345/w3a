@@ -8,7 +8,6 @@ import setting from './modules/setting';
 import agent from './modules/agent';
 import cms from './modules/cms';
 import LayoutMain from '@/layout';
-import frameOut from './modules/frameOut';
 import settings from '@/setting';
 
 const modulesFiles = require.context('./modules/crud', true, /\.js$/);
@@ -155,7 +154,6 @@ const frameIn = [
  * 在主框架之外显示
  */
 
-const frameOuts = frameOut;
 
 
 
@@ -163,4 +161,4 @@ const frameOuts = frameOut;
 export const frameInRoutes = frameIn;
 
 // 重新组织后导出
-export default [...frameIn, ...frameOuts];
+export default [...frameIn];

@@ -55,32 +55,6 @@ export default {
       component: () => import('@/pages/setting/systemMenus/index'),
     },
     {
-      path: 'system_config',
-      name: `${pre}setSystem`,
-      meta: {
-        auth: ['setting-system-config'],
-        title: '系统设置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'system_config/:type?/:tab_id?',
-      name: `${pre}setApp`,
-      meta: {
-        title: '系统设置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'system_config_retail/:type?/:tab_id?',
-      name: `${pre}distributionSet`,
-      meta: {
-        ...meta,
-        title: '分销配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
       path: 'membership_level/index',
       name: `${pre}membershipLevel`,
       meta: {
@@ -89,15 +63,7 @@ export default {
       },
       component: () => import('@/pages/setting/membershipLevel/index'),
     },
-    {
-      path: 'system_config_message/:type?/:tab_id?',
-      name: `${pre}message`,
-      meta: {
-        auth: ['setting-system-config-message'],
-        title: '短信开关',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
+ 
     {
       path: 'notification/index',
       name: `${pre}notification`,
@@ -117,15 +83,7 @@ export default {
       },
       component: () => import('@/pages/setting/notification/notificationEdit'),
     },
-    {
-      path: 'system_config_logistics/:type?/:tab_id?',
-      name: `${pre}logistics`,
-      meta: {
-        auth: ['setting-system-config-logistics'],
-        title: '物流配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
+   
     {
       path: 'sms/sms_config/index',
       name: `${pre}config`,
@@ -271,16 +229,6 @@ export default {
       },
       component: () => import('@/pages/setting/storeService/autoReply'),
     },
-   
-    {
-      path: 'system_config_member_right/:type?/:tab_id?',
-      name: `${pre}right`,
-      meta: {
-        auth: ['setting-system-config-member-right'],
-        title: '会员权益',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
     {
       path: 'storage',
       name: `${pre}storage`,
@@ -289,114 +237,6 @@ export default {
         title: '储存配置',
       },
       component: () => import('@/pages/setting/storage'),
-    },
-    {
-      path: 'wechat_config/:type?/:tab_id?',
-      name: `${pre}wechat_config`,
-      meta: {
-        ...meta,
-        title: '公众号配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'routine_config/:type?/:tab_id?',
-      name: `${pre}routine_config`,
-      meta: {
-        ...meta,
-        title: '小程序配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'app_config/:type?/:tab_id?',
-      name: `${pre}app_config`,
-      meta: {
-        ...meta,
-        title: 'app配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'pc_config/:type?/:tab_id?',
-      name: `${pre}pc_config`,
-      meta: {
-        ...meta,
-        title: 'PC配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/print/:type?/:tab_id?',
-      name: `${pre}other_print`,
-      meta: {
-        auth: ['setting-other-print'],
-        title: '小票打印配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/copy/:type?/:tab_id?',
-      name: `${pre}other_copy`,
-      meta: {
-        auth: ['setting-other-copy'],
-        title: '商品采集配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/logistics/:type?/:tab_id?',
-      name: `${pre}other_logistics`,
-      meta: {
-        auth: ['setting-other-logistics'],
-        title: '物流查询配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/electronic/:type?/:tab_id?',
-      name: `${pre}other_electronic`,
-      meta: {
-        auth: ['setting-other-electronic'],
-        title: '电子面单配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/sms/:type?/:tab_id?',
-      name: `${pre}other_sms`,
-      meta: {
-        auth: ['setting-other-sms'],
-        title: '短信功能配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'other_config/pay/:type?/:tab_id?',
-      name: `${pre}other_pay`,
-      meta: {
-        auth: ['setting-other-sms'],
-        title: '商城支付配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'agreement',
-      name: `${pre}notification`,
-      meta: {
-        auth: ['setting-agreement'],
-        title: '协议设置',
-      },
-      component: () => import('@/pages/setting/agreement/index'),
-    },
-    {
-      path: 'other_config/out/:type?/:tab_id?',
-      name: `${pre}other_print`,
-      meta: {
-        auth: ['setting-other-out'],
-        title: '对外接口配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
     },
     {
       path: 'system_out_account/index',
@@ -442,78 +282,6 @@ export default {
         title: '地区关联语言',
       },
       component: () => import('@/pages/setting/multiLanguage/country'),
-    },
-    {
-      path: 'yihaotong_config/:type?/:tab_id?',
-      name: `${pre}yihaotong_config`,
-      meta: {
-        ...meta,
-        title: '一号通配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'lang_config/:type?/:tab_id?',
-      name: `${pre}lang_config`,
-      meta: {
-        ...meta,
-        title: '翻译配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'kefu_config/:type?/:tab_id?',
-      name: `${pre}kefu_config`,
-      meta: {
-        ...meta,
-        title: '客服配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'recharge_config/:type?/:tab_id?',
-      name: `${pre}recharge_config`,
-      meta: {
-        ...meta,
-        title: '充值配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'member_config/:type?/:tab_id?',
-      name: `${pre}member_config`,
-      meta: {
-        ...meta,
-        title: '付费会员配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'user_config/:type?/:tab_id?',
-      name: `${pre}user_config`,
-      meta: {
-        ...meta,
-        title: '用户配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'order_config/:type?/:tab_id?',
-      name: `${pre}order_config`,
-      meta: {
-        ...meta,
-        title: '订单配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
-      path: 'sign_config/:type?/:tab_id?',
-      name: `${pre}sign_config`,
-      meta: {
-        ...meta,
-        title: '签到配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
     },
   ],
 };
