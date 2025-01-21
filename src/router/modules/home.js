@@ -32,31 +32,41 @@ export default {
       path: 'index',
       name: `${pre}homeIndex`,
       meta: {
-        title: '数据配置',
+        title: '首页配置',
         auth: ['admin-store-storeProuduct-index'],
         keepAlive: true,
       },
       component: () => import('@/pages/home/index'),
     },
     {
+      path: 'company',
+      name: `${pre}homeCompany`,
+      meta: {
+        title: '公司介绍',
+        auth: ['admin-store-storeProuduct-index'],
+        keepAlive: true,
+      },
+      component: () => import('@/pages/home/company'),
+    },
+    {
       path: 'quality',
       name: `${pre}homeQuality`,
       meta: {
-        title: '公司介绍',
+        title: '品牌介绍',
         auth: ['admin-store-storeProuduct-index'],
         keepAlive: true,
       },
       component: () => import('@/pages/home/quality'),
     },
     {
-      path: 'company',
-      name: `${pre}homeCompany`,
+      path: 'router_wx',
+      name: `${pre}homeRouterWx`,
       meta: {
-        title: '底部设置',
+        title: '微信路由',
         auth: ['admin-store-storeProuduct-index'],
         keepAlive: true,
       },
-      component: () => import('@/pages/home/company'),
+      component: () => import('@/pages/home/router_wx'),
     },
   ],
 };

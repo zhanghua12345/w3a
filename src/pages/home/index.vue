@@ -226,14 +226,21 @@
             <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 7].includes(pageIndex)">
               <span style="width: 70px">跳转位置：</span>
               <div class="flex-1">
-                <el-select v-model="info[pageIndex].router" class="input-class">
-                  <el-option :value="1" label="案例详情"></el-option>
-                  <el-option :value="2" label="文章详情"></el-option>
-                  <el-option :value="3" label="公司介绍"></el-option>
-                  <el-option :value="4" label="品牌介绍"></el-option>
-                  <el-option :value="11" label="自定义路径"></el-option>
+                <el-select v-model="info[pageIndex].router"  value-key="name" class="input-class">
+                  <el-option
+                    :value="item"
+                    :label="item.name"
+                    v-for="(item, index) in routerList"
+                    :key="index"
+                  ></el-option>
                 </el-select>
                 <span class="text-tip ml-10">谨慎修改，可咨询管理员</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap mt-20 items-center" v-show="info[pageIndex]?.router?.isId">
+              <span style="width: 70px">ID：</span>
+              <div class="flex-1">
+                <el-input class="input-class" v-model="info[pageIndex].routerId" placeholder="请填写跳转ID" />
               </div>
             </div>
             <div class="add-btn" v-show="pageIndex === 6">
@@ -307,29 +314,20 @@
                     <div class="info-item">
                       <span style="width: 70px">链接位置</span>
                       <div class="input-box">
-                        <el-select v-model="item.type" class="input-class">
-                          <el-option :value="1" label="案例详情"></el-option>
-                          <el-option :value="2" label="文章详情"></el-option>
-                          <el-option :value="3" label="公司介绍"></el-option>
-                          <el-option :value="4" label="品牌介绍"></el-option>
-                          <el-option :value="11" label="自定义路径"></el-option>
+                        <el-select v-model="item.router" value-key="name" class="input-class">
+                          <el-option
+                            :value="item"
+                            :label="item.name"
+                            v-for="(item, index) in routerList"
+                            :key="index"
+                          ></el-option>
                         </el-select>
                       </div>
                     </div>
-                    <div class="info-item" v-show="item.type === 11">
-                      <span style="width: 70px">自定义</span>
-                      <div class="input-box">
-                        <el-select v-model="item.router" class="input-class">
-                          <el-option :value="1" label="第一表单"></el-option>
-                          <el-option :value="2" label="第二表单"></el-option>
-                          <el-option :value="3" label="第三表单"></el-option>
-                        </el-select>
-                      </div>
-                    </div>
-                    <div class="info-item" v-show="[1, 2, 3, 4].includes(item.type)">
+                    <div class="info-item" v-show="item.router?.isId" >
                       <span style="width: 70px">ID</span>
                       <div class="input-box">
-                        <el-input class="input-class" v-model="item.id" />
+                        <el-input class="input-class" v-model="item.routerId" />
                       </div>
                     </div>
                   </div>
@@ -383,6 +381,7 @@ import uploadVideo from '@/components/uploadVideo2';
 import { postSaveData, getAllData } from '@/api/system';
 import draggable from 'vuedraggable';
 import uploadPictures from '@/components/uploadPictures';
+import { router } from '@/utils/routerWx';
 
 export default {
   name: 'list',
@@ -465,9 +464,12 @@ export default {
       upload: {
         videoIng: false, // 是否显示进度条；
       },
+      routerList: [],
     };
   },
-  created() {},
+  created() {
+    this.routerList = router;
+  },
   mounted() {
     this.getInfo();
   },
