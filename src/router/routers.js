@@ -7,7 +7,6 @@ import user from './modules/user';
 import setting from './modules/setting';
 import agent from './modules/agent';
 import cms from './modules/cms';
-import system from './modules/system';
 import LayoutMain from '@/layout';
 import frameOut from './modules/frameOut';
 import settings from '@/setting';
@@ -148,7 +147,6 @@ const frameIn = [
   cms,
   setting,
   index,
-  system,
   agent,
   ...routers,
 ];
@@ -159,39 +157,10 @@ const frameIn = [
 
 const frameOuts = frameOut;
 
-/**
- * 错误页面
- */
 
-const errorPage = [
-  {
-    path: routePre + '/403',
-    name: '403',
-    meta: {
-      title: '403',
-    },
-    component: () => import('@/pages/system/error/403'),
-  },
-  {
-    path: routePre + '/500',
-    name: '500',
-    meta: {
-      title: '500',
-    },
-    component: () => import('@/pages/system/error/500'),
-  },
-  {
-    path: routePre + '/*',
-    name: '404',
-    meta: {
-      title: '404',
-    },
-    component: () => import('@/pages/system/error/404'),
-  },
-];
 
 // 导出需要显示菜单的
 export const frameInRoutes = frameIn;
 
 // 重新组织后导出
-export default [...frameIn, ...frameOuts, ...errorPage];
+export default [...frameIn, ...frameOuts];
