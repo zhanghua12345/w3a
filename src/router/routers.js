@@ -1,30 +1,17 @@
-// +----------------------------------------------------------------------
-// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2023 https://www.crmeb.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
-// +----------------------------------------------------------------------
-// | Author: CRMEB Team <admin@crmeb.com>
-// +----------------------------------------------------------------------
 
 import home from './modules/home';
 import index from './modules/index';
 import product from './modules/product';
-import order from './modules/order';
 import user from './modules/user';
 // import echarts from './modules/echarts'
 import setting from './modules/setting';
 import agent from './modules/agent';
 import finance from './modules/finance';
 import cms from './modules/cms';
-import marketing from './modules/marketing';
 import app from './modules/app';
 import system from './modules/system';
 import LayoutMain from '@/layout';
-import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
-import division from './modules/division';
 import settings from '@/setting';
 import crud from './modules/crud';
 
@@ -159,19 +146,15 @@ const frameIn = [
     component: () => import('@/components/uploadVideo/index'),
   },
   home,
-  index,
-  agent,
-  cms,
-  product,
-  marketing,
-  order,
   user,
-  finance,
+  product,
+  cms,
   setting,
+  index,
+  finance,
   system,
   app,
-  statistic,
-  division,
+  agent,
   ...routers,
   crud,
 ];
