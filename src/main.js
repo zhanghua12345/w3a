@@ -1,21 +1,6 @@
-// +----------------------------------------------------------------------
-// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2023 https://www.crmeb.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
-// +----------------------------------------------------------------------
-// | Author: CRMEB Team <admin@crmeb.com>
-// +----------------------------------------------------------------------
 
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
-import router from './router';
-import store from './store';
-Vue.prototype.bus = new Vue();
-import Router from 'vue-router';
 import Auth from '@/libs/wechat';
 import { i18n } from '@/i18n/index.js';
 
@@ -30,7 +15,6 @@ import '@/styles/iconfont.css';
 import '@/theme/index.scss';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import { globalComponentSize } from '@/utils/componentSize.js';
 
 import './assets/iconfontYI/iconfontYI.css';
 import './plugin/emoji-awesome/css/google.min.css';
@@ -40,7 +24,7 @@ import VOrgTree from 'v-org-tree';
 import 'xe-utils';
 import 'vxe-table/lib/style.css';
 
-import './assets/tailwendcss.css'
+import './assets/tailwendcss.css';
 import 'v-org-tree/dist/v-org-tree.css';
 import './styles/index.scss';
 import 'swiper/css/swiper.css';
@@ -49,10 +33,12 @@ import 'codemirror/lib/codemirror.css';
 import 'vxe-table/lib/index.css';
 import 'vue-happy-scroll/docs/happy-scroll.css';
 // swiper
+
+Vue.prototype.bus = new Vue();
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 // 懒加载
 import VueLazyload from 'vue-lazyload';
-import VXETable, { t } from 'vxe-table';
+import VXETable from 'vxe-table';
 import Viewer from 'v-viewer';
 import VueDND from 'awe-dnd';
 import formCreate from '@form-create/element-ui';
@@ -71,6 +57,8 @@ import VueTreeList from 'vue-tree-list';
 import Pagination from '@/components/Pagination';
 import pagesHeader from '@/components/pagesHeader';
 
+import router from './router';
+import store from './store';
 // 全局组件挂载
 Vue.component('Pagination', Pagination);
 Vue.component('pagesHeader', pagesHeader);
