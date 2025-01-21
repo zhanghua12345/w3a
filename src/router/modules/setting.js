@@ -37,6 +37,15 @@ export default {
       component: () => import('@/pages/setting/systemRole/index'),
     },
     {
+      path: 'agreement',
+      name: `${pre}notification`,
+      meta: {
+        auth: ['setting-agreement'],
+        title: '协议设置',
+      },
+      component: () => import('@/pages/setting/agreement/index'),
+    },
+    {
       path: 'system_admin/index',
       name: `${pre}systemAdmin`,
       meta: {
@@ -63,7 +72,7 @@ export default {
       },
       component: () => import('@/pages/setting/membershipLevel/index'),
     },
- 
+
     {
       path: 'notification/index',
       name: `${pre}notification`,
@@ -83,7 +92,7 @@ export default {
       },
       component: () => import('@/pages/setting/notification/notificationEdit'),
     },
-   
+
     {
       path: 'sms/sms_config/index',
       name: `${pre}config`,
@@ -120,7 +129,7 @@ export default {
       },
       component: () => import('@/pages/notify/smsTemplateApply/index'),
     },
-   
+
     {
       path: 'merchant/system_store/index',
       name: `${pre}systemStore`,
