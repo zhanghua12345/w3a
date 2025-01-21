@@ -6,14 +6,11 @@ import user from './modules/user';
 // import echarts from './modules/echarts'
 import setting from './modules/setting';
 import agent from './modules/agent';
-import finance from './modules/finance';
 import cms from './modules/cms';
-import app from './modules/app';
 import system from './modules/system';
 import LayoutMain from '@/layout';
 import frameOut from './modules/frameOut';
 import settings from '@/setting';
-import crud from './modules/crud';
 
 const modulesFiles = require.context('./modules/crud', true, /\.js$/);
 
@@ -151,12 +148,9 @@ const frameIn = [
   cms,
   setting,
   index,
-  finance,
   system,
-  app,
   agent,
   ...routers,
-  crud,
 ];
 
 /**

@@ -167,14 +167,4 @@ export default [
     },
     component: () => import('@/pages/kefu/appChat/mobile/feedback'),
   },
-  {
-    path: '/app/upload',
-    name: `mobile_upload`,
-    meta: {
-      auth: true,
-      title: '手机端扫码上传',
-      kefu: true,
-    },
-    component: () => import('@/pages/app/upload'),
-  },
 ];
