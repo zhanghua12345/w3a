@@ -46,6 +46,23 @@ export default {
       component: () => import('@/pages/setting/agreement/index'),
     },
     {
+      path: 'system_config',
+      name: `${pre}setSystem`,
+      meta: {
+        auth: ['setting-system-config'],
+        title: '系统设置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
+    },
+    {
+      path: 'system_config/:type?/:tab_id?',
+      name: `${pre}setApp`,
+      meta: {
+        title: '系统设置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
+    },
+    {
       path: 'system_admin/index',
       name: `${pre}systemAdmin`,
       meta: {
