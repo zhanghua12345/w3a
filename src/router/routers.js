@@ -3,9 +3,7 @@ import home from './modules/home';
 import index from './modules/index';
 import product from './modules/product';
 import user from './modules/user';
-// import echarts from './modules/echarts'
 import setting from './modules/setting';
-import agent from './modules/agent';
 import cms from './modules/cms';
 import LayoutMain from '@/layout';
 import settings from '@/setting';
@@ -35,15 +33,6 @@ const frameIn = [
     },
     component: LayoutMain,
     children: [
-      // {
-      //   path: '/admin/system/log',
-      //   name: 'log',
-      //   meta: {
-      //     title: '前端日志',
-      //     auth: true
-      //   },
-      //   component: () => import('@/pages/system/log')
-      // },
       {
         path: routePre + '/system/user',
         name: `systemUser`,
@@ -146,7 +135,6 @@ const frameIn = [
   cms,
   setting,
   index,
-  agent,
   ...routers,
 ];
 

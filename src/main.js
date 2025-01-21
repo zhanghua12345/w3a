@@ -13,8 +13,6 @@ import '@/assets/iconfont/iconfont.css';
 import '@/styles/iconfont.css';
 
 import '@/theme/index.scss';
-import Element from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 
 import './assets/iconfontYI/iconfontYI.css';
 import './plugin/emoji-awesome/css/google.min.css';
@@ -34,6 +32,8 @@ import 'vxe-table/lib/index.css';
 import 'vue-happy-scroll/docs/happy-scroll.css';
 // swiper
 
+import Element from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 Vue.prototype.bus = new Vue();
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 // 懒加载
