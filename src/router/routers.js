@@ -11,9 +11,7 @@
 import home from './modules/home';
 import index from './modules/index';
 import product from './modules/product';
-import order from './modules/order';
 import user from './modules/user';
-// import echarts from './modules/echarts'
 import setting from './modules/setting';
 import agent from './modules/agent';
 import finance from './modules/finance';
@@ -21,7 +19,6 @@ import cms from './modules/cms';
 import app from './modules/app';
 import system from './modules/system';
 import LayoutMain from '@/layout';
-import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
 import settings from '@/setting';
 
@@ -160,13 +157,11 @@ const frameIn = [
   agent,
   cms,
   product,
-  order,
   user,
   finance,
   setting,
   system,
   app,
-  statistic,
   ...routers,
 ];
 
