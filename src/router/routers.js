@@ -18,12 +18,15 @@ import setting from './modules/setting';
 import agent from './modules/agent';
 import finance from './modules/finance';
 import cms from './modules/cms';
+import marketing from './modules/marketing';
 import app from './modules/app';
 import system from './modules/system';
 import LayoutMain from '@/layout';
 import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
+import division from './modules/division';
 import settings from '@/setting';
+import crud from './modules/crud';
 
 const modulesFiles = require.context('./modules/crud', true, /\.js$/);
 
@@ -160,6 +163,7 @@ const frameIn = [
   agent,
   cms,
   product,
+  marketing,
   order,
   user,
   finance,
@@ -167,7 +171,9 @@ const frameIn = [
   system,
   app,
   statistic,
+  division,
   ...routers,
+  crud,
 ];
 
 /**
