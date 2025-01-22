@@ -22,6 +22,15 @@ import LayoutMain from '@/layout';
 import frameOut from './modules/frameOut';
 import settings from '@/setting';
 
+const modulesFiles = require.context('./modules/crud', true, /\.js$/);
+
+const routers = [];
+// 将扫描到的路由信息加入路由数组中
+modulesFiles.keys().forEach((modulePath) => {
+  const value = modulesFiles(modulePath);
+  routers.push(value.default);
+});
+
 let routePre = settings.routePre;
 /**
  * 在主框架内显示
@@ -153,6 +162,7 @@ const frameIn = [
   setting,
   system,
   app,
+  ...routers,
 ];
 
 /**
