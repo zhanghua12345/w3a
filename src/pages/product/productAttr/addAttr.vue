@@ -60,7 +60,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="onClose">取消</el-button>
-      <el-button type="primary" :loading="modal_loading" @click="handleSubmit()">确定</el-button>
+      <el-button type="primary" :loading="modal_loading" @click="handleSubmit('formDynamic')">确定</el-button>
     </span>
   </el-dialog>
 </template>
