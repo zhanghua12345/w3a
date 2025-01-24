@@ -77,7 +77,7 @@
                   <el-input v-model.trim="formValidate.coverImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <div class="titTip">移动端分类样式3显示的长方形图片，建议比例：5:2</div>
+                <div class="titTip">建议尺寸：700 * 320px</div>
               </div>
             </el-form-item>
           </el-col>
@@ -106,7 +106,7 @@
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
               </div>
-              <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，默认首张图为主图，最多上传10张</div>
+              <div class="titTip">建议尺寸：700 * 700，可拖拽改变图片顺序，最多上传10张</div>
             </el-form-item>
           </el-col>
           <el-col>
@@ -196,7 +196,7 @@
                     </div>
                   </div>
 
-                  <div class="titTip">建议尺寸：800*800，可拖拽改变图片顺序，最多上传10张</div>
+                  <div class="titTip">建议尺寸：700 * 高度任意，可拖拽改变图片顺序，最多上传10张</div>
                 </el-form-item>
               </el-col>
             </el-col>
@@ -273,7 +273,7 @@
                   <el-input v-model.trim="formValidate.recommendImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <div class="titTip">移动端分类样式3显示的长方形图片，建议比例：5:2</div>
+                <div class="titTip">建议尺寸：700 * 700px</div>
               </div>
             </el-form-item>
           </el-col>
