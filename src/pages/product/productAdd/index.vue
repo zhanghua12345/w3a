@@ -665,7 +665,6 @@ export default {
             }
           });
           form.treeSelect.forEach((e) => {
-            e.children.forEach;
             if (e.status && !e.images?.length) {
               this.$message.warning('详情设置-必填图片不能为空！');
               throw Error();
