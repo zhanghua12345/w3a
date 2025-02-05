@@ -107,14 +107,16 @@
           <!-- 家空间 -->
           <div class="mt-20 mx-main">
             <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
-            <div class="mt-main grid grid-rows-5 grid-cols-6 gap-main h-230">
+            <div class="mt-main grid grid-rows-6 grid-cols-6 gap-main h-250">
               <div
                 class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
                 :class="{
-                  'row-span-3 col-span-3': index === 0 || index === 1,
-                  'row-span-2 col-span-2': index === 2 || index === 3 || index === 4,
+                  'row-span-4 col-span-2': [0].includes(index),
+                  'row-span-2 col-span-2': [1, 2, 3, 4].includes(index),
+                  'row-span-2 col-span-3': [5, 6].includes(index),
                 }"
-                v-for="(item, index) in info[4].list"
+                v-if="info[4]?.list.length"
+                v-for="(item, index) in info[4].list.slice(0, 5)"
                 :key="index"
               >
                 <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
@@ -187,23 +189,23 @@
             <div class="title-text" v-show="pageIndex !== 7">
               建议尺寸：{{
                 pageIndex === 0
-                  ? '750 * 700'
+                  ? '750 * 700px'
                   : pageIndex === 1
-                  ? '148 * 100'
+                  ? '148 * 100px'
                   : pageIndex === 2
-                  ? '250 * 300'
+                  ? '250 * 300px'
                   : pageIndex === 3
-                  ? '100 * 100'
+                  ? '100 * 100px'
                   : pageIndex === 4
-                  ? '332 * 260'
+                  ? '以左边展示为主'
                   : pageIndex === 5
-                  ? '313 * 200'
+                  ? '313 * 200px'
                   : pageIndex === 6
-                  ? '横图：750 * 任意高；竖图为280 * 400'
+                  ? '横图：750 * 任意高；竖图为280 * 400px'
                   : pageIndex === 7
-                  ? '100 * 100'
+                  ? '100 * 100px'
                   : ''
-              }}px，拖拽图片可调整图片顺序
+              }}，拖拽图片可调整图片顺序
             </div>
             <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 6, 7].includes(pageIndex)">
               <span style="width: 70px">模块标题：</span>
@@ -226,7 +228,7 @@
             <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 7].includes(pageIndex)">
               <span style="width: 70px">跳转位置：</span>
               <div class="flex-1">
-                <el-select v-model="info[pageIndex].router"  value-key="name" class="input-class">
+                <el-select v-model="info[pageIndex].router" value-key="name" class="input-class">
                   <el-option
                     :value="item"
                     :label="item.name"
@@ -243,6 +245,34 @@
                 <el-input class="input-class" v-model="info[pageIndex].routerId" placeholder="请填写跳转ID" />
               </div>
             </div>
+            <div class="add-btn" v-show="pageIndex === 4">
+              <el-button
+                type="primary"
+                style="height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
+                @click="getvideoint('video')"
+                >{{ info[pageIndex].video ? '一分钟了解装修流程' : '添加视频 - 一分钟了解装修流程' }}
+              </el-button>
+              <div class="rounded-main mt-main relative" v-show="info[4].video">
+                <video class="w-full h-200" style="width: 360px" v-if="info[4].video" :src="info[4].video" controls />
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[4].video = ''">
+                  <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
+                </div>
+              </div>
+              <div class="mt-10"></div>
+              <el-button
+                type="primary"
+                style="height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
+                @click="getvideoint('video1')"
+                >{{ info[pageIndex].video1 ? '打算花多少钱来装修' : '添加视频 - 打算花多少钱来装修' }}
+              </el-button>
+              <div class="rounded-main mt-main relative" v-show="info[4].video1">
+                <video class="w-full h-200" style="width: 360px" v-if="info[4].video1" :src="info[4].video1" controls />
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[4].video1 = ''">
+                  <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
+                </div>
+              </div>
+            </div>
+
             <div class="add-btn" v-show="pageIndex === 6">
               <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
                 >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
@@ -263,7 +293,7 @@
               <el-button
                 type="primary"
                 style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
-                @click="getvideoint"
+                @click="getvideoint('video')"
                 >{{ info[pageIndex].video ? '修改视频' : '添加视频' }}
               </el-button>
               <div class="rounded-main mt-main relative" v-show="info[6].video">
@@ -273,6 +303,7 @@
                 </div>
               </div>
             </div>
+
             <div class="list-box" v-if="info[pageIndex].list">
               <draggable
                 class="dragArea list-group"
@@ -324,7 +355,7 @@
                         </el-select>
                       </div>
                     </div>
-                    <div class="info-item" v-show="item.router?.isId" >
+                    <div class="info-item" v-show="item.router?.isId">
                       <span style="width: 70px">ID</span>
                       <div class="input-box">
                         <el-input class="input-class" v-model="item.routerId" />
@@ -420,6 +451,7 @@ export default {
       spaces: [],
       introduces: [],
       modalVideo: false,
+      videoName: 'video',
       video: '',
 
       name: '',
@@ -474,12 +506,13 @@ export default {
     this.getInfo();
   },
   methods: {
-    getvideoint() {
+    getvideoint(name) {
       this.modalVideo = true;
+      this.videoName = name;
     },
     getvideo(data) {
       this.modalVideo = false;
-      this.info[this.pageIndex].video = data;
+      this.info[this.pageIndex][this.videoName] = data;
     },
     getInfo() {
       getAllData()
@@ -535,6 +568,8 @@ export default {
     },
     // 保存
     save() {
+      this.info[4].maxLength = 7;
+      this.info[5].maxLength = 4;
       postSaveData(this.info)
         .then((res) => {
           this.$message.success(res.msg);

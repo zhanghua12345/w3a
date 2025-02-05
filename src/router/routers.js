@@ -13,6 +13,7 @@ import index from './modules/index';
 import product from './modules/product';
 import order from './modules/order';
 import user from './modules/user';
+import data from './modules/data';
 // import echarts from './modules/echarts'
 import setting from './modules/setting';
 import agent from './modules/agent';
@@ -166,6 +167,7 @@ const frameIn = [
   marketing,
   order,
   user,
+  data,
   finance,
   setting,
   system,
