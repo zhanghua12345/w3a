@@ -38,6 +38,15 @@ export default {
       component: () => import('@/pages/user/list/index'),
     },
     {
+      path: 'member',
+      name: `${pre}member`,
+      meta: {
+        auth: ['admin-user-user-index'],
+        title: '会员审核',
+      },
+      component: () => import('@/pages/user/member/index'),
+    },
+    {
       path: 'level',
       name: `${pre}level`,
       meta: {

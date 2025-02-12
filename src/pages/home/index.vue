@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative">
+      <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative" v-if="info.length>0">
         <div class="w-full h-full overflow-y-scroll overflow-x-hidden container-scroll-y relative">
           <!-- 顶部banner -->
           <div class="w-full h-350 relative">
@@ -132,7 +132,7 @@
           <div class="mx-main mt-20">
             <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
             <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
-              <div v-for="item in info[5].list" :key="item" class="relative h-100 rounded-main overflow-hidden">
+              <div v-for="(item,index) in info[5].list" :key="index" class="relative h-100 rounded-main overflow-hidden">
                 <el-image class="w-full h-full" :src="item.img" fit="cover" />
 
                 <div
