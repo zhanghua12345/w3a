@@ -1,45 +1,71 @@
 <template>
   <div>
+    <template v-if="type === 'offer' || type === 'design'">
+      <el-row class="expand-row">
+        <el-col :span="6">
+          <span class="expand-key">房屋面积：</span>
+          <span class="expand-value">{{ row.area }}</span>
+        </el-col>
+        <el-col :span="6" v-if="type === 'offer'">
+          <span class="expand-key">装修类型：</span>
+          <span class="expand-value">{{ row.type }}</span>
+        </el-col>
+        <el-col :span="6">
+          <span class="expand-key">装修档次：</span>
+          <span class="expand-value">{{ row.grade }}</span>
+        </el-col>
+      </el-row>
+    </template>
+    <template v-else>
+      <el-row class="expand-row">
+        <el-col :span="6">
+          <span class="expand-key">房屋位置：</span>
+          <span class="expand-value">{{ `${row.province} ${row.area} ${row.city}` }}</span>
+        </el-col>
+        <el-col :span="6">
+          <span class="expand-key">具体小区：</span>
+          <span class="expand-value">{{ row.address }}</span>
+        </el-col>
+        <el-col :span="6">
+          <span class="expand-key">装修类型：</span>
+          <span class="expand-value">{{ row.type }}</span>
+        </el-col>
+        <el-col :span="6">
+          <span class="expand-key">装修时间：</span>
+          <span class="expand-value">{{ row.time }}</span>
+        </el-col>
+      </el-row>
+    </template>
+
     <el-row class="expand-row">
       <el-col :span="6">
-        <span class="expand-key">首次访问：</span>
-        <span class="expand-value"> {{ row.add_time | formatDate }}</span>
+        <span class="expand-key">微信昵称：</span>
+        <span class="expand-value">{{ row.user.nickname }}</span>
       </el-col>
       <el-col :span="6">
-        <span class="expand-key">近次访问：</span>
-        <span class="expand-value">{{ row.last_time | formatDate }}</span>
-      </el-col>
-      <el-col :span="6">
-        <span class="expand-key">身份证号：</span>
-        <span class="expand-value">{{ row.card_id }}</span>
+        <span class="expand-key">手机号：</span>
+        <span class="expand-value">{{ row.user.phone }}</span>
       </el-col>
       <el-col :span="6">
         <span class="expand-key">真实姓名：</span>
-        <span class="expand-value">{{ row.real_name }}</span>
+        <span class="expand-value">{{ row.user.real_name || '--' }}</span>
+      </el-col>
+      <el-col :span="6">
+        <span class="expand-key">用户ID：</span>
+        <span class="expand-value">{{ row.user.uid }}</span>
       </el-col>
     </el-row>
     <el-row class="expand-row">
       <el-col :span="6">
-        <span class="expand-key">标签：</span>
-        <span class="expand-value">{{ row.labels }}</span>
-      </el-col>
-      <el-col :span="6">
-        <span class="expand-key">生日：</span>
-        <span class="expand-value">{{ row.birthday }}</span>
-      </el-col>
-      <el-col :span="6">
-        <span class="expand-key">推荐人：</span>
-        <span class="expand-value">{{ row.spread_uid_nickname }}</span>
-      </el-col>
-      <el-col :span="6">
-        <span class="expand-key">地址：</span>
-        <span class="expand-value">{{ row.addres }}</span>
+        <span class="expand-key">创建时间：</span>
+        <span class="expand-value"> {{ row.created_at }}</span>
       </el-col>
     </el-row>
+
     <el-row class="expand-row">
-      <el-col :span="6">
+      <el-col :span="24">
         <span class="expand-key">备注：</span>
-        <span class="expand-value">{{ row.mark }}</span>
+        <span class="expand-value text-main">{{ row.remarks }}</span>
       </el-col>
     </el-row>
   </div>
@@ -59,6 +85,7 @@ export default {
   },
   props: {
     row: Object,
+    type: String,
   },
 };
 </script>

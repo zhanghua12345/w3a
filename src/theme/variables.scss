@@ -543,7 +543,7 @@
     color: var(--prev-color-text-regular);
     font-size: 12px !important;
   }
- 
+
   /* Table 表格
 ------------------------------- */
   .el-table {
@@ -695,7 +695,12 @@
   }
 
   /* Loading 加载
+   
 ------------------------------- */
+  .el-loading-spinner {
+    display: flex;
+    justify-content: center;
+  }
   .el-loading-spinner .path {
     stroke: var(--prev-color-primary);
   }

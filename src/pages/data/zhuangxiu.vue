@@ -43,49 +43,79 @@
       >
         <el-table-column type="expand">
           <template slot-scope="scope">
-            <expandRow :row="scope.row"></expandRow>
+            <expandRow :row="scope.row" type="renovation"/>
           </template>
         </el-table-column>
-        <el-table-column label="用户ID" min-width="80">
+        <!-- <el-table-column label="用户ID" min-width="80">
           <template slot-scope="scope">
-            <span>{{ scope.row.uid }}</span>
+            <span>{{ scope.row.user.uid }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="头像" min-width="60">
           <template slot-scope="scope">
             <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.avatar" />
+              <img v-lazy="scope.row.user.avatar" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="昵称" min-width="150">
+        <el-table-column label="昵称 - 名字" min-width="150">
           <template slot-scope="scope">
             <div class="acea-row" style="align-items: center">
-              <i class="el-icon-male" v-show="scope.row.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
-              <i class="el-icon-female" v-show="scope.row.sex === '女'" style="color: #ed4014; font-size: 15px"></i>
-              <div v-text="scope.row.nickname" class=""></div>
+              <i class="el-icon-male" v-show="scope.row.user.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
+              <i
+                class="el-icon-female"
+                v-show="scope.row.user.sex === '女'"
+                style="color: #ed4014; font-size: 15px"
+              ></i>
+              <div
+                v-text="
+                  scope.row.user.real_name
+                    ? `${scope.row.user.nickname} - ${scope.row.user.real_name}`
+                    : scope.row.user.nickname
+                "
+                class=""
+              ></div>
             </div>
-            <div v-if="scope.row.is_del == 1" style="color: red">用户已注销</div>
           </template>
         </el-table-column>
-        <el-table-column label="姓名备注" min-width="90">
+        <!-- <el-table-column label="分组" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.real_name || '--' }}</div>
+            <div>{{ scope.row.user.group_id || '--' }}</div>
           </template>
-        </el-table-column>
-        <el-table-column label="分组" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.group_id || '--' }}</div>
-          </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="手机号" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.phone }}</div>
+            <div>{{ scope.row.user.phone }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="房屋位置" min-width="140">
+          <template slot-scope="scope">
+            <div>{{`${scope.row.province} ${scope.row.area} ${scope.row.city}` }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="具体小区" min-width="100">
+          <template slot-scope="scope">
+            <div>{{ scope.row.address }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="装修类型" min-width="100">
+          <template slot-scope="scope">
+            <div>{{ scope.row.type }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="装修时间" min-width="100">
+          <template slot-scope="scope">
+            <div>{{ scope.row.time }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="提交时间" min-width="140">
+          <template slot-scope="scope">
+            <div>{{ scope.row.created_at }}</div>
           </template>
         </el-table-column>
         <el-table-column label="备注" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.phone }}</div>
+            <div class="text-main">{{ scope.row.remarks }}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">
@@ -109,7 +139,7 @@
     <el-dialog :visible.sync="showSetting" title="设置用户信息" width="540px" :show-close="true">
       <el-form ref="formInline" :model="settingData" label-width="100px" @submit.native.prevent>
         <el-form-item label="备注：" prop="image">
-          <el-input v-model="settingData.type" placeholder="请输入用户" clearable class="form_content_width" />
+          <el-input v-model="settingData.remarks" placeholder="请输入用户" clearable class="form_content_width" />
         </el-form-item>
       </el-form>
       <div class="acea-row row-right mt20">
@@ -122,10 +152,10 @@
 
 <script>
 import expandRow from './tableExpand.vue';
-import { userList } from '@/api/user';
+import { renovationList, setAddRemarks } from '@/api/data';
 
 export default {
-  name: 'baojia_list',
+  name: 'zhuangxiu_list',
   components: {
     expandRow,
   },
@@ -134,12 +164,16 @@ export default {
       field_key: '',
       loading: false,
       total: 0,
-      userLists:[],
+      userLists: [],
       userFrom: {
         page: 1,
         limit: 15,
       },
-      settingData: {},
+      settingData: {
+        id: '',
+        type: 'renovation',
+        remarks: '',
+      },
       showSetting: false,
     };
   },
@@ -151,10 +185,9 @@ export default {
     // 会员列表
     getList() {
       this.loading = true;
-      userList(this.userFrom)
+      renovationList(this.userFrom)
         .then(async (res) => {
           this.userLists = res.data.list;
-
           this.total = res.data.count;
           this.loading = false;
         })
@@ -183,11 +216,19 @@ export default {
     },
     userDetail(data) {
       this.showSetting = true;
-      this.settingData = data;
+      this.settingData = { ...this.settingData, id: data.id, remarks: data.remarks };
     },
-    submit() {
+    async submit() {
       this.showSetting = false;
-      console.log(this.settingData);
+      console.log( this.settingData )
+      await setAddRemarks(this.settingData)
+        .then(async (res) => {
+          this.$message.success('修改成功');
+        })
+        .catch((res) => {
+          this.$message.error(res.msg);
+        });
+      this.getList();
     },
   },
 };

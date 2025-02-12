@@ -116,7 +116,7 @@
                   'row-span-2 col-span-3': [5, 6].includes(index),
                 }"
                 v-if="info[4]?.list.length"
-                v-for="(item, index) in info[4].list.slice(0, 5)"
+                v-for="(item, index) in info[4].list"
                 :key="index"
               >
                 <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
