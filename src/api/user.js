@@ -347,6 +347,31 @@ export function userLabelApi(data) {
 }
 
 /**
+ * @description 会员审核列表
+ * data 请求参数
+ */
+export function registerList(data) {
+  return request({
+    url: `user/registerList`,
+    method: 'get',
+    params: data,
+  });
+}
+
+/**
+ * @description 会员审核
+ * data 请求参数
+ */
+export function setRegisters(data) {
+  return request({
+    url: `user/registerAdopt`,
+    method: 'post',
+    data,
+  });
+}
+
+
+/**
  * @description 获取标签分类（全部）
  * data 请求参数
  */

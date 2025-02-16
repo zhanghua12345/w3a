@@ -31,16 +31,16 @@
           <el-form-item label="排序：" prop="sort">
             <el-input v-model="formValidate.sort" placeholder="请输入" type="number" class="content_width" />
           </el-form-item>
-          <el-form-item label="图文封面：" prop="image_input">
+          <el-form-item label="图文封面：" prop="image">
             <div class="picBox" @click="modalPicTap('单选')">
-              <div class="pictrue" v-if="formValidate.image_input">
-                <img :src="formValidate.image_input" />
+              <div class="pictrue" v-if="formValidate.image">
+                <img :src="formValidate.image" />
               </div>
               <div class="upLoad acea-row row-center-wrapper" v-else>
                 <i class="el-icon-plus" style="font-size: 24px"></i>
               </div>
             </div>
-            <div class="tip">建议尺寸：500 x 312 px</div>
+            <div class="tip">建议尺寸：616 * 400px</div>
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-switch
@@ -54,9 +54,6 @@
             >
             </el-switch>
           </el-form-item>
-        </div>
-        <div class="goodsTitle acea-row">
-          <div class="title">文章内容</div>
         </div>
         <el-row class="content">
           <el-col :span="16">
@@ -96,23 +93,19 @@ export default {
   data() {
     const validateUpload = (rule, value, callback) => {
       console.log(1);
-      if (this.formValidate.image_input) {
+      if (this.formValidate.image) {
         callback();
       } else {
         callback(new Error('请上传图文封面'));
       }
     };
     return {
-      currentTab: '1',
+      currentTab: '',
       headerList: [
-        { label: '模块一', value: '1' },
-        { label: '模块二', value: '2' },
-        { label: '模块三', value: '3' },
-        { label: '模块四', value: '4' },
-        { label: '模块五', value: '5' },
-        { label: '模块六', value: '6' },
-        { label: '模块七', value: '7' },
-        { label: '模块八', value: '8' },
+        { label: '模块一', value: '121' },
+        { label: '模块二', value: '122' },
+        { label: '模块三', value: '123' },
+        { label: '模块四', value: '124' },
       ],
       dialog: {},
       isChoice: '单选',
@@ -141,7 +134,7 @@ export default {
       formValidate: {
         id: 0,
         title: '',
-        image_input: '',
+        image: '',
         content: '',
         status: false,
         visit: 0,
@@ -150,7 +143,7 @@ export default {
       ruleValidate: {
         title: [{ required: true, message: '请输入标题', trigger: 'change' }],
         sort: [{ required: true, message: '请输入排序', trigger: 'change' }],
-        image_input: [{ required: true, validator: validateUpload, trigger: 'change' }],
+        image: [{ required: true, validator: validateUpload, trigger: 'change' }],
         content: [{ required: true, message: '请输入文章内容', trigger: 'change' }],
       },
       value: '',
@@ -185,7 +178,7 @@ export default {
     },
     // 选中图片
     getPic(pc) {
-      this.formValidate.image_input = pc.att_dir;
+      this.formValidate.image = pc.att_dir;
       this.modalPic = false;
     },
 
@@ -221,6 +214,7 @@ export default {
   },
   created() {
     this.changeTab(this.currentTab);
+    this.currentTab = this.headerList[0].value
     this.getDetails();
   },
 };

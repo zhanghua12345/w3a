@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       loadingExist: false,
-      currentTab: '1',
+      currentTab: '2',
       headerList: [
         { label: '代理商协议', value: '2' },
         { label: '隐私协议', value: '3' },

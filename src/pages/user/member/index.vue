@@ -41,11 +41,11 @@
         empty-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column type="expand">
+        <!-- <el-table-column type="expand">
           <template slot-scope="scope">
             <expandRow :row="scope.row" type="offer" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="用户ID" min-width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.user.uid }}</span>
@@ -78,7 +78,7 @@
         </el-table-column>
         <el-table-column label="分组" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.user.group_id || '--' }}</div>
+            <div>{{ scope.row.group.group_name || '--' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="手机号" min-width="100">
@@ -86,15 +86,27 @@
             <div>{{ scope.row.user.phone }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="备注" min-width="100">
+        <el-table-column label="创建时间" min-width="140">
+          <template slot-scope="scope">
+            <div>{{ scope.row.user.created_at }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="审核备注" min-width="100">
+          <template slot-scope="scope">
+            <div class="text-main">
+              {{ scope.row.status === 0 ? '待审核' : scope.row.status === 1 ? '审核成功' : '审核失败' }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="审核备注" min-width="100">
           <template slot-scope="scope">
             <div class="text-main">{{ scope.row.remarks }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="120">
+        <el-table-column label="操作" fixed="right" width="80">
           <template slot-scope="scope">
-            <a @click="userDetail(scope.row)">备注</a>
-            <el-divider direction="vertical"></el-divider>
+            <!-- <a @click="userDetail(scope.row)">备注</a>
+            <el-divider direction="vertical"></el-divider> -->
             <a @click="userReview(scope.row)">审核</a>
           </template>
         </el-table-column>
@@ -125,25 +137,25 @@
     <!-- 审核会员 -->
     <el-dialog :visible.sync="showReview" title="审核会员" width="540px" :show-close="true">
       <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent>
-        <el-form-item label="昵称：" >
-          <el-input v-model="reviewData.nickname" class="form_content_width" disabled />
+        <el-form-item label="昵称：">
+          <el-input v-model="reviewData.user.nickname" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="手机号：" >
-          <el-input v-model="reviewData.phone" class="form_content_width" disabled />
+        <el-form-item label="手机号：">
+          <el-input v-model="reviewData.user.phone" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="真实姓名：" >
-          <el-input v-model="reviewData.real_name" class="form_content_width" disabled />
+        <el-form-item label="真实姓名：">
+          <el-input v-model="reviewData.user.real_name" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="审核状态：" prop="aaa">
-          <el-select v-model="reviewData.aaa" style="">
-            <el-option label="通过"  :value="0"/>
-            <el-option label="驳回"  :value="1"/>
+        <el-form-item label="审核状态：" prop="state">
+          <el-select v-model="reviewData.state">
+            <el-option label="通过" :value="1" />
+            <el-option label="驳回" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="驳回理由：" prop="image">
+        <el-form-item :label="reviewData.state === 1 ? '备注：' : '驳回理由：'" prop="remarks" v-if="reviewData.state">
           <el-input
             v-model="reviewData.remarks"
-            placeholder="请输入驳回理由"
+            :placeholder="reviewData.state === 1 ? '' : '请输入驳回理由'"
             clearable
             class="form_content_width"
           />
@@ -160,8 +172,7 @@
 
 <script>
 import expandRow from './tableExpand.vue';
-import { offerList, setAddRemarks } from '@/api/data';
-
+import { registerList, setRegisters } from '@/api/user';
 export default {
   name: 'baojia_list',
   components: {
@@ -182,7 +193,7 @@ export default {
         type: 'offer',
         remarks: '',
       },
-      reviewData:{},
+      reviewData: { user: {} },
       showSetting: false,
       showReview: false,
     };
@@ -192,11 +203,13 @@ export default {
   },
 
   methods: {
-    // 会员列表
+    // 会员审核列表
     getList() {
       this.loading = true;
-      offerList(this.userFrom)
+      console.log(4545);
+      registerList(this.userFrom)
         .then(async (res) => {
+          console.log(res);
           this.userLists = res.data.list;
 
           this.total = res.data.count;
@@ -230,13 +243,27 @@ export default {
 
     userReview(data) {
       this.showReview = true;
-      console.log(data)
-      this.reviewData = data.user;
-
+      console.log(data);
+      this.reviewData = data;
     },
 
-    reviewSubmit() {
-      
+    async reviewSubmit() {
+      this.showReview = false;
+      const data = {
+        id: this.reviewData.id,
+        user_id: this.reviewData.user_id,
+        status: this.reviewData.state,
+        remarks: this.reviewData.remarks,
+      };
+      console.log(this.reviewData);
+      await setRegisters(data)
+        .then(async (res) => {
+          this.$message.success('提交成功');
+        })
+        .catch((res) => {
+          this.$message.error(res.msg);
+        });
+      this.getList();
     },
 
     userDetail(data) {
@@ -247,9 +274,9 @@ export default {
     async submit() {
       this.showSetting = false;
       console.log(this.settingData);
-      await setAddRemarks(this.settingData)
+      await setRegisters(this.settingData)
         .then(async (res) => {
-          this.$message.success('修改成功');
+          this.$message.success('提交成功');
         })
         .catch((res) => {
           this.$message.error(res.msg);
