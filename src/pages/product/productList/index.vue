@@ -133,14 +133,14 @@
         </el-table-column>
         <el-table-column label="总浏览量（真实值）" width="140">
           <template slot-scope="scope">
-            <span class="mr-10">{{ Number(scope.row.browse || 0) + Number(scope.row.realBrowse || 0) }}</span>
-            <el-tag size="mini" type="danger">{{ scope.row.realBrowse || 0 }}</el-tag>
+            <span class="mr-10">{{ scope.row.realBrowse }}</span>
+            <el-tag size="mini" type="danger">{{scope.row.realBrowse- scope.row.browse}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="总点赞量（真实值）" width="140">
           <template slot-scope="scope">
-            <span class="mr-10">{{ Number(scope.row.praise || 0) + Number(scope.row.realPraise || 0) }}</span>
-            <el-tag size="mini" type="success">{{ scope.row.realPraise || 0 }}</el-tag>
+            <span class="mr-10">{{ scope.row.realPraise }}</span>
+            <el-tag size="mini" type="success">{{ scope.row.realPraise -  scope.row.praise}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">

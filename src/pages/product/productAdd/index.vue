@@ -228,11 +228,9 @@
               />
               <div style="color: #666" v-if="$route.params.id">
                 浏览量
-                <span class="text-main">{{
-                  Number(formValidate.browse || 0) + Number(formValidate.realBrowse || 0)
-                }}</span>
+                <span class="text-main">{{ formValidate.realBrowse }}</span>
                 = 初始值 <span class="text-main">{{ formValidate.browse }}</span> + 真实量
-                <span class="text-main">{{ formValidate.realBrowse || 0 }}</span>
+                <span class="text-main">{{ formValidate.realBrowse - formValidate.browse }}</span>
               </div>
             </el-form-item>
           </el-col>
@@ -246,11 +244,9 @@
               />
               <div style="color: #666" v-if="$route.params.id">
                 点赞量
-                <span class="text-main">{{
-                  Number(formValidate.praise || 0) + Number(formValidate.realPraise || 0)
-                }}</span>
+                <span class="text-main">{{ formValidate.realPraise }}</span>
                 = 初始值 <span class="text-main">{{ formValidate.praise }}</span> + 真实量
-                <span class="text-main">{{ formValidate.realPraise || 0 }}</span>
+                <span class="text-main">{{ formValidate.realPraise - formValidate.praise }}</span>
               </div>
             </el-form-item>
           </el-col>
