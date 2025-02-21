@@ -47,6 +47,24 @@ export default {
       component: () => import('@/pages/user/member/index'),
     },
     {
+      path: 'task',
+      name: `${pre}task`,
+      meta: {
+        auth: ['admin-user-user-index'],
+        title: '邀请人审核',
+      },
+      component: () => import('@/pages/data/task'),
+    },
+    {
+      path: 'discount',
+      name: `${pre}discount`,
+      meta: {
+        auth: ['admin-user-user-index'],
+        title: '提现列表',
+      },
+      component: () => import('@/pages/data/discount'),
+    },
+    {
       path: 'level',
       name: `${pre}level`,
       meta: {

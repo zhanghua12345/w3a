@@ -14,7 +14,6 @@ import '@/styles/iconfont.css';
 
 import '@/theme/index.scss';
 import Element from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 
 import './assets/iconfontYI/iconfontYI.css';
 import './plugin/emoji-awesome/css/google.min.css';
@@ -57,6 +56,7 @@ import VueTreeList from 'vue-tree-list';
 import Pagination from '@/components/Pagination';
 import pagesHeader from '@/components/pagesHeader';
 
+import 'element-ui/lib/theme-chalk/index.css';
 import router from './router';
 import store from './store';
 // 全局组件挂载
