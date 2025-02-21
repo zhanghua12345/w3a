@@ -107,13 +107,13 @@
           <!-- 家空间 -->
           <div class="mt-20 mx-main">
             <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
-            <div class="mt-main grid grid-rows-6 grid-cols-6 gap-main h-250">
+            <div class="mt-main grid grid-rows-6 grid-cols-6 gap-10 h-270">
               <div
                 class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
                 :class="{
                   'row-span-4 col-span-2': [0].includes(index),
                   'row-span-2 col-span-2': [1, 2, 3, 4].includes(index),
-                  'row-span-2 col-span-3': [5, 6].includes(index),
+                  'row-span-3 col-span-3': [5, 6].includes(index),
                 }"
                 v-if="info[4]?.list.length"
                 v-for="(item, index) in info[4].list"

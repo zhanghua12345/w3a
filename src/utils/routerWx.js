@@ -9,8 +9,8 @@ export const router = [
   { id: 8, name: '算报价', page: 'pagesForm/baojia/index', type: 'navigateTo',isId: false, },
   { id: 9, name: '免费设计', page: 'pagesForm/mianfeisheji/index', type: 'navigateTo',isId: false, },
   { id: 10, name: '我要装修', page: 'pagesForm/zhuangxiu/index', type: 'navigateTo',isId: false, },
-  { id: 10, name: '空间模块', page: 'pages/space/index', type: 'navigateTo',isId: false, },
-  { id: 10, name: '公司介绍', page: 'pages/company/index', type: 'navigateTo',isId: true, },
-  { id: 10, name: '品牌介绍', page: 'pages/brand/index', type: 'navigateTo',isId: true, },
+  { id: 11, name: '空间模块', page: 'pages/space/index', type: 'navigateTo',isId: false, },
+  { id: 12, name: '公司介绍', page: 'pages/company/index', type: 'navigateTo',isId: true, },
+  { id: 13, name: '品牌介绍', page: 'pages/brand/index', type: 'navigateTo',isId: true, },
   
 ];

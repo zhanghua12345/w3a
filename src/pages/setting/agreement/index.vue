@@ -51,7 +51,7 @@ export default {
       headerList: [
         { label: '代理商协议', value: '2' },
         { label: '隐私协议', value: '3' },
-        { label: '用户协议', value: '4' },
+        { label: '服务须知', value: '4' },
         { label: '关于我们', value: '6' },
       ],
       ueConfig: {
