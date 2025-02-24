@@ -80,26 +80,34 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="作者" min-width="60">
+        <el-table-column label="作者" min-width="100">
           <template slot-scope="scope">
             <div class="line2">{{ scope.row.author || '--' }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="分类" min-width="70">
+        <el-table-column label="分类" min-width="100">
           <template slot-scope="scope">
             <span class="line2">{{ scope.row.catename }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总浏览量（真实值）" width="140">
+        <el-table-column label="总浏览量" width="100">
           <template slot-scope="scope">
-            <span class="mr-10">{{ Number(scope.row.browse || 0) + Number(scope.row.realBrowse || 0) }}</span>
-            <el-tag size="mini" type="danger">{{ scope.row.realBrowse || 0 }}</el-tag>
+            <span class="mr-10">{{ scope.row.realBrowse }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总点赞量（真实值）" width="140">
+        <el-table-column label="浏览量真实值" width="100">
           <template slot-scope="scope">
-            <span class="mr-10">{{ Number(scope.row.praise || 0) + Number(scope.row.realPraise || 0) }}</span>
-            <el-tag size="mini" type="danger">{{ scope.row.realPraise || 0 }}</el-tag>
+            <span >{{ scope.row.realBrowse- scope.row.browse}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总点赞量" width="100">
+          <template slot-scope="scope">
+            <span class="mr-10">{{ scope.row.realPraise }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="点赞量真实值" width="100">
+          <template slot-scope="scope">
+            <span >{{ scope.row.realPraise -  scope.row.praise }}</span>
           </template>
         </el-table-column>
         <el-table-column label="热门文章" width="80">

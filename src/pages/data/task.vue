@@ -14,7 +14,7 @@
             <div>
               <el-form-item label="会员搜索：" label-for="nickname">
                 <el-input v-model="userFrom.nickname" placeholder="请输入用户" clearable class="form_content_width">
-                  <el-select v-model="field_key" slot="prepend" style="width: 100px">
+                  <el-select v-model="userFrom.field_key" slot="prepend" style="width: 100px">
                     <el-option value="all" label="全部"></el-option>
                     <el-option value="uid" label="用户ID"></el-option>
                     <el-option value="phone" label="手机号"></el-option>
@@ -22,15 +22,21 @@
                   </el-select>
                 </el-input>
               </el-form-item>
-              <el-form-item label="邀请人手机" label-for="nickname">
-                <el-input v-model="userFrom.nickname" placeholder="请输入用户" clearable class="form_content_width"  style="width: 160px"/>
+              <el-form-item label="邀请人手机" label-for="phone">
+                <el-input
+                  v-model="userFrom.phone"
+                  placeholder="请输入邀请人手机"
+                  clearable
+                  class="form_content_width"
+                  style="width: 160px"
+                />
               </el-form-item>
-              <el-form-item label="状态" label-for="nickname">
-                <el-select v-model="field_key" style="width: 160px">
-                    <el-option value="all" label="待审核"></el-option>
-                    <el-option value="all" label="已审核"></el-option>
-                    <el-option value="all" label="驳回"></el-option>
-                  </el-select>
+              <el-form-item label="状态" label-for="status">
+                <el-select v-model="userFrom.status" style="width: 160px">
+                  <el-option :value="0" label="待审核"></el-option>
+                  <el-option :value="1" label="通过"></el-option>
+                  <el-option :value="2" label="驳回"></el-option>
+                </el-select>
               </el-form-item>
             </div>
             <el-form-item class="search-form-sub">
@@ -63,7 +69,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="会员信息(角色-昵称-名字-手机号)" min-width="180">
+        <el-table-column label="会员信息(角色-昵称-名字-手机号)" min-width="200">
           <template slot-scope="scope">
             <div class="acea-row" style="align-items: center">
               <i class="el-icon-male" v-show="scope.row.user.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
@@ -74,7 +80,7 @@
               ></i>
               <div
                 v-text="
-                  `员工 - ${scope.row.user.nickname}${
+                  `${scope.row.user.group_name} - ${scope.row.user.nickname}${
                     scope.row.user.real_name ? ' - ' + scope.row.user.real_name : ''
                   }${scope.row.user.phone ? ' - ' + scope.row.user.phone : ''}`
                 "
@@ -84,34 +90,34 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="邀请人信息" min-width="180">
+        <el-table-column label="邀请人信息" min-width="200">
           <template slot-scope="scope">
             <div
-            style="font-weight: 600;"
+              style="font-weight: 600"
               v-text="
-                `${scope.row.user.nickname}${scope.row.user.real_name ? ' - ' + scope.row.user.real_name : ''}${
-                  scope.row.user.phone ? ' - ' + scope.row.user.phone : ''
+                `${scope.row.name}${scope.row.wechat_name ? ' - ' + scope.row.wechat_name : ''}${
+                  scope.row.phone ? ' - ' + scope.row.phone : ''
                 }`
               "
             ></div>
-            <div>长沙市 开福区 绿地v岛 c09-1001</div>
+            <div>{{scope.row.area}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="提交时间" min-width="110">
+        <el-table-column label="提交时间" min-width="140">
           <template slot-scope="scope">
-            <div>{{ scope.row.created_at }}</div>
+            <div>{{  scope.row.updated_at || scope.row.created_at }}</div>
           </template>
         </el-table-column>
         <el-table-column label="审核" min-width="60">
           <template slot-scope="scope">
-            <div :style="{ color: scope.row.status === 0 ? '#f30' : scope.row.status === 1 ? '##67c23a' : '#888' }">
-              {{ scope.row.status === 0 ? '待审核' : scope.row.status === 1 ? '已审核' : '驳回' }}
+            <div :style="{ color: scope.row.status === 0 ? '#f30' : scope.row.status === 1 ? '#67c23a' : '#888' }">
+              {{ scope.row.status === 0 ? '待审核' : scope.row.status === 1 ? '已通过' : '驳回' }}
             </div>
           </template>
         </el-table-column>
         <el-table-column label="审核结果" min-width="120">
           <template slot-scope="scope">
-            <div style="color:#888">{{ scope.row.remarks }}</div>
+            <div style="color: #888">{{ scope.row.remakes }}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="60">
@@ -133,26 +139,27 @@
 
     <!-- 审核会员 -->
     <el-dialog :visible.sync="showReview" title="审核会员" width="540px" :show-close="true">
-      <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent>
-        <el-form-item label="昵称：">
-          <el-input v-model="reviewData.user.nickname" class="form_content_width" disabled />
+      <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent :rules="rules">
+        <el-form-item label="昵称">
+          <el-input v-model="reviewData.invite.nickname" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="手机号：">
-          <el-input v-model="reviewData.user.phone" class="form_content_width" disabled />
+        <el-form-item label="手机号">
+          <el-input v-model="reviewData.invite.phone" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="真实姓名：">
-          <el-input v-model="reviewData.user.real_name" class="form_content_width" disabled />
+        <el-form-item label="真实姓名">
+          <el-input v-model="reviewData.invite.real_name" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="审核状态：" prop="state">
-          <el-select v-model="reviewData.state">
+        <el-form-item label="操作" prop="status">
+          <el-select v-model="reviewData.status">
+            <el-option label="待审核" :value="0" />
             <el-option label="通过" :value="1" />
             <el-option label="驳回" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="reviewData.state === 1 ? '备注：' : '驳回理由：'" prop="remarks" v-if="reviewData.state">
+        <el-form-item :label="reviewData.status === 1 || reviewData.status === 0 ? '备注' : '操作结果'" prop="remakes">
           <el-input
-            v-model="reviewData.remarks"
-            :placeholder="reviewData.state === 1 ? '' : '请输入驳回理由'"
+            v-model="reviewData.remakes"
+            :placeholder="reviewData.status === 1 ? '' : '请输入操作结果'"
             clearable
             class="form_content_width"
           />
@@ -169,7 +176,7 @@
 
 <script>
 import expandRow from './tableExpand.vue';
-import { offerList, setAddRemarks } from '@/api/data';
+import { inviteList, inviteProcess } from '@/api/data';
 
 export default {
   name: 'baojia_list',
@@ -186,13 +193,14 @@ export default {
         page: 1,
         limit: 15,
       },
-      reviewData: { user: {} },
+      reviewData: { invite: {} },
+      rules: { status: [{ required: true, message: '请选择状态', trigger: 'change' }] },
+
       settingData: {
         id: '',
         type: 'offer',
         remarks: '',
       },
-      showSetting: false,
       showReview: false,
     };
   },
@@ -204,7 +212,7 @@ export default {
     // 会员列表
     getList() {
       this.loading = true;
-      offerList(this.userFrom)
+      inviteList(this.userFrom)
         .then(async (res) => {
           this.userLists = res.data.list;
 
@@ -219,7 +227,7 @@ export default {
     userReview(data) {
       this.showReview = true;
       console.log(data);
-      this.reviewData = data;
+      this.reviewData = { ...data };
     },
     pageChange() {
       this.getList();
@@ -238,14 +246,10 @@ export default {
       this.field_key = '';
       this.getList();
     },
-    userDetail(data) {
-      this.showSetting = true;
-      this.settingData = { ...this.settingData, id: data.id, remarks: data.remarks };
-    },
-    async submit() {
-      this.showSetting = false;
+    async reviewSubmit() {
+      this.showReview = false;
       console.log(this.settingData);
-      await setAddRemarks(this.settingData)
+      await inviteProcess({ id: this.reviewData.id, status: this.reviewData.status, remakes: this.reviewData.remakes })
         .then(async (res) => {
           this.$message.success('修改成功');
         })

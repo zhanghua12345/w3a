@@ -131,16 +131,24 @@
             <span>{{ scope.row.isRecommend==0?'否':'是' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总浏览量（真实值）" width="140">
+        <el-table-column label="总浏览量" width="100">
           <template slot-scope="scope">
             <span class="mr-10">{{ scope.row.realBrowse }}</span>
-            <el-tag size="mini" type="danger">{{scope.row.realBrowse- scope.row.browse}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="总点赞量（真实值）" width="140">
+        <el-table-column label="浏览量真实值" width="100">
+          <template slot-scope="scope">
+            <span >{{ scope.row.realBrowse- scope.row.browse}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总点赞量" width="100">
           <template slot-scope="scope">
             <span class="mr-10">{{ scope.row.realPraise }}</span>
-            <el-tag size="mini" type="success">{{ scope.row.realPraise -  scope.row.praise}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="点赞量真实值" width="100">
+          <template slot-scope="scope">
+            <span >{{ scope.row.realPraise -  scope.row.praise }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">
