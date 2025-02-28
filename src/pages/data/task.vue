@@ -80,7 +80,7 @@
               ></i>
               <div
                 v-text="
-                  `${scope.row.user.group_name} - ${scope.row.user.nickname}${
+                  `${scope.row.group_name} - ${scope.row.user.nickname}${
                     scope.row.user.real_name ? ' - ' + scope.row.user.real_name : ''
                   }${scope.row.user.phone ? ' - ' + scope.row.user.phone : ''}`
                 "
@@ -100,12 +100,7 @@
                 }`
               "
             ></div>
-            <div>{{scope.row.area}}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提交时间" min-width="140">
-          <template slot-scope="scope">
-            <div>{{  scope.row.updated_at || scope.row.created_at }}</div>
+            <div>{{ scope.row.area }}</div>
           </template>
         </el-table-column>
         <el-table-column label="审核" min-width="60">
@@ -120,9 +115,46 @@
             <div style="color: #888">{{ scope.row.remakes }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="60">
+
+        <el-table-column label="提交时间" min-width="140">
           <template slot-scope="scope">
-            <a @click="userReview(scope.row)">审核</a>
+            <div>{{ scope.row.updated_at || scope.row.created_at }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="总收益" min-width="80">
+          <template slot-scope="scope">
+            <div>{{ scope.row.user?.all_money || '0.00' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="余额" min-width="80">
+          <template slot-scope="scope">
+            <div>{{ scope.row.user?.money || '0.00' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="赠送现金" min-width="80">
+          <template slot-scope="scope">
+            <div>{{ scope.row.money || '--' }}</div>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" fixed="right" width="120">
+          <template slot-scope="scope">
+            <a @click="userReview(scope.row)"
+            :style="{
+                cursor: Number(scope.row.money) ? 'not-allowed' : 'pointer',
+                color:  Number(scope.row.money) ? '#888' : '#409eff',
+              }"
+            >审核</a>
+            <el-divider direction="vertical" />
+            <a
+              @click="useMoney(scope.row)"
+              :style="{
+                cursor: scope.row.status !== 1 || Number(scope.row.money) ? 'not-allowed' : 'pointer',
+                color: scope.row.status !== 1 || Number(scope.row.money) ? '#888' : '#409eff',
+              }"
+            >
+              赠送现金
+            </a>
           </template>
         </el-table-column>
       </el-table>
@@ -137,18 +169,22 @@
       </div>
     </el-card>
 
-    <!-- 审核会员 -->
+    <!-- 审核邀请人 -->
     <el-dialog :visible.sync="showReview" title="审核会员" width="540px" :show-close="true">
       <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent :rules="rules">
-        <el-form-item label="昵称">
-          <el-input v-model="reviewData.invite.nickname" class="form_content_width" disabled />
+        <el-form-item label="邀请人姓名">
+          <el-input v-model="reviewData.name" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model="reviewData.invite.phone" class="form_content_width" disabled />
+        <el-form-item label="微信昵称">
+          <el-input v-model="reviewData.wechat_name" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="真实姓名">
-          <el-input v-model="reviewData.invite.real_name" class="form_content_width" disabled />
+        <el-form-item label="邀请人手机">
+          <el-input v-model="reviewData.phone" class="form_content_width" disabled />
         </el-form-item>
+        <el-form-item label="邀请人地址">
+          <el-input v-model="reviewData.area" class="form_content_width" disabled />
+        </el-form-item>
+        <el-divider />
         <el-form-item label="操作" prop="status">
           <el-select v-model="reviewData.status">
             <el-option label="待审核" :value="0" />
@@ -159,7 +195,7 @@
         <el-form-item :label="reviewData.status === 1 || reviewData.status === 0 ? '备注' : '操作结果'" prop="remakes">
           <el-input
             v-model="reviewData.remakes"
-            :placeholder="reviewData.status === 1 ? '' : '请输入操作结果'"
+            :placeholder="reviewData.status === 1 || reviewData.status === 0 ? '' : '请输入操作结果'"
             clearable
             class="form_content_width"
           />
@@ -171,12 +207,49 @@
         <el-button type="primary" @click="reviewSubmit()">确认</el-button>
       </div>
     </el-dialog>
+
+    <!-- 赠送现金 -->
+    <el-dialog :visible.sync="showMoney" title="赠送现金" width="540px" :show-close="true">
+      <el-form ref="formInline" :model="moneyData" label-width="100px" @submit.native.prevent :rules="rules">
+        <el-form-item label="会员真实姓名">
+          <el-input v-model="moneyData.userRegister.rename" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="会员昵称">
+          <el-input v-model="moneyData.user.nickname" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="会员分组">
+          <el-input v-model="moneyData.group_name" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="邀请人姓名">
+          <el-input v-model="moneyData.name" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="邀请人手机号">
+          <el-input v-model="moneyData.phone" class="form_content_width" disabled />
+        </el-form-item>
+        <el-divider />
+        <el-form-item prop="money" label="赠送现金">
+          <el-input
+            v-model="moneyData.money"
+            placeholder=" 请谨慎操作"
+            clearable
+            type="number"
+            class="form_content_width"
+          />
+          <span style="color: #f30">该操作无法撤回，请确认后再操作</span>
+        </el-form-item>
+      </el-form>
+
+      <div class="acea-row row-right mt20">
+        <el-button @click="showMoney = false">取消</el-button>
+        <el-button type="primary" @click="moneySubmit()">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import expandRow from './tableExpand.vue';
-import { inviteList, inviteProcess } from '@/api/data';
+import { inviteList, inviteProcess, addMoney } from '@/api/data';
 
 export default {
   name: 'baojia_list',
@@ -193,8 +266,10 @@ export default {
         page: 1,
         limit: 15,
       },
-      reviewData: { invite: {} },
-      rules: { status: [{ required: true, message: '请选择状态', trigger: 'change' }] },
+      rules: {
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        money: [{ required: true, message: '请输入金额', trigger: 'change' }],
+      },
 
       settingData: {
         id: '',
@@ -202,6 +277,9 @@ export default {
         remarks: '',
       },
       showReview: false,
+      reviewData: {},
+      showMoney: false,
+      moneyData: { user: {},userRegister:{} },
     };
   },
   async created() {
@@ -225,9 +303,14 @@ export default {
         });
     },
     userReview(data) {
+      if ( Number(data?.money)) return false;
       this.showReview = true;
-      console.log(data);
       this.reviewData = { ...data };
+    },
+    useMoney(data) {
+      if (data.status !== 1 || Number(data?.money)) return false;
+      this.showMoney = true;
+      this.moneyData = { ...data };
     },
     pageChange() {
       this.getList();
@@ -257,6 +340,19 @@ export default {
           this.$message.error(res.msg);
         });
       this.getList();
+    },
+    async moneySubmit() {
+      this.showMoney = false;
+      if (Number(this.moneyData.money) && this.moneyData.status === 1) {
+        await addMoney({ id: this.moneyData.id, money: this.moneyData.money })
+          .then(async (res) => {
+            this.$message.success('赠送成功');
+          })
+          .catch((res) => {
+            this.$message.error(res.msg);
+          });
+        this.getList();
+      }
     },
   },
 };

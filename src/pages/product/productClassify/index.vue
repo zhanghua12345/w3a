@@ -57,7 +57,7 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="sort" title="排序" min-width="100" tooltip="true"></vxe-table-column>
-        <vxe-table-column field="is_show" title="列表筛选" min-width="120">
+        <vxe-table-column field="is_show" title="移动端显示" min-width="120">
           <template v-slot="{ row }">
             <el-tag :type="row.list_show ? 'success' : 'info'">{{ row.list_show ? '显示' : '不显示' }}</el-tag>
           </template>

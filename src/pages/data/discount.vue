@@ -89,7 +89,7 @@
               ></i>
               <div
                 v-text="
-                  `${scope.row.user.group_name} - ${scope.row.user.nickname}${
+                  `${scope.row.group_name} - ${scope.row.user.nickname}${
                     scope.row.user.real_name ? ' - ' + scope.row.user.real_name : ''
                   }${scope.row.user.phone ? ' - ' + scope.row.user.phone : ''}`
                 "
@@ -118,14 +118,14 @@
         <el-table-column label="操作" min-width="60">
           <template slot-scope="scope">
             <div :style="{ color: scope.row.status === 0 ? '#f30' : scope.row.status === 1 ? '#67c23a' : '#888' }">
-              {{ scope.row.status === 0 ? '待确认' : scope.row.status === 1 ? '已转账' : '驳回' }}
+              {{ scope.row.status === 0 ? '待转账' : scope.row.status === 1 ? '已转账' : '驳回' }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="转账金额" min-width="110">
+        <el-table-column label="提现金额" min-width="110">
           <template slot-scope="scope">
-            <div :style="{ color: scope.row.status === 1 ? '#f30' : '#888' }">
-              {{ scope.row.status === 1 ? scope.row.money : '--' }}
+            <div >
+              {{  scope.row.money ||'--' }}
             </div>
           </template>
         </el-table-column>
@@ -139,11 +139,12 @@
             <a
               @click="userReview(scope.row)"
               :style="{
-                cursor: scope.row.status === 1 ? 'not-allowed' : 'pointer',
-                color: scope.row.status === 1 ? '#888' : '#409eff',
+                cursor: scope.row.status !== 0 ? 'not-allowed' : 'pointer',
+                color: scope.row.status !== 0 ? '#888' : '#409eff',
               }"
-              >审核</a
             >
+              审核
+            </a>
           </template>
         </el-table-column>
       </el-table>
@@ -161,11 +162,14 @@
     <!-- 审核会员 -->
     <el-dialog :visible.sync="showReview" title="提现确认" width="540px" :show-close="true">
       <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent :rules="rules">
+        <el-form-item label="会员真实姓名">
+          <el-input v-model="reviewData.userRegister.rename" class="form_content_width" disabled />
+        </el-form-item>
         <el-form-item label="会员昵称">
           <el-input v-model="reviewData.user.nickname" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="真实姓名">
-          <el-input v-model="reviewData.real_name" class="form_content_width" disabled />
+        <el-form-item label="会员分组">
+          <el-input v-model="reviewData.group_name" class="form_content_width" disabled />
         </el-form-item>
         <el-form-item label="支付宝账号">
           <el-input v-model="reviewData.ali_account" class="form_content_width" disabled />
@@ -173,15 +177,15 @@
         <el-form-item label="手机号">
           <el-input v-model="reviewData.user.phone" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="转账金额" prop="money">
+        <el-form-item label="提现金额" prop="money">
           <el-input
             v-model="reviewData.money"
-            placeholder="请输入转账金额"
             clearable
             class="form_content_width"
             disabled
           />
         </el-form-item>
+        <el-divider />
         <el-form-item label="操作" prop="status">
           <el-select v-model="reviewData.status">
             <el-option label="待审核" :value="0" />
@@ -228,7 +232,7 @@ export default {
         limit: 15,
       },
       rules: { status: [{ required: true, message: '请选择状态', trigger: 'change' }] },
-      reviewData: { user: {} },
+      reviewData: { user: {},userRegister:{} },
       settingData: {
         id: '',
         type: 'offer',
@@ -259,9 +263,8 @@ export default {
         });
     },
     userReview(data) {
-      if (data.status === 1) return false;
+      if (data.status === 1 ||data.status === 2) return false;
       this.showReview = true;
-      console.log(data);
       this.reviewData = { ...data };
     },
     pageChange() {

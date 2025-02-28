@@ -99,20 +99,9 @@ export function withdrawal(data) {
   });
 }
 
-/**
- * @description 添加余额列表--会员
- * @param {Object} param data {Object} 传值参数
- */
-export function addMoneyList(data) {
-  return request({
-    url: 'user/addMoneyList',
-    method: 'get',
-    params: data,
-  });
-}
 
 /**
- * @description 通过id给用户添加余额--会员
+ * @description 增加余额--会员
  * data 请求参数
  * @param {Object} param data {id: "", "status" : "0 是审核中 1 通过 2拒绝" 三选一, "remakes" : "备注"} 传值参数
  */

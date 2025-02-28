@@ -73,6 +73,7 @@
             <span>{{ scope.row.uid }}</span>
           </template>
         </el-table-column>
+
         <el-table-column label="头像" min-width="60">
           <template slot-scope="scope">
             <div class="tabBox_img" v-viewer>
@@ -93,6 +94,16 @@
         <el-table-column label="姓名备注" min-width="90">
           <template slot-scope="scope">
             <div>{{ scope.row.real_name||'--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="总金额" min-width="90">
+          <template slot-scope="scope">
+            <div>{{ scope.row.all_money||'--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="余额" min-width="90">
+          <template slot-scope="scope">
+            <div>{{ scope.row.money||'--' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="分组" min-width="100">

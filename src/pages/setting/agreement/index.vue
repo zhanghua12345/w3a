@@ -49,11 +49,12 @@ export default {
       loadingExist: false,
       currentTab: '2',
       headerList: [
+        { label: '提现说明', value: '1' },
         { label: '代理商协议', value: '2' },
         { label: '隐私协议', value: '3' },
         { label: '服务须知', value: '4' },
+        { label: '会员章程', value: '5' },
         { label: '关于我们', value: '6' },
-        { label: '提现说明', value: '1' },
       ],
       ueConfig: {
         autoHeightEnabled: false,

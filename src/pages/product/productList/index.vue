@@ -3,27 +3,14 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt" :body-style="{ padding: 0 }">
       <div class="padding-add">
         <el-form ref="artFrom" :model="artFrom" label-width="90px" label-position="right" inline @submit.native.prevent>
-          
           <el-form-item label="标题：" label-for="name">
-            <el-input
-              clearable
-              placeholder="请搜索案例名称"
-              v-model="artFrom.name"
-            />
+            <el-input clearable placeholder="请搜索案例名称" v-model="artFrom.name" />
           </el-form-item>
           <el-form-item label="作者：" label-for="author">
-            <el-input
-              clearable
-              placeholder="请搜索作者"
-              v-model="artFrom.author"
-            />
+            <el-input clearable placeholder="请搜索作者" v-model="artFrom.author" />
           </el-form-item>
           <el-form-item label="ID：" label-for="id">
-            <el-input
-              clearable
-              placeholder="请搜索案例ID"
-              v-model="artFrom.id"
-            />
+            <el-input clearable placeholder="请搜索案例ID" v-model="artFrom.id" />
           </el-form-item>
           <el-form-item label="分类：" label-for="pid">
             <el-cascader
@@ -35,7 +22,7 @@
             ></el-cascader>
           </el-form-item>
           <el-form-item label="状态" label-for="status">
-            <el-select v-model.trim="artFrom.status" >
+            <el-select v-model.trim="artFrom.status">
               <el-option value="" label="全部"></el-option>
               <el-option :value="0" label="下架"></el-option>
               <el-option :value="1" label="上架"></el-option>
@@ -126,9 +113,9 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="是否推荐" min-width="80">
+        <el-table-column label="是否推荐" min-width="60">
           <template slot-scope="scope">
-            <span>{{ scope.row.isRecommend==0?'否':'是' }}</span>
+            <span>{{ scope.row.isRecommend == 0 ? '否' : '是' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="总浏览量" width="100">
@@ -138,7 +125,7 @@
         </el-table-column>
         <el-table-column label="浏览量真实值" width="100">
           <template slot-scope="scope">
-            <span >{{ scope.row.realBrowse- scope.row.browse}}</span>
+            <span>{{ scope.row.realBrowse - scope.row.browse }}</span>
           </template>
         </el-table-column>
         <el-table-column label="总点赞量" width="100">
@@ -148,10 +135,10 @@
         </el-table-column>
         <el-table-column label="点赞量真实值" width="100">
           <template slot-scope="scope">
-            <span >{{ scope.row.realPraise -  scope.row.praise }}</span>
+            <span>{{ scope.row.realPraise - scope.row.praise }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="状态" min-width="60">
           <template slot-scope="scope">
             <el-switch
               class="defineSwitch"
@@ -173,6 +160,8 @@
             <el-divider direction="vertical"></el-divider> -->
             <a @click="edit(scope.row)">编辑</a>
             <el-divider direction="vertical"></el-divider>
+            <!-- <a @click="AIClick(scope.row)">AI配置</a>
+            <el-divider direction="vertical"></el-divider> -->
             <a v-if="artFrom.type === '4'" @click="del(scope.row, '恢复案例', scope.$index)">恢复案例</a>
             <a v-else @click="del(scope.row, '移入失效案例', scope.$index)">刪除</a>
           </template>
@@ -205,6 +194,83 @@
       <goodsDetail :goodsId="goodsId"></goodsDetail>
     </div>
     <coupon-list ref="couponTemplates" @nameId="nameId" :couponids="batchFormData.coupon_ids"></coupon-list>
+    <!-- AI配置 -->
+    <el-dialog :visible.sync="showAI" title="AI配置" width="800px" :show-close="true">
+      <el-form ref="formInline" :model="AIData" label-width="100px" @submit.native.prevent :rules="AIRules">
+        <el-row :gutter="24" justify="left" align="middle">
+          <el-col :span="24">
+            <el-form-item label="布局" prop="name">
+              <div style="display: flex; flex-wrap: wrap; align-items: center">
+                <el-select v-model="AIData.status" style="width: 120px">
+                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
+                </el-select>
+                <div style="padding: 0 10px">房</div>
+                <el-select v-model="AIData.status" style="width: 120px">
+                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
+                </el-select>
+                <div style="padding: 0 10px">厅</div>
+                <el-select v-model="AIData.status" style="width: 120px">
+                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
+                </el-select>
+                <div style="padding: 0 10px">厨</div>
+                <el-select v-model="AIData.status" style="width: 120px">
+                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
+                </el-select>
+                <div style="padding: 0 10px">卫</div>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="小区" prop="VR_link">
+              <el-input v-model="AIData.VR_link" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="风格" prop="VR_link">
+              <el-input v-model="AIData.VR_link" />
+            </el-form-item>
+          </el-col>
+       
+          <el-col :span="12">
+            <el-form-item label="面积" prop="VR_link">
+              <el-input v-model="AIData.VR_link" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="颜色" prop="VR_link">
+              <el-input v-model="AIData.VR_link" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!-- <el-form-item label="真实姓名" prop="new">
+          <el-input v-model="AIData.real_name" />
+        </el-form-item>
+        <el-form-item label="操作" prop="status">
+          <el-select v-model="AIData.status">
+            <el-option label="待审核" :value="0" />
+            <el-option label="通过" :value="1" />
+            <el-option label="驳回" :value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-switch
+            class="defineSwitch"
+            :active-value="1"
+            :inactive-value="0"
+            v-model="AIData.status"
+            size="large"
+            active-text="开启"
+            inactive-text="关闭"
+          />
+        </el-form-item> -->
+      </el-form>
+
+      <div class="acea-row row-right mt20">
+        <el-button @click="showAI = false">取消</el-button>
+        <el-button type="primary" @click="AISubmit()">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -231,7 +297,20 @@ import {
   productNewList,
 } from '@/api/product';
 import userLabel from '@/components/labelList';
-
+import { readonly } from 'vue';
+const ruleInit = readonly({
+  name: [{ required: true, message: '请输入案例名称', trigger: 'blur' }],
+  VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
+  coverImg: [{ required: true, message: '请上传案例封面图', trigger: 'change' }],
+  banner: [{ required: true, message: '请上传案例封面图', trigger: 'change', type: 'array' }],
+  status: [{ required: true, message: '请选择案例状态', trigger: 'change' }],
+  selectRule: [{ required: true, message: '请选择案例详情分类', trigger: 'change' }],
+  attrs: [{ required: true, message: '案例详情菜单不能为空', trigger: 'change', type: 'array' }],
+  attrsImages: [{ required: true, message: '案例详情图片不能为空', trigger: 'change', type: 'array' }],
+  isRecommend: [{ required: true, message: '请选择案例推荐', trigger: 'change' }],
+  recommendImg: [{ required: true, message: '请上传推荐图', trigger: 'change' }],
+  // required: [{ required: true, message: '这是一个只加标头的数据', trigger: 'change' }],
+});
 export default {
   name: 'product_productList',
   components: { expandRow, attribute, taoBao, goodsDetail, userLabel, couponList },
@@ -286,6 +365,9 @@ export default {
       isProductBox: false,
       treeSelect: [],
       multipleSelection: [],
+      showAI: false,
+      AIData: {},
+      AIRules: ruleInit,
     };
   },
   watch: {
@@ -306,6 +388,12 @@ export default {
     }
   },
   methods: {
+    AIClick() {
+      this.showAI = true;
+    },
+    AISubmit() {
+      this.showAI = false;
+    },
     batchSub() {
       let data = this.batchFormData;
       data.ids = this.ids;

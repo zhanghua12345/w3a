@@ -24,10 +24,10 @@
               </el-form-item>
               <el-form-item label="状态" label-for="nickname">
                 <el-select v-model="field_key" style="width: 160px">
-                    <el-option value="all" label="待审核"></el-option>
-                    <el-option value="all" label="审核成功"></el-option>
-                    <el-option value="all" label="审核失败"></el-option>
-                  </el-select>
+                  <el-option value="all" label="待审核"></el-option>
+                  <el-option value="all" label="审核成功"></el-option>
+                  <el-option value="all" label="审核失败"></el-option>
+                </el-select>
               </el-form-item>
             </div>
             <el-form-item class="search-form-sub">
@@ -65,7 +65,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="昵称" min-width="150">
+        <el-table-column label="昵称-手机号" min-width="150">
           <template slot-scope="scope">
             <div class="acea-row" style="align-items: center">
               <i class="el-icon-male" v-show="scope.row.user.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
@@ -74,40 +74,32 @@
                 v-show="scope.row.user.sex === '女'"
                 style="color: #ed4014; font-size: 15px"
               ></i>
-              {{ scope.row.user.nickname }}
+              {{ scope.row.user.nickname }}-{{ scope.row.phone }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="真实姓名" min-width="100">
+        <el-table-column label="申请信息（真实姓名-手机号-角色-门店/小区）" min-width="200">
           <template slot-scope="scope">
-            <div>{{ scope.row.user.real_name || '--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="分组" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.group.group_name || '--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="手机号" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.user.phone }}</div>
+            <div>
+              {{ scope.row.rename }}-{{ scope.row.phone }}-{{ scope.row.groups?.group_name }}-{{ scope.row.store }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="创建时间" min-width="140">
           <template slot-scope="scope">
-            <div>{{ scope.row.user.created_at }}</div>
+            <div>{{ scope.row.created_at }}</div>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="100">
           <template slot-scope="scope">
-            <div  :style="{color:scope.row.status === 0?'#f30':scope.row.status === 1?'##67c23a':'#888'}">
+            <div :style="{ color: scope.row.status === 0 ? '#f30' : scope.row.status === 1 ? '##67c23a' : '#888' }">
               {{ scope.row.status === 0 ? '待审核' : scope.row.status === 1 ? '审核成功' : '审核失败' }}
             </div>
           </template>
         </el-table-column>
         <el-table-column label="审核结果" min-width="100">
           <template slot-scope="scope">
-            <div class="text-main">{{ scope.row.remarks }}</div>
+            <div style="color: #888">{{ scope.row.remarks }}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="80">
@@ -144,25 +136,38 @@
     <!-- 审核会员 -->
     <el-dialog :visible.sync="showReview" title="审核会员" width="540px" :show-close="true">
       <el-form ref="formInline" :model="reviewData" label-width="100px" @submit.native.prevent>
-        <el-form-item label="昵称：">
+        <el-form-item label="昵称">
           <el-input v-model="reviewData.user.nickname" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="手机号：">
-          <el-input v-model="reviewData.user.phone" class="form_content_width" disabled />
+
+        <el-form-item label="真实姓名">
+          <el-input v-model="reviewData.rename" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="真实姓名：">
-          <el-input v-model="reviewData.user.real_name" class="form_content_width" disabled />
+        <el-form-item label="手机号">
+          <el-input v-model="reviewData.phone" class="form_content_width" disabled />
         </el-form-item>
-        <el-form-item label="审核状态：" prop="state">
-          <el-select v-model="reviewData.state">
+        <el-form-item label="申请角色">
+          <el-input v-model="reviewData.groups.group_name" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="小区/门店">
+          <el-input v-model="reviewData.store" class="form_content_width" disabled />
+        </el-form-item>
+        <el-form-item label="审核状态" prop="status">
+          <el-select v-model="reviewData.status">
+            <el-option label="待审核" :value="0" />
             <el-option label="通过" :value="1" />
             <el-option label="驳回" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="reviewData.state === 1 ? '备注：' : '驳回理由：'" prop="remarks" v-if="reviewData.state">
+        <el-form-item
+          :label="reviewData.status === 1 || reviewData.status === 0 ? '备注：' : '驳回理由：'"
+          prop="remarks"
+          v-if="reviewData.status"
+          required
+        >
           <el-input
             v-model="reviewData.remarks"
-            :placeholder="reviewData.state === 1 ? '' : '请输入驳回理由'"
+            :placeholder="reviewData.status === 1 || reviewData.status === 0 ? '' : '请输入驳回理由'"
             clearable
             class="form_content_width"
           />
@@ -200,7 +205,7 @@ export default {
         type: 'offer',
         remarks: '',
       },
-      reviewData: { user: {} },
+      reviewData: { user: {}, groups: {} },
       showSetting: false,
       showReview: false,
     };
@@ -251,7 +256,7 @@ export default {
     userReview(data) {
       this.showReview = true;
       console.log(data);
-      this.reviewData = data;
+      this.reviewData ={...data};
     },
 
     async reviewSubmit() {
@@ -259,7 +264,7 @@ export default {
       const data = {
         id: this.reviewData.id,
         user_id: this.reviewData.user_id,
-        status: this.reviewData.state,
+        status: this.reviewData.status,
         remarks: this.reviewData.remarks,
       };
       console.log(this.reviewData);
