@@ -14,6 +14,7 @@ import product from './modules/product';
 import order from './modules/order';
 import user from './modules/user';
 import data from './modules/data';
+import AI from './modules/AI';
 // import echarts from './modules/echarts'
 import setting from './modules/setting';
 import agent from './modules/agent';
@@ -168,6 +169,7 @@ const frameIn = [
   order,
   user,
   data,
+  AI,
   finance,
   setting,
   system,

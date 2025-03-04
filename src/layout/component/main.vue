@@ -7,7 +7,7 @@
       :style="{ minHeight: `calc(100vh - ${headerHeight}` }"
     >
       <LayoutParentView />
-      <Footers v-if="getThemeConfig.isFooter" />
+      <!-- <Footers v-if="getThemeConfig.isFooter" /> -->
     </el-scrollbar>
     <Links
       :style="{ height: `calc(100vh - ${headerHeight}` }"
