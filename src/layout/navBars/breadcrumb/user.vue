@@ -3,47 +3,18 @@
     <div class="layout-navbars-breadcrumb-user-icon" @click="refresh">
       <i class="el-icon-refresh-right" :title="$t('message.user.title7')"></i>
     </div>
-    <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
-      <i class="el-icon-search" :title="$t('message.user.title2')"></i>
-    </div>
-
-    <div class="layout-navbars-breadcrumb-user-icon">
-      <el-tooltip
-        effect="light"
-        placement="bottom"
-        trigger="click"
-        v-model="isShowUserNewsPopover"
-        :width="300"
-        popper-class="el-tooltip-pupop-user-news"
-      >
-        <el-badge :is-dot="isDot" @click.stop="openNews">
-          <i class="el-icon-bell" :title="$t('message.user.title4')"></i>
-        </el-badge>
-        <transition name="el-zoom-in-top" slot="content">
-          <UserNews :vm="this" v-show="isShowUserNewsPopover" @haveNews="initIsDot"></UserNews>
-        </transition>
-      </el-tooltip>
-    </div>
-    <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
-      <i
-        :title="isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
-        :class="!isScreenfull ? 'el-icon-full-screen' : 'el-icon-crop'"
-      ></i>
-    </div>
-    <el-dropdown :show-timeout="70" @command="onDropdownCommand">
+   
+    <el-dropdown :show-timeout="70" @command="onDropdownCommand" style="padding-right:20px ;">
       <span class="layout-navbars-breadcrumb-user-link">
         <img :src="getUserInfos.head_pic" class="layout-navbars-breadcrumb-user-link-photo mr5" />
         {{ getUserInfos.account === '' ? 'test' : getUserInfos.account }}
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="user">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
         <el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
-      <i class="el-icon-setting" :title="$t('message.user.title3')"></i>
-    </div>
+   
     <Search ref="searchRef" />
   </div>
 </template>
