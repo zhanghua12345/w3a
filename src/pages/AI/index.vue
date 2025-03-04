@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-fff" style="border-radius: 100px;" >
+  <div class="bg-fff">
     <iframe
       src="https://www.doubao.com/"
       frameborder="0"

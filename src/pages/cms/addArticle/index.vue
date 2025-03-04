@@ -101,18 +101,18 @@
           <!--                        </el-form-item>-->
           <!--                    </el-col>-->
           <el-col :span="24">
-            <el-form-item label="列表页推荐显示：" label-for="is_banner">
+            <el-form-item label="是否推荐：" label-for="is_banner">
               <el-radio-group v-model="formValidate.is_banner" element-id="is_banner">
-                <el-radio :label="1" class="radio">显示</el-radio>
-                <el-radio :label="0">不显示</el-radio>
+                <el-radio :label="1" class="radio">是</el-radio>
+                <el-radio :label="0">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="热门文章：" label-for="is_hot">
+            <el-form-item label="是否热门：" label-for="is_hot">
               <el-radio-group v-model="formValidate.is_hot" element-id="is_hot">
-                <el-radio :label="1" class="radio">显示</el-radio>
-                <el-radio :label="0">不显示</el-radio>
+                <el-radio :label="1" class="radio">是</el-radio>
+                <el-radio :label="0">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>

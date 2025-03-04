@@ -27,41 +27,35 @@
     </el-card>
     <el-card :bordered="false" shadow="never" class="ivu-mt mt16">
       <el-button v-auth="['product-rule-save']" type="primary" @click="addAttr">添加详情模板</el-button>
-      <el-button v-auth="['product-product-rule-delete']" @click="del(null, '批量删除规格')">批量删除</el-button>
       <el-table
         ref="table"
         :data="tableList"
         v-loading="loading"
         highlight-current-row
         :row-key="getRowKey"
-        @selection-change="handleSelectRow"
         empty-text="暂无数据"
         class="mt14"
       >
-        <el-table-column type="selection" width="60" :reserve-selection="true"> </el-table-column>
         <el-table-column label="ID" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="模板名称" min-width="130">
+        <el-table-column label="模板名称" min-width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.rule_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="类型规格" min-width="130">
+        <el-table-column label="类型规格" min-width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.attr_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="类型属性" min-width="130">
+        <el-table-column label="排序" min-width="130">
           <template slot-scope="scope">
-            <span
-              v-for="(item, index) in scope.row.attr_value"
-              :key="index"
-              v-text="item"
-              style="display: block"
-            ></span>
+            <span v-for="(item, index) in scope.row.attr_value" :key="index">{{
+              item + (index < scope.row.attr_value.length - 1 ? ',' : '')
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">

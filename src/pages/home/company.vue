@@ -19,18 +19,21 @@
         @submit.native.prevent
       >
         <div class="goodsTitle acea-row">
-          <div class="title">文章信息</div>
+          <div class="title">
+            文章信息
+            <span style="color: #888">（id:{{ formValidate.id || '--' }}）</span>
+          </div>
         </div>
         <div class="grid_box">
-          <el-form-item label="id：" prop="id">
-            <div class="text-main">{{ formValidate.id || '--' }}</div>
-          </el-form-item>
           <el-form-item label="标题：" prop="title">
             <el-input v-model="formValidate.title" placeholder="请输入" class="content_width" />
           </el-form-item>
-          <el-form-item label="排序：" prop="sort">
+          <!-- <el-form-item label="id：" prop="id">
+            <div class="text-main">{{ formValidate.id || '--' }}</div>
+          </el-form-item> -->
+          <!-- <el-form-item label="排序：" prop="sort">
             <el-input v-model="formValidate.sort" placeholder="请输入" type="number" class="content_width" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="图文封面：" prop="image">
             <div class="picBox" @click="modalPicTap('单选')">
               <div class="pictrue" v-if="formValidate.image">
@@ -42,7 +45,7 @@
             </div>
             <div class="tip">建议尺寸：616 * 400px</div>
           </el-form-item>
-          <el-form-item label="状态" prop="status">
+          <!-- <el-form-item label="状态" prop="status">
             <el-switch
               class="defineSwitch"
               :active-value="1"
@@ -53,7 +56,7 @@
               inactive-text="隐藏"
             >
             </el-switch>
-          </el-form-item>
+          </el-form-item> -->
         </div>
         <el-row class="content">
           <el-col :span="16">
@@ -214,7 +217,7 @@ export default {
   },
   created() {
     this.changeTab(this.currentTab);
-    this.currentTab = this.headerList[0].value
+    this.currentTab = this.headerList[0].value;
     this.getDetails();
   },
 };

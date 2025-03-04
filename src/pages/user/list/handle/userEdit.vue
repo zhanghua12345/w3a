@@ -28,47 +28,18 @@
           value-format="yyyy-MM-dd"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="身份证号：">
+      <!-- <el-form-item label="身份证号：">
         <el-input
           v-model.trim="formItem.card_id"
           placeholder="请输入身份证号"
           style="width: 80%"
         ></el-input>
-      </el-form-item>
-      <el-form-item label="用户地址：">
+      </el-form-item> -->
+      <el-form-item label="用户地址1：">
         <el-input  v-model="formItem.addres" placeholder="请输入用户地址" style="width: 80%"></el-input>
       </el-form-item>
       <el-form-item label="用户备注：">
         <el-input  v-model="formItem.mark" placeholder="请输入用户备注" style="width: 80%"></el-input>
-      </el-form-item>
-      <el-form-item label="登录密码：" prop="pwd">
-        <el-input
-      
-          type="password"
-          v-model="formItem.pwd"
-          placeholder="请输入登录密码（修改用户可不填写，不填写不修改原密码）"
-          style="width: 80%"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码：" prop="true_pwd">
-        <el-input
-       
-          type="password"
-          v-model="formItem.true_pwd"
-          placeholder="请输入确认密码（修改用户可不填写，不填写不修改原密码）"
-          style="width: 80%"
-        ></el-input>
-      </el-form-item>
-
-      <el-form-item label="用户等级：">
-        <el-select v-model="formItem.level" clearable>
-          <el-option
-            v-for="(item, index) in infoData.levelInfo"
-            :key="index"
-            :value="item.id"
-            :label="item.name"
-          ></el-option>
-        </el-select>
       </el-form-item>
       <el-form-item label="用户分组：">
         <el-select v-model="formItem.group_id" clearable>

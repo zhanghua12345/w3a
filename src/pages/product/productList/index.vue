@@ -3,12 +3,12 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt" :body-style="{ padding: 0 }">
       <div class="padding-add">
         <el-form ref="artFrom" :model="artFrom" label-width="90px" label-position="right" inline @submit.native.prevent>
-          <el-form-item label="标题：" label-for="name">
+          <el-form-item label="案例名称：" label-for="name">
             <el-input clearable placeholder="请搜索案例名称" v-model="artFrom.name" />
           </el-form-item>
-          <el-form-item label="作者：" label-for="author">
+          <!-- <el-form-item label="作者：" label-for="author">
             <el-input clearable placeholder="请搜索作者" v-model="artFrom.author" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="ID：" label-for="id">
             <el-input clearable placeholder="请搜索案例ID" v-model="artFrom.id" />
           </el-form-item>
@@ -24,8 +24,8 @@
           <el-form-item label="状态" label-for="status">
             <el-select v-model.trim="artFrom.status">
               <el-option value="" label="全部"></el-option>
-              <el-option :value="0" label="下架"></el-option>
               <el-option :value="1" label="上架"></el-option>
+              <el-option :value="0" label="下架"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否推荐：" label-for="isRecommend">
@@ -138,7 +138,7 @@
             <span>{{ scope.row.realPraise - scope.row.praise }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="60">
+        <el-table-column label="状态" min-width="100">
           <template slot-scope="scope">
             <el-switch
               class="defineSwitch"
@@ -700,14 +700,15 @@ export default {
     },
     // 上下架
     changeSwitch(row) {
-      PostgoodsNewIsShow(row.id, row.is_show || 0)
+      console.log(row)
+      PostgoodsNewIsShow(row.id, row.status || 0)
         .then((res) => {
           this.$message.success(res.msg);
           this.goodHeade();
           this.getDataList();
         })
         .catch((res) => {
-          row.is_show = !row.is_show ? 1 : 0;
+          row.status = !row.status ? 1 : 0;
           this.$message.error(res.msg);
         });
     },

@@ -33,43 +33,14 @@
             </el-form-item>
           </div>
           <div class="item">
-            <el-form-item label="身份证号：">
-              <el-input class="form-sty" v-model.trim="formItem.card_id" placeholder="请输入身份证号"></el-input>
-            </el-form-item>
-          </div>
-          <div class="item">
             <el-form-item label="用户地址：">
               <el-input class="form-sty" v-model="formItem.addres" placeholder="请输入用户地址"></el-input>
             </el-form-item>
           </div>
         </div>
       </div>
+   
       <!-- <div class="section">
-        <div class="section-hd">密码</div>
-        <div class="section-bd">
-          <div class="item">
-            <el-form-item label="登录密码：" prop="pwd">
-              <el-input
-                class="form-sty"
-                type="password"
-                v-model="formItem.pwd"
-                placeholder="请输入登录密码（修改用户可不填写，不填写不修改原密码）"
-              ></el-input>
-            </el-form-item>
-          </div>
-          <div class="item">
-            <el-form-item label="确认密码：" prop="true_pwd">
-              <el-input
-                class="form-sty"
-                type="password"
-                v-model="formItem.true_pwd"
-                placeholder="请输入确认密码（修改用户可不填写，不填写不修改原密码）"
-              ></el-input>
-            </el-form-item>
-          </div>
-        </div>
-      </div> -->
-      <div class="section">
         <div class="section-hd">用户概况</div>
         <div class="section-bd">
           <div class="item">
@@ -85,7 +56,7 @@
             </el-form-item>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="section">
         <div class="section-hd">用户备注</div>
         <div class="section-bd">

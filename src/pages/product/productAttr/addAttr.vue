@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { ruleAddApi, ruleInfoApi } from '@/api/product';
 export default {
   name: 'addAttr',
@@ -102,7 +101,16 @@ export default {
         this.formDynamic.spec.push({ value: '', detail: [], status: '' });
       }
     },
-
+    getIofo(row){
+      this.formDynamic = row
+      this.isBtn = true
+      this.ids = row.id
+      this.formDynamic = {
+        rule_name: row.rule_name,
+        spec:  JSON.parse(row.rule_value),
+      }
+      console.log(row)
+    },
     // 新增表单
     addCustom() {
       if (this.formDynamic.spec.length > 9) {

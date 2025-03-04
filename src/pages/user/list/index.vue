@@ -38,7 +38,7 @@
       <el-row :gutter="24" justify="space-between">
         <el-col :span="24">
           <!-- <el-button v-auth="['admin-user-save']" type="primary" @click="edit({ uid: 0 })">添加用户</el-button> -->
-          <el-button v-auth="['admin-user-group_set']" @click="setGroup">批量设置分组</el-button>
+          <!-- <el-button v-auth="['admin-user-group_set']" @click="setGroup">批量设置分组</el-button> -->
           <!-- <el-button class="mr10" @click="exportList">导出</el-button> -->
           <!-- <el-button v-auth="['admin-user-synchro']" class="mr20" @click="synchro">同步公众号用户</el-button> -->
         </el-col>
@@ -59,15 +59,15 @@
         empty-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
         @sort-change="sortChanged"
-        @select="handleSelectRow"
-        @select-all="handleSelectAll"
       >
-        <el-table-column type="expand">
+        <!-- @select="handleSelectRow"
+      @select-all="handleSelectAll" -->
+        <!-- <el-table-column type="expand">
           <template slot-scope="scope">
             <expandRow :row="scope.row"></expandRow>
           </template>
-        </el-table-column>
-        <el-table-column type="selection" :selectable="isSel" width="55"> </el-table-column>
+        </el-table-column> -->
+        <!-- <el-table-column type="selection" :selectable="isSel" width="55"> </el-table-column> -->
         <el-table-column label="用户ID" min-width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.uid }}</span>
@@ -81,7 +81,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="昵称" min-width="150">
+        <el-table-column label="昵称" min-width="90">
           <template slot-scope="scope">
             <div class="acea-row" style="align-items: center">
               <i class="el-icon-male" v-show="scope.row.sex === '男'" style="color: #2db7f5; font-size: 15px"></i>
@@ -91,24 +91,9 @@
             <div v-if="scope.row.is_del == 1" style="color: red">用户已注销</div>
           </template>
         </el-table-column>
-        <el-table-column label="姓名备注" min-width="90">
+        <el-table-column label="真实姓名" min-width="90">
           <template slot-scope="scope">
-            <div>{{ scope.row.real_name||'--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="总金额" min-width="90">
-          <template slot-scope="scope">
-            <div>{{ scope.row.all_money||'--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="余额" min-width="90">
-          <template slot-scope="scope">
-            <div>{{ scope.row.money||'--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="分组" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.group_id||'--'  }}</div>
+            <div>{{ scope.row.real_name || '--' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="手机号" min-width="100">
@@ -116,20 +101,40 @@
             <div>{{ scope.row.phone }}</div>
           </template>
         </el-table-column>
+        <el-table-column label="分组" min-width="90">
+          <template slot-scope="scope">
+            <div>{{ scope.row.group_id && scope.row.group_id !== '无' ? scope.row.group_id : '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="总金额" min-width="90">
+          <template slot-scope="scope">
+            <div>{{ scope.row.all_money || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="余额" min-width="90">
+          <template slot-scope="scope">
+            <div>{{ scope.row.money || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="120">
+          <template slot-scope="scope">
+            <div>{{ scope.row.mark }}</div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope">
             <template v-if="scope.row.is_del != 1">
               <a @click="userDetail(scope.row)">详情</a>
-              <el-divider direction="vertical"></el-divider>
-              <el-dropdown size="small" @command="changeMenu(scope.row, $event, scope.$index)" :transfer="true">
+              <!-- <el-divider direction="vertical"></el-divider> -->
+              <!-- <el-dropdown size="small" @command="changeMenu(scope.row, $event, scope.$index)" :transfer="true">
                 <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="5">设置分组</el-dropdown-item>
-                  <!-- <el-dropdown-item command="6">设置标签</el-dropdown-item>
+                  <el-dropdown-item command="6">设置标签</el-dropdown-item>
                   <el-dropdown-item command="7">修改上级推广人</el-dropdown-item>
-                  <el-dropdown-item command="8" v-if="scope.row.spread_uid">清除上级推广人</el-dropdown-item> -->
+                  <el-dropdown-item command="8" v-if="scope.row.spread_uid">清除上级推广人</el-dropdown-item>
                 </el-dropdown-menu>
-              </el-dropdown>
+              </el-dropdown> -->
             </template>
             <template v-else>
               <a @click="userDetail(scope.row)">详情</a>

@@ -28,9 +28,6 @@
               <el-option value="0" label="隐藏"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="分类名称：" label-for="status2">
-            <el-input clearable placeholder="请输入分类名称" v-model="artFrom.cate_name" class="form_content_width" />
-          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="userSearchs">查询</el-button>
           </el-form-item>
@@ -48,7 +45,7 @@
         :data="tableData"
       >
         <vxe-table-column field="id" title="ID" tooltip width="80"></vxe-table-column>
-        <vxe-table-column field="cate_name" tree-node title="分类名称" min-width="250"></vxe-table-column>
+        <vxe-table-column field="cate_name" tree-node title="分类名称" min-width="150"></vxe-table-column>
         <vxe-table-column field="pic" title="分类图标" min-width="100">
           <template v-slot="{ row }">
             <div class="tabBox_img" v-viewer v-if="row.pic">
@@ -56,20 +53,15 @@
             </div>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="sort" title="排序" min-width="100" tooltip="true"></vxe-table-column>
-        <vxe-table-column field="is_show" title="移动端显示" min-width="120">
-          <template v-slot="{ row }">
-            <el-tag :type="row.list_show ? 'success' : 'info'">{{ row.list_show ? '显示' : '不显示' }}</el-tag>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="is_show" title="状态" min-width="120">
+        <vxe-table-column field="sort" title="菜单排序" min-width="100" tooltip="true"></vxe-table-column>
+        <vxe-table-column field="list_show" title="菜单显示" min-width="120">
           <template v-slot="{ row }">
             <el-switch
               class="defineSwitch"
               :active-value="1"
               :inactive-value="0"
-              v-model="row.is_show"
-              :value="row.is_show"
+              v-model="row.list_show"
+              :value="row.list_show"
               @change="onchangeIsShow(row)"
               size="large"
               active-text="开启"
@@ -78,6 +70,13 @@
             </el-switch>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="sort" title="AI排序" min-width="100" tooltip="true"></vxe-table-column>
+        <vxe-table-column field="is_show" title="AI显示" min-width="120">
+          <template v-slot="{ row }">
+            <el-tag :type="row.list_show ? 'success' : 'info'">{{ row.list_show ? '显示' : '不显示' }}</el-tag>
+          </template>
+        </vxe-table-column>
+        
         <vxe-table-column field="date" title="操作" width="120" fixed="right">
           <template v-slot="{ row, index }">
             <a @click="edit(row)">编辑</a>

@@ -24,10 +24,10 @@
           <div v-if="psInfo.sex" class="value">{{ psInfo.sex == 1 ? '男' : '女' }}</div>
           <div v-else class="value">保密</div>
         </div> -->
-        <div class="item">
+        <!-- <div class="item">
           <div>身份证号：</div>
           <div class="value">{{ psInfo.card_id || '--' }}</div>
-        </div>
+        </div> -->
         <div class="item">
           <div>用户地址：</div>
           <div class="value">{{ `${psInfo.addres}` || '--' }}</div>

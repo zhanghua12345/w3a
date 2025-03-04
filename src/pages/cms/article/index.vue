@@ -27,15 +27,15 @@
           <el-form-item label="是否热门：" label-for="is_hot">
             <el-select v-model="artFrom.is_hot">
               <el-option value="" label="全部"></el-option>
-              <el-option :value="1" label="显示"></el-option>
-              <el-option :value="0" label="不显示"></el-option>
+              <el-option :value="1" label="是"></el-option>
+              <el-option :value="0" label="否"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否推荐：" label-for="is_banner">
             <el-select v-model="artFrom.is_banner">
               <el-option value="" label="全部"></el-option>
-              <el-option :value="1" label="显示"></el-option>
-              <el-option :value="0" label="不显示"></el-option>
+              <el-option :value="1" label="是"></el-option>
+              <el-option :value="0" label="否"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -64,7 +64,7 @@
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="文章图片" min-width="50">
+        <el-table-column label="图片" min-width="50">
           <template slot-scope="scope">
             <div v-if="scope.row.image_input.length !== 0" v-viewer>
               <div class="tabBox_img" v-for="(item, index) in scope.row.image_input" :key="index">
@@ -73,7 +73,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="文章名称" min-width="130">
+        <el-table-column label="名称" min-width="150">
           <template slot-scope="scope">
             <el-tooltip content="Top Left 提示文字" placement="top-start">
               <span class="line2">{{ scope.row.title }}</span>
@@ -110,21 +110,21 @@
             <span >{{ scope.row.realPraise -  scope.row.praise }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="热门文章" width="80">
+        <el-table-column label="是否热门" width="80">
           <template slot-scope="scope">
             <el-tag :type="scope.row.is_hot == 0 ? 'info' : 'success'">{{
-              scope.row.is_hot == 0 ? '不显示' : '显示'
+              scope.row.is_hot == 0 ? '否' : '是'
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="列表页推荐" width="80">
+        <el-table-column label="是否推荐" width="80">
           <template slot-scope="scope">
             <el-tag :type="scope.row.is_banner == 0 ? 'info' : 'success'">{{
-              scope.row.is_hot == 0 ? '不显示' : '显示'
+              scope.row.is_hot == 0 ? '否' : '是'
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" min-width="80">
+        <el-table-column label="创建时间" min-width="120">
           <template slot-scope="scope">
             <span>{{ scope.row.add_time | formatDate }}</span>
           </template>
