@@ -48,6 +48,15 @@ export default {
       component: () => import('@/pages/product/productClassify'),
     },
     {
+      path: 'product_ai',
+      name: `${pre}productAI`,
+      meta: {
+        title: 'AI配置',
+        auth: ['admin-store-storeCategory-index'],
+      },
+      component: () => import('@/pages/product/productAI'),
+    },
+    {
       path: 'add_product/:id?',
       name: `${pre}productAdd`,
       meta: {

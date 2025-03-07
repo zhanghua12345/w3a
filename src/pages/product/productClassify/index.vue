@@ -60,8 +60,8 @@
               class="defineSwitch"
               :active-value="1"
               :inactive-value="0"
-              v-model="row.list_show"
-              :value="row.list_show"
+              v-model="row.is_show"
+              :value="row.is_show"
               @change="onchangeIsShow(row)"
               size="large"
               active-text="开启"
@@ -70,13 +70,6 @@
             </el-switch>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="sort" title="AI排序" min-width="100" tooltip="true"></vxe-table-column>
-        <vxe-table-column field="is_show" title="AI显示" min-width="120">
-          <template v-slot="{ row }">
-            <el-tag :type="row.list_show ? 'success' : 'info'">{{ row.list_show ? '显示' : '不显示' }}</el-tag>
-          </template>
-        </vxe-table-column>
-        
         <vxe-table-column field="date" title="操作" width="120" fixed="right">
           <template v-slot="{ row, index }">
             <a @click="edit(row)">编辑</a>

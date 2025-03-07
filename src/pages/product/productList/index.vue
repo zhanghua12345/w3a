@@ -160,8 +160,8 @@
             <el-divider direction="vertical"></el-divider> -->
             <a @click="edit(scope.row)">编辑</a>
             <el-divider direction="vertical"></el-divider>
-            <!-- <a @click="AIClick(scope.row)">AI配置</a>
-            <el-divider direction="vertical"></el-divider> -->
+            <a @click="AIClick(scope.row)">AI配置</a>
+            <el-divider direction="vertical"></el-divider>
             <a v-if="artFrom.type === '4'" @click="del(scope.row, '恢复案例', scope.$index)">恢复案例</a>
             <a v-else @click="del(scope.row, '移入失效案例', scope.$index)">刪除</a>
           </template>
@@ -198,26 +198,9 @@
     <el-dialog :visible.sync="showAI" title="AI配置" width="800px" :show-close="true">
       <el-form ref="formInline" :model="AIData" label-width="100px" @submit.native.prevent :rules="AIRules">
         <el-row :gutter="24" justify="left" align="middle">
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="布局" prop="name">
-              <div style="display: flex; flex-wrap: wrap; align-items: center">
-                <el-select v-model="AIData.status" style="width: 120px">
-                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
-                </el-select>
-                <div style="padding: 0 10px">房</div>
-                <el-select v-model="AIData.status" style="width: 120px">
-                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
-                </el-select>
-                <div style="padding: 0 10px">厅</div>
-                <el-select v-model="AIData.status" style="width: 120px">
-                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
-                </el-select>
-                <div style="padding: 0 10px">厨</div>
-                <el-select v-model="AIData.status" style="width: 120px">
-                  <el-option :label="item" :value="item" v-for="item in 10" :key="item" />
-                </el-select>
-                <div style="padding: 0 10px">卫</div>
-              </div>
+              <el-input v-model="AIData.VR_link" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
