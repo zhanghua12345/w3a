@@ -290,6 +290,31 @@ export function ruleListApi(params) {
 }
 
 /**
+ * @description ai列表 -- 列表
+ * @param {Object} param params {Object} 传值参数
+ */
+export function productListAi(params) {
+  return request({
+    url: `product/problem`,
+    method: 'GET',
+    params,
+  });
+}
+
+/**
+ * @description ai列表 -- 添加
+ * @param {Object} param params {Object} 传值参数
+ */
+export function addProblemAi(data) {
+  return request({
+    url: `product/addProblem`,
+    method: 'POST',
+    data,
+  });
+}
+
+
+/**
  * @description 商品属性 -- 添加
  * @param {Number} param id {Number} 属性id
  * @param {Object} param data {Object} 传值参数

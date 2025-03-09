@@ -1,6 +1,5 @@
 <template>
   <div>
-   
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-button v-auth="['product-rule-save']" type="primary" @click="addAttr">添加AI问题</el-button>
       <el-table
@@ -19,27 +18,36 @@
         </el-table-column>
         <el-table-column label="AI问题" min-width="100">
           <template slot-scope="scope">
-            <span>{{ scope.row.rule_name }}</span>
+            <div>{{ scope.row.problem }}</div>
+            <div style="font-size: 12px; color: #8a8a8a">{{ scope.row.description }}</div>
           </template>
         </el-table-column>
         <el-table-column label="问题类型" min-width="100">
           <template slot-scope="scope">
-            <span>输入框</span>
+            <span>{{ scope.row.type_text }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="选项排序" min-width="70">
+        <el-table-column label="排序" min-width="70">
           <template slot-scope="scope">
-            <div v-for="(item, index) in scope.row.attr_value" :key="index">{{
-              index
-            }}</div>
+            {{ scope.row.sort }}
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" min-width="70">
+          <template slot-scope="scope">
+            {{ scope.row.sort?'正常':'隐藏' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="必填" min-width="70">
+          <template slot-scope="scope">
+            {{ scope.row.required?'是':'否' }}
           </template>
         </el-table-column>
         <el-table-column label="问题选项" min-width="130">
           <template slot-scope="scope">
-            <div v-for="(item, index) in scope.row.attr_value" :key="index">60~90m²</div>
+            <div v-for="(item, index) in JSON.parse( scope.row.content)" :key="index">{{item}}</div>
           </template>
         </el-table-column>
-        
+
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope">
             <a @click="edit(scope.row)">编辑</a>
@@ -56,7 +64,7 @@
 <script>
 import { mapState } from 'vuex';
 import addAttr from './addAttr';
-import { ruleListApi } from '@/api/product';
+import { productListAi } from '@/api/product';
 export default {
   name: 'productAttr',
   components: { addAttr },
@@ -166,7 +174,7 @@ export default {
     // 列表；
     getDataList() {
       this.loading = true;
-      ruleListApi(this.artFrom)
+      productListAi(this.artFrom)
         .then((res) => {
           let data = res.data;
           this.tableList = data.list;
