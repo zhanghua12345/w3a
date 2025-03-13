@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative" v-if="info.length>0">
+      <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative" v-if="info.length > 0">
         <div class="w-full h-full overflow-y-scroll overflow-x-hidden container-scroll-y relative">
           <!-- 顶部banner -->
           <div class="w-full h-350 relative">
@@ -31,6 +31,10 @@
                 <el-image class="w-full h-full" :src="item.img" fit="cover" />
               </swiper-slide>
             </swiper>
+            <div class="absolute left-main top-main z-10">
+              <el-image class="h-30" fit="cover" v-if="info[0].img" :src="info[0].img" />
+            </div>
+
             <div
               class="absolute bottom-main left-main right-main py-6 rounded-main bg-000-4 flex items-center justify-around shadow-md z-10"
               v-show="info[1].list.length"
@@ -107,16 +111,15 @@
           <!-- 家空间 -->
           <div class="mt-20 mx-main">
             <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
-            <div class="mt-main grid grid-rows-6 grid-cols-6 gap-10 h-270">
+            <div class="mt-main grid grid-rows-5 grid-cols-6 gap-10 h-210">
               <div
                 class="bg-000 rounded-main text-fff relative overflow-hidden shadow-md"
                 :class="{
-                  'row-span-4 col-span-2': [0].includes(index),
-                  'row-span-2 col-span-2': [1, 2, 3, 4].includes(index),
-                  'row-span-3 col-span-3': [5, 6].includes(index),
+                  'row-span-2 col-span-2': [0, 1, 2].includes(index),
+                  'row-span-3 col-span-3': [3, 4].includes(index),
                 }"
                 v-if="info[4]?.list.length"
-                v-for="(item, index) in info[4].list"
+                v-for="(item, index) in info[4].list.filter((e, i) => i < 5)"
                 :key="index"
               >
                 <el-image class="w-full h-full" :src="item.img" fit="cover"></el-image>
@@ -132,7 +135,11 @@
           <div class="mx-main mt-20">
             <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
             <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
-              <div v-for="(item,index) in info[5].list" :key="index" class="relative h-100 rounded-main overflow-hidden">
+              <div
+                v-for="(item, index) in info[5].list"
+                :key="index"
+                class="relative h-100 rounded-main overflow-hidden"
+              >
                 <el-image class="w-full h-full" :src="item.img" fit="cover" />
 
                 <div
@@ -177,11 +184,13 @@
             </div>
           </div>
         </div>
-        <div class="absolute right-0 bottom-150 rounded-l-full bg-main-wx pl-20 pr-10 py-6 text-fff shadow-sm">
-          {{ info[7]?.title || '---' }}
+        <div class="absolute right-0 bottom-150 z-10">
+          <el-image v-if="info[7].img" :src="info[7].img" fit="cover" class="h-36 mr-10 shadow-sm" />
+          <div v-else class="rounded-l-full bg-main-wx pl-20 pr-10 py-6 text-fff shadow-sm">
+            {{ info[7]?.title || '---' }}
+          </div>
         </div>
       </div>
-
       <div class="content flex-1 h-full">
         <div class="right-box container-scroll-y" v-if="info?.length">
           <div class="hot_imgs">
@@ -273,32 +282,39 @@
               </div>
             </div>
 
-            <div class="add-btn" v-show="pageIndex === 6">
+            <div class="add-btn" v-show="[0, 6, 7].includes(pageIndex)">
               <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
                 >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
               </el-button>
-              <div class="rounded-main mt-main relative" v-show="info[6].img">
+              <div class="rounded-main mt-main relative" v-show="info[pageIndex].img">
                 <el-image
                   class="rounded-main overflow-hidden w-full"
                   style="width: 360px"
-                  v-show="info[6].img"
-                  :src="info[6].img"
+                  v-show="info[pageIndex].img"
+                  :src="info[pageIndex].img"
                   fit="cover"
                 />
-                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[6].img = ''">
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[pageIndex].img = ''">
                   <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
                 </div>
               </div>
-              <div class="mt-10"></div>
+            </div>
+            <div class="add-btn" v-show="[6].includes(pageIndex)">
               <el-button
                 type="primary"
                 style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
                 @click="getvideoint('video')"
                 >{{ info[pageIndex].video ? '修改视频' : '添加视频' }}
               </el-button>
-              <div class="rounded-main mt-main relative" v-show="info[6].video">
-                <video class="w-full h-200" style="width: 360px" v-if="info[6].video" :src="info[6].video" controls />
-                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[6].video = ''">
+              <div class="rounded-main mt-main relative" v-show="info[pageIndex].video">
+                <video
+                  class="w-full h-200"
+                  style="width: 360px"
+                  v-if="info[pageIndex].video"
+                  :src="info[pageIndex].video"
+                  controls
+                />
+                <div class="absolute left-354 top-0 z-[999]" @click.stop="info[pageIndex].video = ''">
                   <i class="el-icon-circle-close text-tip" style="font-size: 24px" />
                 </div>
               </div>
@@ -381,13 +397,7 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      :visible.sync="modalPic"
-      width="950px"
-      title="上传商品图"
-      :close-on-click-modal="false"
-      :show-close="true"
-    >
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传图片" :close-on-click-modal="false" :show-close="true">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"

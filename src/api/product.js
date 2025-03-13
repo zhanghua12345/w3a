@@ -313,6 +313,28 @@ export function addProblemAi(data) {
   });
 }
 
+/**
+ * @description ai列表 -- 添加答案
+ * @param {Object} param params {Object} 传值参数
+ */
+export function caseAnswer(data) {
+  return request({
+    url: `product/caseAnswer`,
+    method: 'POST',
+    data,
+  });
+}
+
+/**
+ * @description ai列表 -- 删除答案
+ * @param {Object} param params {Object} 传值参数
+ */
+export function delProblem(data) {
+  return request({
+    url: `product/delProblem/${data.id}`,
+    method: 'delete',
+  });
+}
 
 /**
  * @description 商品属性 -- 添加

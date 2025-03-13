@@ -195,58 +195,33 @@
     </div>
     <coupon-list ref="couponTemplates" @nameId="nameId" :couponids="batchFormData.coupon_ids"></coupon-list>
     <!-- AI配置 -->
-    <el-dialog :visible.sync="showAI" title="AI配置" width="800px" :show-close="true">
-      <el-form ref="formInline" :model="AIData" label-width="100px" @submit.native.prevent :rules="AIRules">
+    <el-dialog :visible.sync="showAI" title="AI配置" width="800px" :show-close="true" class="aiModule">
+      <el-form ref="formInline" :model="formAI" label-width="100px" @submit.native.prevent label-position="top">
         <el-row :gutter="24" justify="left" align="middle">
-          <el-col :span="12">
-            <el-form-item label="布局" prop="name">
-              <el-input v-model="AIData.VR_link" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="小区" prop="VR_link">
-              <el-input v-model="AIData.VR_link" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="风格" prop="VR_link">
-              <el-input v-model="AIData.VR_link" />
-            </el-form-item>
-          </el-col>
-       
-          <el-col :span="12">
-            <el-form-item label="面积" prop="VR_link">
-              <el-input v-model="AIData.VR_link" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="颜色" prop="VR_link">
-              <el-input v-model="AIData.VR_link" />
+          <el-col :span="12" v-for="(item, index) in AIData" :key="index">
+            <el-form-item :label="item.problem">
+              <template v-if="item.type === 'input' ||item.type === ''">
+                <el-input v-model="formAI[item.id]" />
+              </template>
+              <template v-if="item.type === 'number'">
+                <el-input v-model="formAI[item.id]" type="number" />
+              </template>
+              <template v-if="item.type === 'opt'">
+                <el-select v-model="formAI[item.id]" placeholder="请选择AI类型" style="width: 100%">
+                  <el-option :value="e.value" :label="e.value" v-for="(e, i) in JSON.parse(item.content).sort((a,b)=>Number(a)-Number(b))" :key="i" />
+                </el-select>
+              </template>
+              <template v-if="item.type === 'radio'">
+                <el-radio-group v-model="formAI[item.id]">
+                  <el-radio :value="e.value" :label="e.value" v-for="(e, i) in (JSON.parse(item.content).sort((a,b)=>Number(a.sort)-Number(b.sort)))" :key="i" />
+                </el-radio-group>
+              </template>
+              <template v-if="item.type === 'textarea'">
+                <el-input v-model="formAI[item.id]" type="textarea" :rows="2" />
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
-
-        <!-- <el-form-item label="真实姓名" prop="new">
-          <el-input v-model="AIData.real_name" />
-        </el-form-item>
-        <el-form-item label="操作" prop="status">
-          <el-select v-model="AIData.status">
-            <el-option label="待审核" :value="0" />
-            <el-option label="通过" :value="1" />
-            <el-option label="驳回" :value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-switch
-            class="defineSwitch"
-            :active-value="1"
-            :inactive-value="0"
-            v-model="AIData.status"
-            size="large"
-            active-text="开启"
-            inactive-text="关闭"
-          />
-        </el-form-item> -->
       </el-form>
 
       <div class="acea-row row-right mt20">
@@ -275,6 +250,8 @@ import {
   productShowApi,
   productUnshowApi,
   storeProductApi,
+  productListAi,
+  caseAnswer,
   batchSetting,
   productGetTemplateApi,
   productNewList,
@@ -349,7 +326,8 @@ export default {
       treeSelect: [],
       multipleSelection: [],
       showAI: false,
-      AIData: {},
+      AIData: [],
+      formAI: {},
       AIRules: ruleInit,
     };
   },
@@ -368,15 +346,39 @@ export default {
       this.getPath();
     } else {
       this.getDataList();
+      this.getProductAIList();
     }
   },
   methods: {
-    AIClick() {
+    AIClick(row) {
+      const formAI = { id: row.id };
+      (row?.problem || []).forEach((e) => (formAI[e.perblem_id] = e.answer));
+      this.formAI = formAI
+
+      console.log(this.formAI )
       this.showAI = true;
     },
     AISubmit() {
-      this.showAI = false;
+      const answer = [];
+      Object.keys(this.formAI).forEach((key) => {
+        if (key !== 'id') {
+          answer.push({ perblem_id: key, answer: this.formAI[key] });
+        }
+      });
+      let formAI = { case_id: this.formAI.id, answer };
+      console.log(formAI);
+      caseAnswer(formAI)
+        .then((res) => {
+          this.$message.success(res.msg);
+          this.showAI = false;
+          this.goodHeade();
+          this.getDataList();
+        })
+        .catch((res) => {
+          this.$message.error(res.msg);
+        });
     },
+
     batchSub() {
       let data = this.batchFormData;
       data.ids = this.ids;
@@ -661,6 +663,21 @@ export default {
           this.$message.error(res.msg);
         });
     },
+    getProductAIList() {
+      productListAi({
+        page: 1,
+        limit: 100,
+      })
+        .then((res) => {
+          let data = res.data.list.filter((e) => e.status === 1).sort((a, b) => a - b);
+          this.AIData = data;
+          console.log(this.AIData);
+        })
+        .catch((res) => {
+          this.loading = false;
+          this.$message.error(res.msg);
+        });
+    },
     showSelectData() {
       if (this.multipleSelection.length > 0) {
         // 判断是否存在勾选过的数据
@@ -683,7 +700,7 @@ export default {
     },
     // 上下架
     changeSwitch(row) {
-      console.log(row)
+      console.log(row);
       PostgoodsNewIsShow(row.id, row.status || 0)
         .then((res) => {
           this.$message.success(res.msg);
@@ -856,5 +873,8 @@ export default {
 
 .label_width {
   width: 400px;
+}
+::v-deep .aiModule .el-form-item__label {
+  padding: 0 !important;
 }
 </style>

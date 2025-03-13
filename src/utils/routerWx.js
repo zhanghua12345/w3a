@@ -12,5 +12,6 @@ export const router = [
   { id: 11, name: '空间模块', page: 'pages/space/index', type: 'navigateTo',isId: false, },
   { id: 12, name: '公司介绍', page: 'pages/company/index', type: 'navigateTo',isId: true, },
   { id: 13, name: '品牌介绍', page: 'pages/brand/index', type: 'navigateTo',isId: true, },
+  { id: 14, name: '活动模块', page: 'pages/active/index', type: 'navigateTo',isId: true, },
   
 ];

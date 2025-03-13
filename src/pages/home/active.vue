@@ -1,13 +1,14 @@
 <template>
   <div class="article-manager">
     <el-card :bordered="false" shadow="never" class="mt16">
-      <el-tabs v-model="currentTab" @tab-click="changeTab">
+      <el-tabs v-model="currentTab" @tab-click="changeTab('formValidate')">
         <el-tab-pane
           :label="item.label"
           :name="item.value.toString()"
           v-for="(item, index) in headerList"
           :key="index"
         />
+       
       </el-tabs>
       <el-form
         class="form"
@@ -18,7 +19,7 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-      <div class="goodsTitle acea-row" style="display: flex;flex-wrap: wrap;align-items: center; justify-content: space-between; padding-bottom: 10px;">
+        <div class="goodsTitle acea-row" style="display: flex;flex-wrap: wrap;align-items: center; justify-content: space-between; padding-bottom: 10px;">
           <div >
             文章信息
             <span style="color: #888">（id:{{ formValidate.id || '--' }}）</span>
@@ -26,13 +27,13 @@
            <el-button type="primary" class="submission" @click="onsubmit('formValidate')">保存</el-button>
         </div>
         <div class="grid_box">
+          <el-form-item label="标题：" prop="title">
+            <el-input v-model="formValidate.title" placeholder="请输入" class="content_width" />
+          </el-form-item>
           <!-- <el-form-item label="id：" prop="id">
             <div class="text-main">{{ formValidate.id || '--' }}</div>
           </el-form-item> -->
-          <el-form-item label="标题：" prop="title" label-for="title">
-            <el-input v-model="formValidate.title" placeholder="请输入" class="content_width" />
-          </el-form-item>
-          <!-- <el-form-item label="排序：" prop="sort" label-for="sort">
+          <!-- <el-form-item label="排序：" prop="sort">
             <el-input v-model="formValidate.sort" placeholder="请输入" type="number" class="content_width" />
           </el-form-item> -->
           <el-form-item label="图文封面：" prop="image">
@@ -59,7 +60,6 @@
             </el-switch>
           </el-form-item> -->
         </div>
-
         <el-row class="content">
           <el-col :span="16">
             <el-form-item label="" prop="content" label-width="0">
@@ -72,6 +72,7 @@
             </div>
           </el-col>
         </el-row>
+        
       </el-form>
       <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
         <uploadPictures
@@ -106,14 +107,14 @@ export default {
     return {
       currentTab: '',
       headerList: [
-        { label: '模块一', value: '101' },
-        { label: '模块二', value: '102' },
-        { label: '模块三', value: '103' },
-        { label: '模块四', value: '104' },
-        { label: '模块五', value: '105' },
-        { label: '模块六', value: '106' },
-        { label: '模块七', value: '107' },
-        { label: '模块八', value: '108' },
+        { label: '模块一', value: '141' },
+        { label: '模块二', value: '142' },
+        { label: '模块三', value: '143' },
+        { label: '模块四', value: '144' },
+        { label: '模块五', value: '145' },
+        { label: '模块六', value: '146' },
+        { label: '模块七', value: '147' },
+        { label: '模块八', value: '148' },
       ],
       dialog: {},
       isChoice: '单选',
@@ -139,11 +140,18 @@ export default {
         xs: 8,
       },
       loading: false,
-      formValidate: {},
+      formValidate: {
+        id: 0,
+        title: '',
+        image: '',
+        content: '',
+        status: false,
+        visit: 0,
+      },
       content: '',
       ruleValidate: {
         title: [{ required: true, message: '请输入标题', trigger: 'change' }],
-        sort: [{ required: true, message: '请选择分类', trigger: 'change' }],
+        sort: [{ required: true, message: '请输入排序', trigger: 'change' }],
         image: [{ required: true, validator: validateUpload, trigger: 'change' }],
         content: [{ required: true, message: '请输入文章内容', trigger: 'change' }],
       },
@@ -160,13 +168,6 @@ export default {
       },
     };
   },
-
-  created() {
-    this.changeTab(this.currentTab);
-    this.currentTab = this.headerList[0].value;
-    this.getDetails();
-  },
-
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
@@ -215,10 +216,15 @@ export default {
         this.content = res.data.content;
       });
     },
-    changeTab() {
+    changeTab(name) {
       this.formValidate.content = '';
       this.getDetails();
     },
+  },
+  created() {
+    this.changeTab(this.currentTab);
+    this.currentTab = this.headerList[0].value;
+    this.getDetails();
   },
 };
 </script>

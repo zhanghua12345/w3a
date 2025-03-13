@@ -49,6 +49,16 @@ export default {
       component: () => import('@/pages/home/company'),
     },
     {
+      path: 'active',
+      name: `${pre}homeActive`,
+      meta: {
+        title: '活动配置',
+        auth: ['admin-store-storeProuduct-index'],
+        keepAlive: true,
+      },
+      component: () => import('@/pages/home/active'),
+    },
+    {
       path: 'quality',
       name: `${pre}homeQuality`,
       meta: {

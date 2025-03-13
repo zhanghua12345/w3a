@@ -18,13 +18,17 @@
         </el-table-column>
         <el-table-column label="AI问题" min-width="100">
           <template slot-scope="scope">
-            <div>{{ scope.row.problem }}</div>
-            <div style="font-size: 12px; color: #8a8a8a">{{ scope.row.description }}</div>
+            {{ scope.row.problem }}
+          </template>
+        </el-table-column>
+        <el-table-column label="AI问题描述" min-width="100">
+          <template slot-scope="scope">
+            {{ scope.row.description || '--' }}
           </template>
         </el-table-column>
         <el-table-column label="问题类型" min-width="100">
           <template slot-scope="scope">
-            <span>{{ scope.row.type_text }}</span>
+            <span>{{ typeEnums[scope.row.type || 'no'] }}</span>
           </template>
         </el-table-column>
         <el-table-column label="排序" min-width="70">
@@ -34,25 +38,35 @@
         </el-table-column>
         <el-table-column label="状态" min-width="70">
           <template slot-scope="scope">
-            {{ scope.row.sort?'正常':'隐藏' }}
+            {{ scope.row.status ? '显示' : '不显示' }}
           </template>
         </el-table-column>
         <el-table-column label="必填" min-width="70">
           <template slot-scope="scope">
-            {{ scope.row.required?'是':'否' }}
+            {{ scope.row.required ? '必填' : '非必填' }}
           </template>
         </el-table-column>
         <el-table-column label="问题选项" min-width="130">
           <template slot-scope="scope">
-            <div v-for="(item, index) in JSON.parse( scope.row.content)" :key="index">{{item}}</div>
+            <template v-if="!scope.row.content">/</template>
+            <template v-else>
+              <div v-for="(item, index) in JSON.parse(scope.row.content || [])" :key="index">{{ item.value }}</div>
+            </template>
           </template>
         </el-table-column>
-
+        <el-table-column label="问题排序" min-width="130">
+          <template slot-scope="scope">
+            <template v-if="!scope.row.content">/</template>
+            <template v-else>
+              <div v-for="(item, index) in JSON.parse(scope.row.content || [])" :key="index">{{ item.sort }}</div>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope">
             <a @click="edit(scope.row)">编辑</a>
             <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除规格', scope.$index)">删除</a>
+            <a @click="del(scope.row, '删除该配置', scope.$index)">删除</a>
           </template>
         </el-table-column>
       </el-table>
@@ -75,6 +89,14 @@ export default {
         page: 1,
         limit: 20,
         rule_name: '',
+      },
+      typeEnums: {
+        input: '输入框',
+        number: '数字输入框',
+        opt: '下拉框选择器',
+        textarea: '长文本编辑器',
+        radio: '单选框',
+        no: '/',
       },
       tableList: [],
       total: 0,
@@ -135,25 +157,23 @@ export default {
       this.ids = [...this.selectedIds].join(',');
     },
     // 删除
+    // delProblem({ id: row.id })
+    //         .then((res) => {
+    //           this.$message.success(res.msg);
+    //           this.getDataList();
+    //         })
+    //         .catch((res) => {
+    //           this.loading = false;
+    //           this.$message.error(res.msg);
+    //         });
     del(row, tit) {
-      let data = {};
-      if (tit === '批量删除规格') {
-        if (this.selectedIds.size === 0) return this.$message.warning('请选择要删除的规格！');
-        data = {
-          ids: this.ids,
-        };
-      } else {
-        data = {
-          ids: row.id,
-        };
-      }
       let delfromData = {
         title: tit,
         num: 0,
-        url: `product/product/rule/delete`,
+        url: `product/delProblem/${row.id}`,
         method: 'DELETE',
-        ids: data,
       };
+      
       this.$modalSure(delfromData)
         .then((res) => {
           this.$message.success(res.msg);
@@ -165,13 +185,14 @@ export default {
     },
     addAttr() {
       this.$refs.addattr.modal = true;
+      this.$refs.addattr.getInfo(null);
     },
     // 编辑
     edit(row) {
       this.$refs.addattr.modal = true;
-      this.$refs.addattr.getIofo(row);
+      this.$refs.addattr.getInfo(row);
     },
-    // 列表；
+    // 列表
     getDataList() {
       this.loading = true;
       productListAi(this.artFrom)

@@ -18,12 +18,23 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <div class="goodsTitle acea-row">
-          <div class="title">
+        <div
+          class="goodsTitle acea-row"
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+          "
+        >
+          <div>
             文章信息
             <span style="color: #888">（id:{{ formValidate.id || '--' }}）</span>
           </div>
+          <el-button type="primary" class="submission" @click="onsubmit('formValidate')">保存</el-button>
         </div>
+
         <div class="grid_box">
           <el-form-item label="标题：" prop="title">
             <el-input v-model="formValidate.title" placeholder="请输入" class="content_width" />
@@ -70,7 +81,6 @@
             </div>
           </el-col>
         </el-row>
-        <el-button type="primary" class="submission" @click="onsubmit('formValidate')">提交</el-button>
       </el-form>
       <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
         <uploadPictures
