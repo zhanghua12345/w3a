@@ -67,7 +67,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="列表页封面图：" prop="coverImg">
+            <el-form-item label="封面图-横图：" prop="coverImg">
               <div class="pictrueBox" @click="modalPicTap('dan', 'coverImg')">
                 <div class="pictrue" v-if="formValidate.coverImg">
                   <img v-lazy="formValidate.coverImg" />
@@ -77,7 +77,22 @@
                   <el-input v-model.trim="formValidate.coverImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <div class="titTip">建议尺寸：700 * 320px</div>
+                <div class="titTip">建议比例: 16 * 10</div>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="封面图-纵图：" prop="coverImg1">
+              <div class="pictrueBox" @click="modalPicTap('dan', 'coverImg1')">
+                <div class="pictrue" v-if="formValidate.coverImg1">
+                  <img v-lazy="formValidate.coverImg1" />
+                  <el-input v-model.trim="formValidate.coverImg1" style="display: none"></el-input>
+                </div>
+                <div class="upLoad acea-row row-center-wrapper" v-else>
+                  <el-input v-model.trim="formValidate.coverImg1" style="display: none"></el-input>
+                  <i class="el-icon-picture-outline" style="font-size: 24px"></i>
+                </div>
+                <div class="titTip">建议比例: 3 * 4</div>
               </div>
             </el-form-item>
           </el-col>
@@ -106,7 +121,7 @@
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
               </div>
-              <div class="titTip">建议尺寸：700 * 700，可拖拽改变图片顺序，最多上传10张</div>
+              <div class="titTip">建议比例: 16 * 10，可拖拽改变图片顺序</div>
             </el-form-item>
           </el-col>
           <el-col>
@@ -196,7 +211,7 @@
                     </div>
                   </div>
 
-                  <div class="titTip">建议尺寸：700 * 高度任意，可拖拽改变图片顺序，最多上传10张</div>
+                  <div class="titTip">可拖拽改变图片顺序，最多上传10张</div>
                 </el-form-item>
               </el-col>
             </el-col>
@@ -251,7 +266,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="是否推荐：" prop="isRecommend">
+            <el-form-item label="首屏推荐：" prop="isRecommend">
               <el-radio-group v-model="formValidate.isRecommend">
                 <el-radio :label="1" class="radio">是</el-radio>
                 <el-radio :label="0">否</el-radio>
@@ -259,7 +274,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24" v-if="formValidate.isRecommend == '1'">
-            <el-form-item label="案例推荐图：" prop="recommendImg">
+            <el-form-item label="推荐图：" prop="recommendImg">
               <div class="pictrueBox" @click="modalPicTap('dan', 'recommendImg')">
                 <div class="pictrue" v-if="formValidate.recommendImg">
                   <img v-lazy="formValidate.recommendImg" />
@@ -269,7 +284,7 @@
                   <el-input v-model.trim="formValidate.recommendImg" style="display: none"></el-input>
                   <i class="el-icon-picture-outline" style="font-size: 24px"></i>
                 </div>
-                <div class="titTip">建议尺寸：700 * 700px</div>
+                <div class="titTip">建议比例：16 * 10</div>
               </div>
             </el-form-item>
           </el-col>
@@ -336,7 +351,8 @@ import { readonly } from 'vue';
 const ruleInit = readonly({
   name: [{ required: true, message: '请输入案例名称', trigger: 'blur' }],
   VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
-  coverImg: [{ required: true, message: '请上传案例封面图', trigger: 'change' }],
+  coverImg: [{ required: true, message: '请上传案例封面横图', trigger: 'change' }],
+  coverImg1: [{ required: true, message: '请上传案例封面纵图', trigger: 'change' }],
   banner: [{ required: true, message: '请上传案例封面图', trigger: 'change', type: 'array' }],
   status: [{ required: true, message: '请选择案例状态', trigger: 'change' }],
   selectRule: [{ required: true, message: '请选择案例详情分类', trigger: 'change' }],
@@ -375,7 +391,8 @@ export default {
         treeSelect: [], // 案例分类数据
         name: '', // 案例名称
         VR_link: '', // 案例效果图链接
-        coverImg: '', // 封面图
+        coverImg: '', // 封面图-横图
+        coverImg1: '', // 封面图-纵图
         banner: [], // 轮播图
         status: 1, // 轮播图
         cate_id: [],
@@ -429,9 +446,9 @@ export default {
     this.bus.$emit('onTagsViewRefreshRouterView', this.$route.path);
     next();
   },
-  mounted() {
+ async  mounted() {
     if (this.$route.params.id) {
-      this.getInfo();
+    await this.getInfo();
     }
     this.goodsCategory(); // 案例分类
     this.productGetRule(); // 案例详情分类
@@ -456,6 +473,7 @@ export default {
             };
           });
           this.formValidate.treeSelect = _list;
+          console.log(  this.formValidate.treeSelect )
         })
         .catch((res) => {
           this.$message.error(res.msg);
@@ -540,10 +558,10 @@ export default {
       });
     },
     // 获取详情
-    getInfo() {
+   async getInfo() {
       let that = this;
       that.spinShow = true;
-      productNewData(that.$route.params.id)
+    await  productNewData(that.$route.params.id)
         .then(async (res) => {
           let data = res.data.detail;
           this.infoData(data);
@@ -580,6 +598,9 @@ export default {
       switch (this.picTit) {
         case 'coverImg':
           this.formValidate.coverImg = pc.att_dir;
+          break;
+          case 'coverImg1':
+          this.formValidate.coverImg1 = pc.att_dir;
           break;
         case 'recommendImg':
           this.formValidate.recommendImg = pc.att_dir;

@@ -57,9 +57,9 @@
           <!-- 案例 -->
           <div class="mt-20 mx-main">
             <Title className="mb-10" :title="info[2].title" :subTitleBottom="info[2].subTitle" :isMore="true" />
-            <div class="container-scroll h-150 w-full pb-10">
+            <div class="container-scroll h-176 w-full pb-8">
               <div
-                class="inline-block w-124 h-full mr-main last:mr-0 shadow-md"
+                class="inline-block w-120 h-full mr-main last:mr-0 shadow-md"
                 v-for="(item, index) in info[2].list"
                 :key="index"
               >
@@ -202,7 +202,7 @@
                   : pageIndex === 1
                   ? '148 * 100px'
                   : pageIndex === 2
-                  ? '250 * 300px'
+                  ? '300 * 400px'
                   : pageIndex === 3
                   ? '100 * 100px'
                   : pageIndex === 4

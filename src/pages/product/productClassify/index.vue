@@ -54,7 +54,12 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="sort" title="菜单排序" min-width="100" tooltip="true"></vxe-table-column>
-        <vxe-table-column field="list_show" title="菜单显示" min-width="120">
+        <vxe-table-column field="list_show" title="移动端显示" min-width="100" tooltip="true">
+          <template v-slot="{ row }">
+            {{ row.list_show ? '显示' : '不显示' }}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="is_show" title="状态" min-width="120">
           <template v-slot="{ row }">
             <el-switch
               class="defineSwitch"
