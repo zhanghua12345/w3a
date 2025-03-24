@@ -25,7 +25,7 @@
       <div class="w-374 h-600 rounded-8 border-2 border-solid border-ccc ml-20 relative" v-if="info.length > 0">
         <div class="w-full h-full overflow-y-scroll overflow-x-hidden container-scroll-y relative">
           <!-- 顶部banner -->
-          <div class="w-full h-350 relative">
+          <div class="w-full h-350 relative" v-if="info[0].show">
             <swiper :options="swiperOption" class="w-full h-350">
               <swiper-slide class="w-full h-full" v-for="(item, index) in info[0].list" :key="index">
                 <el-image class="w-full h-full" :src="item.img" fit="cover" />
@@ -37,7 +37,7 @@
 
             <div
               class="absolute bottom-main left-main right-main py-6 rounded-main bg-000-4 flex items-center justify-around shadow-md z-10"
-              v-show="info[1].list.length"
+              v-show="info[1].list.length &&info[1].show"
             >
               <div
                 v-for="(item, index) in info[1].list"
@@ -55,7 +55,7 @@
             </div>
           </div>
           <!-- 案例 -->
-          <div class="mt-20 mx-main">
+          <div class="mt-20 mx-main"   v-show="info[2].show">
             <Title className="mb-10" :title="info[2].title" :subTitleBottom="info[2].subTitle" :isMore="true" />
             <div class="container-scroll h-176 w-full pb-8">
               <div
@@ -76,7 +76,7 @@
             </div>
           </div>
           <!-- info[3].list -->
-          <div class="grid grid-rows-2 grid-cols-9 gap-10 h-164 mt-20 mx-main">
+          <div class="grid grid-rows-2 grid-cols-9 gap-10 h-164 mt-20 mx-main"  v-show="info[3].show">
             <div
               class="rounded-main text-main-wx relative"
               v-for="(item, index) in info[3].list"
@@ -109,7 +109,7 @@
             </div>
           </div>
           <!-- 家空间 -->
-          <div class="mt-20 mx-main">
+          <div class="mt-20 mx-main"   v-show="info[4].show">
             <Title :title="info[4].title" :subTitle="info[4].subTitle" :isMore="true" />
             <div class="mt-main grid grid-rows-5 grid-cols-6 gap-10 h-210">
               <div
@@ -132,7 +132,7 @@
             </div>
           </div>
           <!-- 公司介绍 -->
-          <div class="mx-main mt-20">
+          <div class="mx-main mt-20"  v-show="info[5].show">
             <Title :title="info[5].title" :subTitle="info[5].subTitle" :isMore="true" />
             <div class="mt-main p-10 bg-000-04 rounded-main grid grid-rows-2 grid-cols-2 gap-main">
               <div
@@ -156,16 +156,9 @@
               </div>
             </div>
           </div>
-          <!-- 品牌介绍 -->
-          <div class="mx-main mt-20 pb-20">
-            <Title :title="info[6].title" :subTitle="info[6].subTitle" />
-            <el-image
-              class="rounded-main mt-main overflow-hidden w-full"
-              v-if="info[6].img"
-              :src="info[6].img"
-              fit="cover"
-            />
-            <video class="w-full h-200 rounded-main mt-main" v-if="info[6].video" :src="info[6].video" controls />
+          <!-- 优秀员工 -->
+          <div class="mx-main mt-20 "  v-show="info[6].show">
+            <Title :title="info[6].title" :subTitleBottom="info[6].subTitle" />
             <div class="container-scroll">
               <div
                 class="mt-main ml-main first-0 shadow-md inline-block"
@@ -173,9 +166,36 @@
                 :key="index"
               >
                 <div class="h-full overflow-hidden rounded-main relative">
+                  <el-image class="w-90 h-120" :src="item.img" fit="cover" />
+                  <!-- <div
+                    class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main-wx text-16 font-600"
+                  >
+                    {{ item.title }}
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 品牌介绍 -->
+          <div class="mx-main mt-20 pb-20"  v-show="info[7].show">
+            <Title :title="info[7].title" :subTitle="info[7].subTitle" />
+            <el-image
+              class="rounded-main mt-main overflow-hidden w-full"
+              v-if="info[7].img"
+              :src="info[7].img"
+              fit="cover"
+            />
+            <video class="w-full h-200 rounded-main mt-main" v-if="info[7].video" :src="info[7].video" controls />
+            <div class="container-scroll">
+              <div
+                class="mt-main ml-main first-0 shadow-md inline-block"
+                v-for="(item, index) in info[7].list"
+                :key="index"
+              >
+                <div class="h-full overflow-hidden rounded-main relative">
                   <el-image class="w-140 h-200" :src="item.img" fit="cover" />
                   <div
-                    class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main-wx text-16 font-600"
+                    class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-000-2 text-16 font-600"
                   >
                     {{ item.title }}
                   </div>
@@ -184,10 +204,10 @@
             </div>
           </div>
         </div>
-        <div class="absolute right-0 bottom-150 z-10">
-          <el-image v-if="info[7].img" :src="info[7].img" fit="cover" class="h-36 mr-10 shadow-sm" />
+        <div class="absolute right-0 bottom-150 z-10"  v-show="info[8].show">
+          <el-image v-if="info[8].img" :src="info[8].img" fit="cover" class="w-44 mr-main shadow-sm" />
           <div v-else class="rounded-l-full bg-main-wx pl-20 pr-10 py-6 text-fff shadow-sm">
-            {{ info[7]?.title || '---' }}
+            {{ info[8]?.title || '---' }}
           </div>
         </div>
       </div>
@@ -216,13 +236,20 @@
                   : ''
               }}，拖拽图片可调整图片顺序
             </div>
-            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 6, 7].includes(pageIndex)">
+            <div class="flex flex-wrap mt-20 items-center">
+              <span style="width: 70px">显示：</span>
+              <div class="flex-1">
+                <el-switch v-model="info[pageIndex].show" active-color="#ff4949" inactive-color="#ccc" />
+              </div>
+            </div>
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5,6, 7, 8].includes(pageIndex)">
               <span style="width: 70px">模块标题：</span>
               <div class="flex-1">
                 <el-input class="input-class" v-model="info[pageIndex].title" placeholder="请填写一级名称" />
               </div>
             </div>
-            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 6].includes(pageIndex)">
+           
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 7].includes(pageIndex)">
               <span style="width: 70px">二级标题：</span>
               <div class="flex-1">
                 <el-input class="input-class" v-model="info[pageIndex].subTitle" placeholder="请填写二级标题" />
@@ -234,7 +261,7 @@
                 <el-input class="input-class" v-model="info[pageIndex].remark" placeholder="请填写备注" />
               </div>
             </div>
-            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 7].includes(pageIndex)">
+            <div class="flex flex-wrap mt-20 items-center" v-show="[2, 4, 5, 8].includes(pageIndex)">
               <span style="width: 70px">跳转位置：</span>
               <div class="flex-1">
                 <el-select v-model="info[pageIndex].router" value-key="name" class="input-class">
@@ -282,7 +309,7 @@
               </div>
             </div>
 
-            <div class="add-btn" v-show="[0, 6, 7].includes(pageIndex)">
+            <div class="add-btn" v-show="[0, 7, 8].includes(pageIndex)">
               <el-button type="primary" class="w-100 h-36" @click="modalPicTap('单选', -1)"
                 >{{ info[pageIndex].img ? '修改图片' : '添加图片' }}
               </el-button>
@@ -299,7 +326,7 @@
                 </div>
               </div>
             </div>
-            <div class="add-btn" v-show="[6].includes(pageIndex)">
+            <div class="add-btn" v-show="[7].includes(pageIndex)">
               <el-button
                 type="primary"
                 style="width: 100px; height: 35px; background-color: var(--prev-color-primary); color: #ffffff"
@@ -346,7 +373,7 @@
                   <div class="info">
                     <div class="info-item">
                       <span style="width: 70px">{{
-                        [1, 2, 3, 4, 5, 6, 7].includes(pageIndex) ? '标题：' : '备注：'
+                        [1, 2, 3, 4, 5, 7, 8].includes(pageIndex) ? '标题：' : '备注：'
                       }}</span>
                       <div class="input-box">
                         <el-input class="input-class" v-model="item.title" placeholder="请填写标题 (备注)" />
@@ -358,7 +385,7 @@
                         <el-input class="input-class" v-model="item.subTitle" placeholder="请填写二级标题" />
                       </div>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item"  v-if="pageIndex!=6">
                       <span style="width: 70px">链接位置</span>
                       <div class="input-box">
                         <el-select v-model="item.router" value-key="name" class="input-class">
@@ -578,8 +605,7 @@ export default {
     },
     // 保存
     save() {
-      this.info[4].maxLength = 7;
-      this.info[5].maxLength = 4;
+      this.info[6].maxLength = 100
       postSaveData(this.info)
         .then((res) => {
           this.$message.success(res.msg);
