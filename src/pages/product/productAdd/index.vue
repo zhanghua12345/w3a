@@ -37,8 +37,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="案例作者：">
-              <el-input class="content_width" v-model.trim="formValidate.author" placeholder="请输入作者" />
+            <el-form-item label="设计师：" prop="author">
+              <el-input class="content_width" v-model.trim="formValidate.author" placeholder="请输入设计师" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -350,10 +350,11 @@ import {
 import { readonly } from 'vue';
 const ruleInit = readonly({
   name: [{ required: true, message: '请输入案例名称', trigger: 'blur' }],
-  VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
+  // VR_link: [{ required: true, message: '请填写案例效果图链接', trigger: 'blur' }],
   coverImg: [{ required: true, message: '请上传案例封面横图', trigger: 'change' }],
-  coverImg1: [{ required: true, message: '请上传案例封面纵图', trigger: 'change' }],
-  banner: [{ required: true, message: '请上传案例封面图', trigger: 'change', type: 'array' }],
+  author: [{ required: true, message: '请填写作品的设计师', trigger: 'change' }],
+  // coverImg1: [{ required: true, message: '请上传案例封面纵图', trigger: 'change' }],
+  banner: [{ required: true, message: '请上传案例banner图', trigger: 'change', type: 'array' }],
   status: [{ required: true, message: '请选择案例状态', trigger: 'change' }],
   selectRule: [{ required: true, message: '请选择案例详情分类', trigger: 'change' }],
   attrs: [{ required: true, message: '案例详情菜单不能为空', trigger: 'change', type: 'array' }],
