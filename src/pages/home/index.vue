@@ -156,22 +156,20 @@
               </div>
             </div>
           </div>
-          <!-- 优秀员工 -->
+          <!-- 精英团队 -->
           <div class="mx-main mt-20 "  v-show="info[6].show">
             <Title :title="info[6].title" :subTitleBottom="info[6].subTitle" />
             <div class="container-scroll">
               <div
-                class="mt-main ml-main first-0 shadow-md inline-block"
-                v-for="(item, index) in info[6].list"
+                class="my-10 ml-main first-0 inline-block"
+                v-for="index in Math.ceil(info[6].list.length / 2)"
                 :key="index"
               >
-                <div class="h-full overflow-hidden rounded-main relative">
-                  <el-image class="w-90 h-120" :src="item.img" fit="cover" />
-                  <!-- <div
-                    class="absolute bottom-0 left-0 right-0 flex justify-center items-center text-fff bg-main-wx text-16 font-600"
-                  >
-                    {{ item.title }}
-                  </div> -->
+                <div class="border-1 border-ccc border-solid shadow-md bg-fff p-6 rounded-main">
+                  <el-image class="w-140 h-216 rounded-main" :src="info[6].list[index * 2 - 2]?.img" fit="cover" />
+                </div>
+                <div class="border-1 border-ccc border-solid shadow-md bg-fff p-6 rounded-main mt-main" v-if="info[6].list[index * 2 - 1]?.img">
+                  <el-image class="w-140 h-216 rounded-main" :src="info[6].list[index * 2 - 1]?.img" fit="cover" />
                 </div>
               </div>
             </div>
@@ -204,7 +202,7 @@
             </div>
           </div>
         </div>
-        <div class="absolute right-0 bottom-150 z-10"  v-show="info[8].show">
+        <div class="absolute right-0 bottom-100 z-10"  v-show="info[8].show">
           <el-image v-if="info[8].img" :src="info[8].img" fit="cover" class="w-44 mr-main shadow-sm" />
           <div v-else class="rounded-l-full bg-main-wx pl-20 pr-10 py-6 text-fff shadow-sm">
             {{ info[8]?.title || '---' }}
